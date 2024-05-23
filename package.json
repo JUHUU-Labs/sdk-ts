@@ -1,6 +1,6 @@
 {
   "name": "@juhuu/sdk-ts",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Typescript wrapper for juhuu services",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
