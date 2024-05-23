@@ -1,0 +1,1005 @@
+import { OfferDto } from "./Offer";
+import {
+  Address,
+  AutoRenewMode,
+  Category,
+  Circumstance,
+  ColorScheme,
+  Command,
+  CurrencyCode,
+  DeepNullable,
+  DeviceStatus,
+  FuelType,
+  GeoPoint,
+  LanguageCode,
+  Layout,
+  LayoutBlock,
+  LocaleString,
+  Modality,
+  Parameter,
+  Party,
+  PaymentMethod,
+  PaymentReason,
+  PaymentServiceProvider,
+  PaymentStatus,
+  PayoutStatus,
+  Person,
+  Platform,
+  PostingRow,
+  Purpose,
+  PushToken,
+  ServiceMonth,
+  StarRating,
+  TimeZone,
+  Utilization,
+} from "./types/types";
+
+export namespace JUHUU {
+  export interface SetupConfig {
+    environment: Environment;
+    getAccessToken: () => Promise<string | null>;
+    onException: <T>(response: JUHUU.HttpResponse<T>) => Promise<"abort">;
+    setAccessToken: (accessToken: string) => Promise<void>;
+    getRefreshToken: () => Promise<string | null>;
+    setRefreshToken: (refreshToken: string) => Promise<void>;
+    clientVersion: string;
+  }
+
+  export interface HttpResponse<T> {
+    ok: boolean;
+    data: T;
+    statusText: string;
+    status: number;
+  }
+
+  export type RequestOptions = {
+    /**
+     * If this is true, the onException function will be called if the request fails.
+     */
+    triggerOnException?: boolean;
+
+    /**
+     * If this accessToken is provided, the request will be sent with this accessToken.
+     */
+    accessToken?: string;
+
+    /**
+     * If this is true, a new accessToken will be requested if the current one is expired.
+     */
+    refreshTokensIfNecessary?: boolean;
+  };
+
+  export namespace Session {
+    type Base = {
+      id: string;
+      status: "waitingForPayment" | "ready" | "completed";
+      paymentId: string | null; // paymentId is null if session is free
+      userId: string | null; // id of the user who owns the session
+      propertyId: string;
+      createdAt: Date; // date at which session was created
+      terminatedAt: Date | null; // date at which session was terminated
+      terminatedBy: string | null;
+      scheduledTerminationAt: Date; // date at which session will be terminated automatically
+      scheduledTerminationHandler: "cloudFunction" | "cloudTask"; // handler which will terminate the session
+      reminderEnabled: boolean | null; // null, if session reminder was not yet evaluated;
+      reminderAt: Date | null; // timestamp at which the user will be reminded
+      reminderHandler: "cloudFunction" | "cloudTask" | null; // handler which will remind the user
+      reminderExecuted: boolean; // session can be terminated automatically (true) or only by the user (false)}
+      timeZone: TimeZone; // timeZone of the device that was rented
+      autoRenewManualEnabled: boolean; // if true; the user can enable autoRenew manually
+      manualTerminationEnabled: boolean; // if true; the user can terminate the session manually
+      version: number; // new session documents have version number 2.0.0
+      isOffSession: boolean; // true if the session was created without the user being online
+      tariff: JUHUU.Tariff.Object; // dto of the tariff that was selected on session creation
+      previousAutoRenewSessionId: string | null; // if of the session that had autoRenew enabled before this session
+      autoRenew: boolean; // if true, the session will be autoRenew once it is being termianted
+      locationId: string | null; // locationId of the RentableDeviceLocation
+      locationName: string | null; // name of the RentableDeviceLocation
+      locationGroupId: string | null; // id of the RentableDeviceLocationGroup
+      locationGroupName: string | null; // name of the RentableDeviceLocationGroup
+    };
+
+    export interface Rent extends Base {
+      type: "rent";
+      managementUserId: string | null;
+      deviceIdArray: string[];
+      autoRenew: boolean;
+      previousAutoRenewSessionId: string | null;
+      surveyId: string | null;
+      surveyEnabled: boolean;
+    }
+
+    export interface Reservation extends Base {
+      type: "reservation";
+    }
+
+    export type Object = Rent | Reservation;
+
+    export namespace Create {
+      export type Params = {
+        locationId: string;
+        tariffId: string;
+        autoRenew: boolean;
+        sessionType: Object["type"];
+        isOffSession: boolean;
+        idempotencyKey: string;
+        userId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        session: JUHUU.Session.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        sessionId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        session: JUHUU.Session.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+        userId?: string;
+        managementUserId?: string;
+        statusArray?: JUHUU.Session.Object["status"][];
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Session.Object[];
+    }
+
+    export namespace Update {
+      export type Params = {
+        sessionId: string;
+        autoRenew: boolean;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        session: JUHUU.Session.Object;
+      };
+    }
+
+    export namespace Terminate {
+      export type Params = {
+        sessionId: string;
+        isOffSession: boolean;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        session: JUHUU.Session.Object | null;
+      };
+    }
+
+    export namespace AttachLocation {
+      export type Params = {
+        sessionId: string;
+        locationId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        session: JUHUU.Session.Object;
+      };
+    }
+  }
+
+  export namespace User {
+    type Base = {
+      id: string;
+      createdAt: Date;
+      description: string | null;
+      platform: "ios" | "android" | "windows" | "macos" | "web" | null;
+      supportPassphrase: string;
+      appVersion: number | null;
+      termsVersion: number;
+      name: string | null;
+      stripeCustomerId: string;
+      defaultPaymentMethodId: string | null;
+      defaultPaymentMethodProvider: "stripe" | "not_set"; // "stripe" | "paypal"
+      acceptedTermIdArray: string[];
+      licenseArray: JUHUU.License.Object[];
+      languageCode: LanguageCode | null;
+      billingAddress: DeepNullable<Address>;
+      billingEmail: string | null; // primary email that must never be empty
+      billingEmailVerified: boolean;
+      vat: string | null;
+      notifications: {
+        email: {
+          enabled: boolean;
+          emailArray: string[];
+        };
+        sms: {
+          enabled: boolean;
+          phoneNumberArray: string[];
+        };
+        push: {
+          enabled: boolean;
+          pushTokenArray: PushToken[];
+        };
+      };
+    };
+
+    export interface Standard extends Base {
+      type: "standard";
+      managementUserId: string | null;
+    }
+
+    export interface Management extends Base {
+      type: "management";
+      contactPerson: Person;
+    }
+
+    export type Object = Standard | Management;
+
+    export namespace Retrieve {
+      export type Params = {
+        userId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        user: JUHUU.User.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        managementUserId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.User.Object[];
+    }
+
+    export namespace Exists {
+      export type Params = {
+        email: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        exists: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        userId: string;
+        name?: string;
+        licenseArray?: string[];
+        platform?: Platform;
+        languageCode?: LanguageCode;
+        appVersion?: VersionNumber;
+        billingAddress?: DeepNullable<Address>;
+        vat?: string | null;
+        acceptedTermIdArray?: string[];
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        user: JUHUU.User.Object;
+      };
+    }
+
+    export namespace LoginEmailPassword {
+      export type Params = {
+        password: string;
+        email: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        accessToken: string;
+        refreshToken: string;
+      };
+    }
+
+    export namespace PaymentMethodTokens {
+      export type Params = {
+        userId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        stripe: {
+          ephemeralKeySecret: string;
+          customerId: string;
+          publishableKey: string;
+          clientSecret: string;
+        };
+      };
+    }
+
+    export namespace RegisterEmailPassword {
+      export type Params = {
+        password: string;
+        email: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        accessToken: string;
+        refreshToken: string;
+      };
+    }
+
+    export namespace RefreshAccessToken {
+      export type Params = {
+        refreshToken: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        accessToken: string;
+        refreshToken: string;
+      };
+    }
+
+    export namespace InviteEmployee {
+      export type Params = {
+        userId: string;
+
+        /**
+         * The email of the user to invite.
+         */
+        email?: string;
+
+        /**
+         * The userId of the user to invite.
+         */
+        userIdToInvite?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = void;
+    }
+
+    export namespace RemoveEmployee {
+      export type Params = {
+        userId: string;
+        userIdToRemove?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        user: JUHUU.User.Object;
+      };
+    }
+  }
+
+  export namespace Term {
+    export type Object = {
+      id: string;
+      name: string;
+      url: string; // ein Link zu den vom Betreiber zur Verfügung gestellten AGB
+      dsgvoUrl: string; // ein Link zu den vom Betreiber zur Verfügung gestellten DSGVO
+      propertyId: string; // die property Id zu dem die AGB gehört
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        termId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        term: JUHUU.Term.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace Accept {
+      export type Params = {
+        termId: string;
+        userId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        term: JUHUU.Term.Object;
+      };
+    }
+  }
+
+  export namespace Tariff {
+    export type Object = {
+      id: string;
+      name: LocaleString;
+      propertyId: string;
+      reminderEnabled: boolean;
+      reminderPercentage: number;
+      currencyCode: CurrencyCode;
+      amount: number[]; // set interval with "interval"
+      continue: number;
+      interval: number; // in seconds
+      duration: number; // number of seconds the session can be active. After this time; the session will be forcefully terminated
+      autoRenewMode: AutoRenewMode; // autoRenewMode has to be the same for all tarifs of the same link
+      roundToMidnight: boolean; // if true; the session will be rounded to the next midnight; previously "timeReference"
+      autoRenewManualEnabled: boolean; // if true; the user can enable autoRenew manually
+      manualTerminationEnabled: boolean; // if true; the user can terminate the session manually
+      salesTaxPercentage: number;
+      serviceFeePercentage: number; // once the amount for the tariff is calculated the service fee is also calculated and added to the amount yielding the total amount
+      serviceFeeMin: number; // minimum amount of the serviceFee
+      serviceFeeMax: number; // maximum amount of the serviceFee
+    };
+  }
+
+  export namespace Survey {
+    export type Object = {
+      id: string;
+      starRating: StarRating;
+      userId: string;
+      writtenFeedback: string | null;
+      propertyId: string;
+      sessionId: string;
+    };
+  }
+
+  export namespace Property {
+    type Base = {
+      id: string;
+      readonly object: "property";
+      email: string | null;
+      phone: string | null;
+      ownerUserIdArray: string[];
+      name: string;
+      website: string | null;
+      faqUrl: string | null;
+      bannerImageLight: string | null; // image that is being displayed when the property is viewed
+      bannerImageDark: string | null;
+      iconLight: string | null; // url of image is used as a small icon for the property for previews such as the list of properties
+      iconDark: string | null;
+      version: number; // 2.0.0
+      deviceIconLight: string | null; // url of image is used when a new device is created; this is the default image to use
+      deviceIconDark: string | null;
+      colorScheme: ColorScheme;
+      contactUrl: string | null;
+    };
+
+    export interface Internal extends Base {
+      type: "internal";
+      legalName: string;
+      emailSignature: string;
+      billingAddress: Address;
+      vat: string;
+      invoiceImage: string;
+      invoiceNumberPrefix: string;
+      stripeConnectedAccountId: string;
+      payoutPostProcessIdentifier: "oebbV1" | null;
+      iban: string;
+      bic: string;
+      automaticPayoutsEnabled: boolean;
+      payoutCurrencyCode: CurrencyCode;
+      timeZone: TimeZone;
+    }
+
+    export interface External extends Base {
+      type: "external";
+    }
+
+    export type Object = Internal | External;
+
+    export namespace Retrieve {
+      export type Params = {
+        propertyId: string;
+      };
+
+      export type Options = {};
+
+      export type Response = {
+        property: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {};
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Property.Object[];
+    }
+  }
+
+  export namespace Point {
+    type Base = {
+      id: string;
+      readonly object: "point";
+      location: GeoPoint;
+      altitudeRange: [number, number]; // from, to
+      invalidAt: Date;
+      source: "fluctuo" | null;
+      purposeArray: Purpose[];
+    };
+
+    export interface Single extends Base {
+      type: "single";
+      source: "fluctuo" | null;
+      referenceObject: "location";
+      referenceObjectId: string;
+      iconLight: string | null; // image that is being displayed on the map
+      iconDark: string | null; // if null, category or modality icon is always shown
+      utilization: Utilization | null;
+    }
+
+    export interface Aggregation extends Base {
+      type: "aggregation";
+    }
+
+    export type Object = Single | Aggregation;
+
+    export namespace Map {
+      export type Params = {
+        categoryArray: Category[];
+        modalityArray: Modality[];
+        sectorArray: string[];
+        longitudeTopLeft: number;
+        latitudeTopLeft: number;
+        longitudeBottomRight: number;
+        latitudeBottomRight: number;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Point.Object[];
+    }
+  }
+
+  export namespace Payout {
+    export type Object = {
+      id: string;
+      status: PayoutStatus;
+      propertyId: string;
+      createdAt: string;
+      serviceMonth: ServiceMonth;
+      serviceYear: number; // e.g. 2022
+      amountCaptured: number; // amount that was captured during the month
+      amountToPayout: number; // amount that was or will be payed out to the property
+      transferPaymentIdArray: string[]; // array of paymentIds that will be included in the payout
+      periodPaymentIdArray: string[]; // array of paymentIds that happend during the period of the payout
+      stripePayoutFee: number | null; // will be set after the payout was received by the property
+      stripePaymentIntentFees: number; // amount that was payed to stripe as fees. Sum of all fees of all paymentIntents that were used to capture the amountCaptured
+      stripeTransferId: string | null; // will be set when the amountToPayout is transfered from the stripe platform account to a connected account
+      stripeTransferBalanceTransactionId: string | null; // will be set when the amountToPayout is transfered from the stripe platform account to a connected account
+      stripePayoutId: string | null; // will be set when the amountToPayout is payed out to the property
+      stripePayoutBalanceTransactionId: string | null; // will be set when the amountToPayout is payed out to the property
+      lowestInvoiceNumber: number;
+      highestInvoiceNumber: number;
+      previousPayoutId: string | null;
+      approvedBy: string | null;
+      statementDescriptor: string; // information that will be shown on the bank statement of the property
+      items: PostingRow[];
+      receiver: Party;
+      number: number | null; // number is "null" if payout has status "noPayments"
+      currencyCode: CurrencyCode;
+    };
+  }
+
+  export namespace Payment {
+    export type Object = {
+      id: string;
+      version: number;
+      provider: PaymentServiceProvider | null;
+      status: PaymentStatus;
+      amountAuthorized: number; // amount of the payment that was initially authorized
+      amountAuthorizedWithoutServiceFee: number; // amount of the payment that was authorized without the service fee
+      amountFinal: number | null; // amount that was withdrawn from the user
+      amountCaptured: number; // amount that was captured from the user
+      amountToPayout: number | null;
+      createdAt: Date;
+      billingAddress: DeepNullable<Address>;
+      invoicePdfId: string | null;
+      providerPaymentId: string;
+      userId: string; // user who payed
+      reason: PaymentReason; // reason for the payment
+      transactionFee: number | null; // fees that the merchant took to collect the amountCaptured
+      paymentMethod: PaymentMethod | null;
+      estimatedReadyForPayoutAt: Date | null;
+      propertyId: string;
+      payoutId: string | null;
+      vat: string | null;
+      accountingAreaId: string;
+      currencyCode: CurrencyCode;
+      serviceFee: number | null; // difference between the amountCaptured and the amountToPayout. This should always be higher than the transactionFees in order for us to make revenue
+      scheduledCaptureAt: Date | null; // date at which the payment will be captured. Depends on the payment method used. https://docs.stripe.com/payments/place-a-hold-on-a-payment-method#auth-capture-limitations
+      automaticAmountFinalizationAt: Date | null; // date at which the payment will be automatically finalized with the amountAuthorized if by that time the amount was not yet finalized
+      serviceFeePercentage: number;
+      serviceFeeMin: number;
+      serviceFeeMax: number;
+      salesTaxPercentage: number; // 20 for Austria
+      number: number | null; // for every property a unique number
+      reasonDescription: string | null; // text displayed on the users invoice
+      amountCapturedNet: number | null; // amount that was captured from the user in the currency of the property
+      taxAmount: number | null; // portion of the amountCaptured that is tax
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        paymentId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        payment: JUHUU.Payment.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace RetrieveInvoiceUrl {
+      export type Params = {
+        paymentId: string;
+      };
+
+      export type Options = {} & JUHUU.RequestOptions;
+
+      export type Response = {
+        invoiceUrl: string;
+      };
+    }
+
+    export namespace Tokens {
+      export type Params = {
+        paymentId: string;
+      };
+
+      export type Options = {};
+
+      export type Response = {
+        payment: JUHUU.Payment.Object;
+        tokens: {
+          ephemeralKey: string;
+          customer: string;
+          publishableKey: string;
+          clientSecret: string;
+        };
+      };
+    }
+  }
+
+  export namespace Location {
+    type Base = {
+      id: string;
+      readonly object: "location";
+      logoLight: string | null;
+      logoDark: string | null;
+      location: GeoPoint;
+      altitudeRange: [number, number]; // from, to
+      invalidAt: Date; // timestamp this location is no longer valid and can be deleted from the database
+      utilization: Utilization | null;
+      purposeArray: Purpose[];
+      circumstanceArray: Circumstance[];
+      propertyId: string;
+      name: string;
+      source: "fluctuo" | null;
+      rentOfferArray: OfferDto[];
+      reservationOfferArray: OfferDto[];
+      iconLight: string | null;
+      iconDark: string | null;
+      address: Address;
+      termId: string;
+      timeZone: TimeZone;
+    };
+
+    export interface RentableDeviceGroup extends Base {
+      type: "rentableDeviceGroup";
+      concurrentSessionIdArray: string[]; // sessions that are currently active
+      maximumConcurrentSessions: number; // number of maximum concurrent sessions that are allowed
+      surveyEnabled: boolean;
+      accountingAreaId: string;
+      deviceIdArray: string[];
+    }
+
+    export interface RentableDevice extends Base {
+      type: "rentableDevice";
+      source: "fluctuo" | null;
+      concurrentSessionIdArray: string[]; // sessions that are currently active
+      maximumConcurrentSessions: number; // number of maximum concurrent sessions that are allowed
+      surveyEnabled: boolean;
+      accountingAreaId: string;
+      rentableDeviceGroupLocationId: string | null;
+      deviceId: string;
+    }
+
+    export interface UseableDevice extends Base {
+      type: "useableDevice";
+      deviceId: string;
+      useableDeviceGroupLocationId: string | null;
+    }
+
+    export type Object = RentableDeviceGroup | RentableDevice | UseableDevice;
+
+    export namespace Retrieve {
+      export type Params = {
+        locationId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property" | "tariffArray">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        location: JUHUU.Location.Object;
+        property: JUHUU.Property.Object;
+        tariffArray: JUHUU.Tariff.Object[];
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        rentableDeviceGroupLocationId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Location.Object[];
+    }
+  }
+
+  export namespace Link {
+    type Base = {
+      id: string;
+      readonly object: "link";
+      propertyId: string;
+      referenceObject: "location";
+      referenceObjectId: string;
+      name: string;
+    };
+
+    export interface FiveLetterQr extends Base {
+      type: "fiveLetterQr";
+      fiveLetterQr: string;
+    }
+
+    export type Object = FiveLetterQr;
+
+    export namespace Retrieve {
+      export type Params = {
+        linkId: string;
+      };
+
+      export type Options = {
+        expand: Array<"property">;
+      };
+
+      export type Response = {
+        link: JUHUU.Link.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        fiveLetterQr?: string;
+        propertyId?: string;
+      };
+
+      export type Options = {};
+
+      export type Response = JUHUU.Link.Object[];
+    }
+  }
+
+  export namespace License {
+    export type Object = {
+      id: string;
+      validUntil: Date | null; // if null, the license is valid forever
+      licenseTemplateId: string | null; // if null, the license is handle by us
+      version: number;
+    };
+  }
+
+  export namespace Device {
+    export type Object = {
+      id: string;
+      readonly object: "device";
+      propertyId: string;
+      name: string;
+      description: string | null;
+      status: DeviceStatus;
+      parameterArray: Parameter[]; // values of the parameters are used as current values for the parameters of the device
+      version: number;
+      deviceTemplateId: string;
+      source: "fluctuo" | null;
+      location: GeoPoint;
+      fuel: {
+        type: FuelType;
+        level: number; // percentage between 0 and 100
+      } | null; // null if not in use
+      rangeRemaining: number | null; // in km, null if not in use
+      invalidAt: Date | null;
+      connectorId: string | null; // connector that is used to send messages to the device, null if the device has no connector
+      connectorParameter: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        deviceId: string;
+        source?: "fluctuo" | null;
+      };
+
+      export type Options = {
+        expand?: Array<"property" | "deviceTemplate">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        device: JUHUU.Device.Object;
+        deviceTemplate?: JUHUU.DeviceTemplate.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        statusArray?: DeviceStatus[];
+        rentable?: boolean;
+        propertyId?: string;
+        visible?: boolean;
+        deviceTemplateId?: string;
+        termId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Device.Object[];
+    }
+
+    export namespace Realtime {
+      export type Params = {
+        deviceId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        onUpdated: (
+          callback: (message: {
+            payload: {
+              after: JUHUU.Device.Object;
+              before: JUHUU.Device.Object;
+              changedFields: string[];
+            };
+          }) => void
+        ) => void;
+        close: () => void;
+      };
+    }
+
+    export namespace Message {
+      export type Params = {
+        deviceId: string;
+        message: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = void;
+    }
+
+    export namespace ParameterUpdate {
+      export type Params = {
+        deviceId: string;
+        parameterName: string;
+        value: string | number | boolean;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        device: JUHUU.Device.Object;
+      };
+    }
+
+    export namespace CommandExecute {
+      export type Params = {
+        deviceId: string;
+        commandName: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        device: JUHUU.Device.Object;
+      };
+    }
+  }
+
+  export namespace Connector {
+    type Base = {
+      id: string;
+      connectionStatus: "online" | "offline";
+      description: string | null;
+      name: string;
+      propertyId: string;
+      lastOutboundAt: Date;
+      lastInboundAt: Date;
+      connectionMode: "alwaysOnline" | "temporaryOnline"; // used to alert if connection is lost
+    };
+
+    export interface Mqtt extends Base {
+      type: "mqtt";
+      username: string;
+      password: string;
+      simId: string;
+      clientId: string;
+      host: string;
+      port: number;
+      mqttRetain: boolean;
+      mqttQos: "0" | "1" | "2";
+    }
+
+    export type Object = Mqtt;
+  }
+
+  export namespace DeviceTemplate {
+    export type Object = {
+      id: string;
+      readonly object: "deviceTemplate";
+      productId: string;
+      name: string; // z.B. BikeLoop V1
+      propertyId: string;
+      parameterArray: Parameter[]; // "values" of the parameters are used as default values for the parameters of the device
+      nodeArray: Node[]; // nodes that are being executed when an event occurs
+      userLayoutBlockArray: LayoutBlock[];
+      userLayoutBlockActionButton: Layout.Button.General | null;
+      maintenanceLayoutBlockArray: LayoutBlock[];
+      maintenanceLayoutBlockActionButton: Layout.Button.General | null;
+      source: "fluctuo" | null;
+      invalidAt: Date | null;
+      commandArray: Command[]; // commands that can be sent to the device and make it do something
+      useQuickActionArray: Layout.PreviewButton[]; // quick actions that are shown before accessing the device in before the device was rented
+      deviceImageDark: string;
+      deviceImageLight: string;
+      callToAction: LocaleString;
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        deviceTemplateId: string;
+        source?: "fluctuo" | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceTemplate: JUHUU.DeviceTemplate.Object;
+      };
+    }
+  }
+}
+
+export type VersionNumber = `${number}.${number}.${number}`;
+export type Environment = "development" | "production";

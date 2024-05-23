@@ -1,10 +1,13 @@
 {
   "name": "@juhuu/sdk-ts",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Typescript wrapper for juhuu services",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsup",
+    "publish": "npm publish"
   },
   "repository": {
     "type": "git",
@@ -13,10 +16,20 @@
   "keywords": [
     "juhuu"
   ],
-  "author": "JUHUU",
+  "author": "JUHUU <support@juhuu.app> (https://juhuu.app/)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/JUHUU-Labs/sdk-ts/issues"
   },
-  "homepage": "https://github.com/JUHUU-Labs/sdk-ts#readme"
+  "contributors": [
+    "Moritz Wallner <moritz.wallner@juhuu.app>"
+  ],
+  "homepage": "https://github.com/JUHUU-Labs/sdk-ts#readme",
+  "devDependencies": {
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.7.5"
+  }
 }
