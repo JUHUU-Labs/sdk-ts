@@ -1,4 +1,4 @@
-import { JUHUU } from "../types";
+import { JUHUU } from "..";
 import Service from "../index.service";
 
 export default class UsersService extends Service {

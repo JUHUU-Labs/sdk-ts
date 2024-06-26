@@ -1,4 +1,4 @@
-import { JUHUU } from "./types";
+import { JUHUU } from ".";
 import { Environment } from "./types/types";
 import io, { Socket } from "socket.io-client";
 

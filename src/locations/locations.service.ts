@@ -1,6 +1,5 @@
-import { JUHUU } from "../types";
+import { JUHUU } from "..";
 import Service from "../index.service";
-import { ViewportPolygon } from "../types/types";
 
 export default class LocationsService extends Service {
   constructor(config: JUHUU.SetupConfig) {

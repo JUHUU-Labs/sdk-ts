@@ -1,4 +1,3 @@
-export type VersionNumber = string;
 export type Environment = "development" | "production";
 
 export type Platform = "ios" | "android" | "windows" | "macos" | "web";
@@ -8,6 +7,12 @@ export type PushToken = {
   token: string;
 };
 export type ExtractType<T> = T extends { type: infer U } ? U : never;
+
+export interface Offer {
+  tariffId: string;
+  licenseTemplateIdArray: string[];
+  offerTime: OfferTime;
+}
 
 export type OfferTime = {
   mon: {
