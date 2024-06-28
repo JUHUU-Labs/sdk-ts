@@ -6,15 +6,15 @@ export default class ProductService extends Service {
         super(config);
     }
 
-    async listProducts(
-        productListParams: JUHUU.Product.List.Params,
-        productListOptions?: JUHUU.Product.List.Options
+    async list(
+        params: JUHUU.Product.List.Params,
+        options?: JUHUU.Product.List.Options
     ): Promise<JUHUU.HttpResponse<JUHUU.Product.List.Response>> {
         const queryArray: string[] = [];
 
-        // Check if 'category' exists in productListParams
-        if (productListParams.category !== undefined) {
-            queryArray.push("category=" + productListParams.category);
+        // Check if 'category' exists in params
+        if (params.category !== undefined) {
+            queryArray.push("category=" + params.category);
         }
 
         return await super.sendRequest<JUHUU.Product.List.Response>(
@@ -24,29 +24,32 @@ export default class ProductService extends Service {
                 body: undefined,
                 useAuthentication: false,
             },
-            productListOptions
+            options
         );
     }
 
-    async retrieveProduct(
-        productRetrieveParams: JUHUU.Product.Retrieve.Params,
-        productRetrieveOptions?: JUHUU.Product.Retrieve.Options
+    async retrieve(
+        params: JUHUU.Product.Retrieve.Params,
+        options?: JUHUU.Product.Retrieve.Options
     ): Promise<JUHUU.HttpResponse<JUHUU.Product.Retrieve.Response>> {
         const queryArray: string[] = [];
 
-        // Check if 'expand' exists in productRetrieveOptions
-        if (productRetrieveOptions?.expand !== undefined) {
-            queryArray.push("expand=" + productRetrieveOptions.expand.join(","));
+        if (options?.expand !== undefined) {
+            queryArray.push("expand=" + options.expand.join(","));
         }
 
         return await super.sendRequest<JUHUU.Product.Retrieve.Response>(
             {
                 method: "GET",
-                url: `products/${productRetrieveParams.productId}?${queryArray.join("&")}`,
+                url:
+                    "products/" +
+                    params.productId +
+                    "?" +
+                    queryArray.join("&"),
                 body: undefined,
                 useAuthentication: false,
             },
-            productRetrieveOptions
+            options
         );
     }
 }
