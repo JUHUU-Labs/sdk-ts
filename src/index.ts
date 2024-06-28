@@ -165,7 +165,6 @@ export namespace JUHUU {
         autoRenew: boolean;
         sessionType: Object["type"];
         isOffSession: boolean;
-        idempotencyKey: string;
         userId: string;
       };
 

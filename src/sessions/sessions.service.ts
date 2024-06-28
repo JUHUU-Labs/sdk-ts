@@ -19,7 +19,6 @@ export default class SessionService extends Service {
         autoRenew: SessionCreateParams.autoRenew,
         type: SessionCreateParams.sessionType,
         isOffSession: SessionCreateParams.isOffSession,
-        idempotencyKey: SessionCreateParams.idempotencyKey,
         userId: SessionCreateParams.userId,
       },
       useAuthentication: true,
