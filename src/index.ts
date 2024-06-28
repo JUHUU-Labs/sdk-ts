@@ -9,6 +9,7 @@ import DeviceTemplatesService from "./deviceTemplates/deviceTemplates.service";
 import LocationsService from "./locations/locations.service";
 import TermsService from "./terms/terms.service";
 import TariffsService from "./tariffs/tariffs.service";
+import ProductService from "./products/products.service";
 import {
   Address,
   AutoRenewMode,
@@ -59,6 +60,7 @@ export class Juhuu {
     this.locations = new LocationsService(config);
     this.terms = new TermsService(config);
     this.tariffs = new TariffsService(config);
+    this.products = new ProductService (config);
   }
 
   /**
@@ -75,6 +77,8 @@ export class Juhuu {
   readonly locations: LocationsService;
   readonly terms: TermsService;
   readonly tariffs: TariffsService;
+  readonly products: ProductService ;
+  
 }
 
 export namespace JUHUU {
@@ -110,7 +114,26 @@ export namespace JUHUU {
      * If this is true, a new accessToken will be requested if the current one is expired.
      */
     refreshTokensIfNecessary?: boolean;
+    expand?: Array<"property" | "tariffArray">; // Add expand property here
+
   };
+  export type LocaleString = {
+    [locale: string]: string;
+};
+export type DeepNullable<T> = {
+  [P in keyof T]?: DeepNullable<T[P]> | null;
+};
+export enum Purpose {
+  Purpose1 = 'Purpose 1',
+  Purpose2 = 'Purpose 2',
+  // Add more purposes as needed
+}
+
+export enum Technology {
+  Tech1 = 'Technology 1',
+  Tech2 = 'Technology 2',
+  // Add more technologies as needed
+}
 
   export namespace Session {
     type Base = {
@@ -166,6 +189,7 @@ export namespace JUHUU {
         sessionType: Object["type"];
         isOffSession: boolean;
         userId: string;
+        
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -810,6 +834,72 @@ export namespace JUHUU {
       export type Response = JUHUU.Location.Object[];
     }
   }
+
+export namespace Product {
+    export type Base = {
+        id: string;
+        readonly object: "product";
+        name: string;
+        propertyId: string;
+        version: number;
+        previewText: JUHUU.LocaleString;
+        description: JUHUU.LocaleString;
+        bannerImageDark: string[];
+        bannerImageLight: string[];
+        model3d: string | null;
+        datasheet: JUHUU.DeepNullable<JUHUU.LocaleString>;
+        highlightArray: JUHUU.LocaleString[];
+        purposeArray: JUHUU.Purpose[];
+        technologyArray: JUHUU.Technology[];
+        invalidAt: Date;
+        source: "fluctuo" | null;
+    };
+
+    export interface PhysicalProduct extends Base {
+        type: "physicalProduct";
+        weight: number; // in kilograms
+        dimensions: {
+            length: number; // in meters
+            width: number; // in meters
+            height: number; // in meters
+        };
+        material: string;
+        color: string;
+    }
+
+    export interface DigitalProduct extends Base {
+        type: "digitalProduct";
+        fileSize: number; // in megabytes
+        downloadUrl: string;
+    }
+
+    export type Object = PhysicalProduct | DigitalProduct;
+
+    export namespace Retrieve {
+        export type Params = {
+            productId: string;
+        };
+
+        export type Options = JUHUU.RequestOptions;
+
+        export type Response = {
+            product: Product.Object;
+        };
+    }
+
+    export namespace List {
+        export type Params = {
+            propertyId?: string;
+            category: string; // New property added
+
+        };
+
+        export type Options = JUHUU.RequestOptions;
+
+        export type Response = Product.Object[];
+    }
+}
+
 
   export namespace Link {
     type Base = {
