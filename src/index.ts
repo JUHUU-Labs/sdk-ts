@@ -48,6 +48,8 @@ import {
   Utilization,
 } from "./types/types";
 
+export * from "./types/types";
+
 export class Juhuu {
   constructor(config: JUHUU.SetupConfig) {
     this.sessions = new SessionsService(config);
