@@ -26,7 +26,6 @@ import {
   LanguageCode,
   Layout,
   LayoutBlock,
-  LocaleString,
   Modality,
   Offer,
   Parameter,
@@ -39,7 +38,6 @@ import {
   Person,
   Platform,
   PostingRow,
-  Purpose,
   PushToken,
   Sector,
   ServiceMonth,
@@ -47,6 +45,7 @@ import {
   TimeZone,
   Utilization,
 } from "./types/types";
+import SettingsService from "./settings/settings.service";
 
 export * from "./types/types";
 
@@ -64,6 +63,7 @@ export class Juhuu {
     this.terms = new TermsService(config);
     this.tariffs = new TariffsService(config);
     this.products = new ProductService(config);
+    this.settings = new SettingsService(config);
   }
 
   /**
@@ -81,6 +81,7 @@ export class Juhuu {
   readonly terms: TermsService;
   readonly tariffs: TariffsService;
   readonly products: ProductService;
+  readonly settings: SettingsService;
 }
 
 export namespace JUHUU {
