@@ -331,7 +331,7 @@ export type PaymentStatus =
 export type PaymentServiceProvider = "stripe";
 
 export type PayoutStatus =
-  | "awaitingApproval" // payout is waiting for its approval
+  | "waitingForApproval" // payout is waiting for its approval
   | "inTransitToProperty" // payout is on its way to the customer
   | "payedOut"; // payout is completed and payed out to the customer
 
