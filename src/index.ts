@@ -200,6 +200,19 @@ export namespace JUHUU {
       };
     }
 
+    export namespace Export {
+      export type Params = {
+        propertyId: string;
+        outputType: "csv";
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        outputUrl: string;
+      };
+    }
+
     export namespace Retrieve {
       export type Params = {
         sessionId: string;
@@ -578,6 +591,20 @@ export namespace JUHUU {
 
     export type Object = Internal | External;
 
+    export namespace Create {
+      export type Params = {
+        userId?: string;
+        name: string;
+        type?: Object["type"];
+      };
+
+      export type Options = {};
+
+      export type Response = {
+        property: JUHUU.Property.Object;
+      };
+    }
+
     export namespace Retrieve {
       export type Params = {
         propertyId: string;
@@ -724,6 +751,18 @@ export namespace JUHUU {
         payment: JUHUU.Payment.Object;
         property?: JUHUU.Property.Object;
       };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+        userId?: string;
+        statusArray?: JUHUU.Payment.Object["status"][];
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Payment.Object[];
     }
 
     export namespace RetrieveInvoiceUrl {

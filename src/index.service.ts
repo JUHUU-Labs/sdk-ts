@@ -74,27 +74,26 @@ export default class Service {
       options.refreshTokensIfNecessary = true;
     }
 
-    let token: string | null = null;
+    let token: string | null | undefined = null;
 
-    if (useAuthentication === true && options.accessToken === undefined) {
+    if (options.accessToken === undefined || options.accessToken === null) {
       token = await this.getAccessToken();
-
-      if (token === null) {
-        console.error(
-          "endpoint",
-          url,
-          "should use authentication but no token was found"
-        );
-        return {
-          ok: false,
-          data: null,
-        } as JUHUU.HttpResponse<T>;
-      }
-    } else if (
-      useAuthentication === true &&
-      options.accessToken !== undefined
-    ) {
+    } else {
       token = options.accessToken;
+    }
+
+    console.log("accessToken:", token);
+
+    if ((token === null || token === undefined) && useAuthentication === true) {
+      console.error(
+        "endpoint",
+        url,
+        "should use authentication but no token was found"
+      );
+      return {
+        ok: false,
+        data: null,
+      } as JUHUU.HttpResponse<T>;
     }
 
     const uri = this.httpBaseUrl + url;
@@ -229,47 +228,56 @@ export default class Service {
   }
 
   private async sendGetRequest(
-    token: string | null,
+    token: string | undefined | null,
     uri: string
   ): Promise<Response> {
+    const headers: any = {
+      "Content-Type": "application/json",
+      "Client-Version": this.clientVersion,
+    };
+    if (token !== undefined && token !== null) {
+      headers.Authorization = `Bearer ${token}`;
+    }
     return await fetch(uri, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Client-Version": this.clientVersion,
-        Authorization: token ? `Bearer ${token}` : "",
-      },
+      headers,
     });
   }
 
   private async sendPostRequest(
-    token: string | null,
+    token: string | undefined | null,
     uri: string,
     body: any
   ): Promise<Response> {
+    const headers: any = {
+      "Content-Type": "application/json",
+      "Client-Version": this.clientVersion,
+    };
+    if (token !== undefined && token !== null) {
+      headers.Authorization = `Bearer ${token}`;
+    }
     return await fetch(uri, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Client-Version": this.clientVersion,
-        Authorization: token ? `Bearer ${token}` : "",
-      },
+      headers,
       body: JSON.stringify(body),
     });
   }
 
   private async sendPatchRequest(
-    token: string | null,
+    token: string | undefined | null,
     uri: string,
     body: any
   ): Promise<Response> {
+    const headers: any = {
+      "Content-Type": "application/json",
+      "Client-Version": this.clientVersion,
+    };
+    if (token !== undefined && token !== null) {
+      headers.Authorization = `Bearer ${token}`;
+    }
     return await fetch(uri, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        "Client-Version": this.clientVersion,
-        Authorization: token ? `Bearer ${token}` : "",
-      },
+      headers,
       body: JSON.stringify(body),
     });
   }

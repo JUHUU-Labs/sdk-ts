@@ -6,7 +6,34 @@ export default class PaymentsService extends Service {
     super(config);
   }
 
-  async create() {}
+  async list(
+    PaymentListParams: JUHUU.Payment.List.Params,
+    PaymentListOptions?: JUHUU.Payment.List.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Payment.List.Response>> {
+    const queryArray: string[] = [];
+
+    if (PaymentListParams.userId !== undefined) {
+      queryArray.push("userId=" + PaymentListParams.userId);
+    }
+
+    if (PaymentListParams.propertyId !== undefined) {
+      queryArray.push("propertyId=" + PaymentListParams.propertyId);
+    }
+
+    if (PaymentListParams.statusArray !== undefined) {
+      queryArray.push("statusArray=" + PaymentListParams.statusArray.join(","));
+    }
+
+    return await super.sendRequest<JUHUU.Payment.List.Response>(
+      {
+        method: "GET",
+        url: "payments?" + queryArray.join("&"),
+        body: undefined,
+        useAuthentication: true,
+      },
+      PaymentListOptions
+    );
+  }
 
   async retrieve(
     PaymentRetrieveParams: JUHUU.Payment.Retrieve.Params,

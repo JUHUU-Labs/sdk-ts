@@ -10,19 +10,40 @@ export default class SessionService extends Service {
     SessionCreateParams: JUHUU.Session.Create.Params,
     SessionCreateOptions?: JUHUU.Session.Create.Options
   ): Promise<JUHUU.HttpResponse<JUHUU.Session.Create.Response>> {
-    return await super.sendRequest<JUHUU.Session.Retrieve.Response>({
-      method: "POST",
-      url: "sessions",
-      body: {
-        locationId: SessionCreateParams.locationId,
-        tariffId: SessionCreateParams.tariffId,
-        autoRenew: SessionCreateParams.autoRenew,
-        type: SessionCreateParams.sessionType,
-        isOffSession: SessionCreateParams.isOffSession,
-        userId: SessionCreateParams.userId,
+    return await super.sendRequest<JUHUU.Session.Create.Response>(
+      {
+        method: "POST",
+        url: "sessions",
+        body: {
+          locationId: SessionCreateParams.locationId,
+          tariffId: SessionCreateParams.tariffId,
+          autoRenew: SessionCreateParams.autoRenew,
+          type: SessionCreateParams.sessionType,
+          isOffSession: SessionCreateParams.isOffSession,
+          userId: SessionCreateParams.userId,
+        },
+        useAuthentication: true,
       },
-      useAuthentication: true,
-    });
+      SessionCreateOptions
+    );
+  }
+
+  async export(
+    SessionExportParams: JUHUU.Session.Export.Params,
+    SessionExportOptions?: JUHUU.Session.Export.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Session.Export.Response>> {
+    return await super.sendRequest<JUHUU.Session.Export.Response>(
+      {
+        method: "POST",
+        url: "sessions/export",
+        body: {
+          propertyId: SessionExportParams.propertyId,
+          outputType: SessionExportParams.outputType,
+        },
+        useAuthentication: true,
+      },
+      SessionExportOptions
+    );
   }
 
   async retrieve(

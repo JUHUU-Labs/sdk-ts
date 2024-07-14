@@ -6,7 +6,23 @@ export default class PropertiesService extends Service {
     super(config);
   }
 
-  async create() {}
+  async create(
+    PropertyCreateParams: JUHUU.Property.Create.Params,
+    PropertyCreateOptions?: JUHUU.Property.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Property.Create.Response>> {
+    const queryArray: string[] = [];
+
+    return await super.sendRequest<JUHUU.Property.Create.Response>({
+      method: "POST",
+      url: "properties",
+      body: {
+        userId: PropertyCreateParams.userId,
+        name: PropertyCreateParams.name,
+        type: PropertyCreateParams.type,
+      },
+      useAuthentication: true,
+    });
+  }
 
   async retrieve(
     PropertyRetrieveParams: JUHUU.Property.Retrieve.Params,
