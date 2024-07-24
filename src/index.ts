@@ -624,6 +624,39 @@ export namespace JUHUU {
 
       export type Response = JUHUU.Property.Object[];
     }
+
+    export namespace StripeAccountUrl {
+      export type Params = {
+        propertyId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        url: string;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        propertyId: string;
+        name?: string;
+        legalName?: string;
+        billingAddress?: Partial<Address>;
+        email?: string;
+        website?: string;
+        phone?: string;
+        faqUrl?: string;
+        colorScheme?: Partial<ColorScheme>;
+        contactUrl?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        property: JUHUU.Property.Object;
+      };
+    }
   }
 
   export namespace Point {

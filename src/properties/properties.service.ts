@@ -59,7 +59,48 @@ export default class PropertiesService extends Service {
     );
   }
 
-  async update() {}
+  async update(
+    PropertyUpdateParams: JUHUU.Property.Update.Params,
+    PropertyUpdateOptions?: JUHUU.Property.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Property.Update.Response>> {
+    return await super.sendRequest<JUHUU.Property.Update.Response>(
+      {
+        method: "PATCH",
+        url: "properties/" + PropertyUpdateParams.propertyId,
+        body: {
+          name: PropertyUpdateParams.name,
+          legalName: PropertyUpdateParams.legalName,
+          billingAddress: PropertyUpdateParams.billingAddress,
+          email: PropertyUpdateParams.email,
+          website: PropertyUpdateParams.website,
+          phone: PropertyUpdateParams.phone,
+          faqUrl: PropertyUpdateParams.faqUrl,
+          colorScheme: PropertyUpdateParams.colorScheme,
+          contactUrl: PropertyUpdateParams.contactUrl,
+        },
+        useAuthentication: true,
+      },
+      PropertyUpdateOptions
+    );
+  }
+
+  async stripeAccountUrl(
+    PropertyStripeAccountUrlParams: JUHUU.Property.StripeAccountUrl.Params,
+    PropertyStripeAccountUrlOptions?: JUHUU.Property.StripeAccountUrl.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Property.StripeAccountUrl.Response>> {
+    return await super.sendRequest<JUHUU.Property.StripeAccountUrl.Response>(
+      {
+        method: "GET",
+        url:
+          "properties/" +
+          PropertyStripeAccountUrlParams.propertyId +
+          "/stripeAccountUrl",
+        body: undefined,
+        useAuthentication: true,
+      },
+      PropertyStripeAccountUrlOptions
+    );
+  }
 
   async delete() {}
 
