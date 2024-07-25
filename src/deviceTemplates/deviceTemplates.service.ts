@@ -33,9 +33,24 @@ export default class DeviceTemplatesService extends Service {
     );
   }
 
-  async update() {}
+  async list(
+    DeviceTemplateListParams: JUHUU.DeviceTemplate.List.Params,
+    DeviceTemplateListOptions?: JUHUU.DeviceTemplate.List.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.DeviceTemplate.List.Response>> {
+    const queryArray: string[] = [];
 
-  async delete() {}
+    if (DeviceTemplateListParams?.propertyId !== undefined) {
+      queryArray.push("propertyId=" + DeviceTemplateListParams.propertyId);
+    }
 
-  async terminate() {}
+    return await super.sendRequest<JUHUU.DeviceTemplate.List.Response>(
+      {
+        method: "GET",
+        url: "deviceTemplates?" + queryArray.join("&"),
+        body: undefined,
+        useAuthentication: false,
+      },
+      DeviceTemplateListOptions
+    );
+  }
 }

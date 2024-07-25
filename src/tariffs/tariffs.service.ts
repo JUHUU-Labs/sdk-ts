@@ -8,40 +8,51 @@ export default class TariffsService extends Service {
 
   async create() {}
 
-  // async retrieve(
-  //     TariffRetrieveParams: JUHUU.Tariff.Retrieve.Params,
-  //     TariffRetrieveOptions?: JUHUU.Tariff.Retrieve.Options,
-  // ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.Retrieve.Response>> {
-  //     const queryArray: string[] = [];
+  async retrieve(
+    TariffRetrieveParams: JUHUU.Tariff.Retrieve.Params,
+    TariffRetrieveOptions?: JUHUU.Tariff.Retrieve.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.Retrieve.Response>> {
+    const queryArray: string[] = [];
 
-  //     return await super.sendRequest<JUHUU.Tariff.Retrieve.Response>({
-  //         method: "GET",
-  //         url:
-  //             "tariffs/" +
-  //             TariffRetrieveParams.propertyId +
-  //             "?" +
-  //             queryArray.join("&"),
-  //         body: undefined,
-  //         useAuthentication: false,
-  //     });
-  // }
+    if (TariffRetrieveOptions?.expand !== undefined) {
+      queryArray.push("expand=" + TariffRetrieveOptions.expand.join(","));
+    }
 
-  // async list(
-  //     TariffListParams: JUHUU.Tariff.List.Params,
-  //     TariffListOptions?: JUHUU.Tariff.List.Options,
-  // ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.List.Response>> {
-  //     const queryArray: string[] = [];
+    return await super.sendRequest<JUHUU.Tariff.Retrieve.Response>(
+      {
+        method: "GET",
+        url:
+          "tariffs/" +
+          TariffRetrieveParams.tariffId +
+          "?" +
+          queryArray.join("&"),
+        body: undefined,
+        useAuthentication: false,
+      },
+      TariffRetrieveOptions
+    );
+  }
 
-  //     return await super.sendRequest<JUHUU.Tariff.List.Response>(
-  //         {
-  //             method: "GET",
-  //             url: "tariffs?" + queryArray.join("&"),
-  //             body: undefined,
-  //             useAuthentication: false,
-  //         },
-  //         TariffListOptions,
-  //     );
-  // }
+  async list(
+    TariffListParams: JUHUU.Tariff.List.Params,
+    TariffListOptions?: JUHUU.Tariff.List.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.List.Response>> {
+    const queryArray: string[] = [];
+
+    if (TariffListParams?.propertyId !== undefined) {
+      queryArray.push("propertyId=" + TariffListParams.propertyId);
+    }
+
+    return await super.sendRequest<JUHUU.Tariff.List.Response>(
+      {
+        method: "GET",
+        url: "tariffs?" + queryArray.join("&"),
+        body: undefined,
+        useAuthentication: false,
+      },
+      TariffListOptions
+    );
+  }
 
   async update() {}
 

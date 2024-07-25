@@ -849,6 +849,11 @@ export type Unit =
   | "month"
   | "year";
 
+export type AccessControlListElement = {
+  topic: string;
+  acc: number;
+};
+
 export type Parameter =
   | {
       name: string; // name of the paramter

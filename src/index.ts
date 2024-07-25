@@ -11,6 +11,7 @@ import TermsService from "./terms/terms.service";
 import TariffsService from "./tariffs/tariffs.service";
 import ProductService from "./products/products.service";
 import {
+  AccessControlListElement,
   Address,
   AutoRenewMode,
   Category,
@@ -46,6 +47,8 @@ import {
   Utilization,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
+import AccountingAreasService from "./accountingAreas/accountingAreas.service";
+import ConnectorsService from "./connectors/connectors.service";
 
 export * from "./types/types";
 
@@ -64,6 +67,8 @@ export class Juhuu {
     this.tariffs = new TariffsService(config);
     this.products = new ProductService(config);
     this.settings = new SettingsService(config);
+    this.accountingAreas = new AccountingAreasService(config);
+    this.connectors = new ConnectorsService(config);
   }
 
   /**
@@ -82,6 +87,8 @@ export class Juhuu {
   readonly tariffs: TariffsService;
   readonly products: ProductService;
   readonly settings: SettingsService;
+  readonly accountingAreas: AccountingAreasService;
+  readonly connectors: ConnectorsService;
 }
 
 export namespace JUHUU {
@@ -499,6 +506,16 @@ export namespace JUHUU {
       };
     }
 
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Term.Object[];
+    }
+
     export namespace Accept {
       export type Params = {
         termId: string;
@@ -510,6 +527,44 @@ export namespace JUHUU {
       export type Response = {
         term: JUHUU.Term.Object;
       };
+    }
+  }
+
+  export namespace AccountingArea {
+    export type Object = {
+      id: string;
+      name: string;
+      propertyId: string;
+      creditPostingRowDescription: string;
+      orderNumber: string; // mandatory field. Value is being used in posting row of credit note
+      BKTXT: string | null;
+      SGTXT: string | null;
+      ZUONR: string | null;
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        accountingAreaId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        accountingArea: JUHUU.AccountingArea.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.AccountingArea.Object[];
     }
   }
 
@@ -534,6 +589,31 @@ export namespace JUHUU {
       serviceFeeMin: number; // minimum amount of the serviceFee
       serviceFeeMax: number; // maximum amount of the serviceFee
     };
+
+    export namespace Retrieve {
+      export type Params = {
+        tariffId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        tariff: JUHUU.Tariff.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Tariff.Object[];
+    }
   }
 
   export namespace Survey {
@@ -701,6 +781,16 @@ export namespace JUHUU {
 
       export type Response = JUHUU.Point.Object[];
     }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Point.Object[];
+    }
   }
 
   export namespace Payout {
@@ -708,29 +798,60 @@ export namespace JUHUU {
       id: string;
       status: PayoutStatus;
       propertyId: string;
-      createdAt: string;
-      serviceMonth: ServiceMonth;
-      serviceYear: number; // e.g. 2022
-      amountCaptured: number; // amount that was captured during the month
-      amountToPayout: number; // amount that was or will be payed out to the property
-      transferPaymentIdArray: string[]; // array of paymentIds that will be included in the payout
-      periodPaymentIdArray: string[]; // array of paymentIds that happend during the period of the payout
+      createdAt: Date;
+      fromDate: Date;
+      toDate: Date;
+      amountCapturedTotal: number; // amount that was captured during the month (transferPaymentIdArray only)
+      amountToPayoutTotal: number; // amount that was or will be payed out to the property (transferPaymentIdArray only)
+      serviceFeeTotal: number; // sum of all serviceFee of all payments of that payout (transferPaymentIdArray only)
+      transactionFeeTotal: number; // amount that was payed to stripe as fees. (transferPaymentIdArray only). Sum of all fees of all paymentIntents that were used to capture the amountCapturedTotal
+      transferPaymentIdArray: string[]; // array of paymentIds that will be transfered to the property
+      periodPaymentIdArray: string[]; // array of paymentIds that whos invoice was created during the period of the payout
       stripePayoutFee: number | null; // will be set after the payout was received by the property
-      stripePaymentIntentFees: number; // amount that was payed to stripe as fees. Sum of all fees of all paymentIntents that were used to capture the amountCaptured
-      stripeTransferId: string | null; // will be set when the amountToPayout is transfered from the stripe platform account to a connected account
-      stripeTransferBalanceTransactionId: string | null; // will be set when the amountToPayout is transfered from the stripe platform account to a connected account
-      stripePayoutId: string | null; // will be set when the amountToPayout is payed out to the property
-      stripePayoutBalanceTransactionId: string | null; // will be set when the amountToPayout is payed out to the property
-      lowestInvoiceNumber: number;
-      highestInvoiceNumber: number;
-      previousPayoutId: string | null;
-      approvedBy: string | null;
-      statementDescriptor: string; // information that will be shown on the bank statement of the property
-      items: PostingRow[];
+      stripeTransferId: string | null; // will be set when the amountToPayoutTotal is transfered from the stripe platform account to a connected account
+      stripeTransferFee: number | null; // fee that stripe charged us for transfering the funds to the connected account
+      stripeTransferBalanceTransactionId: string | null; // will be set when the amountToPayoutTotal is transfered from the stripe platform account to a connected account
+      stripePayoutId: string | null; // will be set when the amountToPayoutTotal is payed out to the property
+      stripePayoutBalanceTransactionId: string | null; // will be set when the amountToPayoutTotal is payed out to the property
+      lowestTransferPaymentNumber: number;
+      highestTransferPaymentNumber: number;
+      approvedByUserId: string | null;
+      createdBy: "propertyAdmin" | "system";
+      createdByUserId: string | null;
+      statementDescription: string; // information that will be shown on the bank statement of the property
+      postingRowArray: PostingRow[];
       receiver: Party;
-      number: number | null; // number is "null" if payout has status "noPayments"
+      number: number; // number of the payout; this number does not start new with every property
       currencyCode: CurrencyCode;
+      version: number;
+      creditNotePdfId: string;
+      stripeConnectedAccountId: string;
     };
+
+    export namespace Retrieve {
+      export type Params = {
+        payoutId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        payout: JUHUU.Payout.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Payout.Object[];
+    }
   }
 
   export namespace Payment {
@@ -900,6 +1021,7 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         rentableDeviceGroupLocationId?: string;
+        propertyId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1146,28 +1268,53 @@ export namespace JUHUU {
   export namespace Connector {
     type Base = {
       id: string;
+      readonly object: "connector";
       connectionStatus: "online" | "offline";
       description: string | null;
       name: string;
       propertyId: string;
-      lastOutboundAt: Date;
-      lastInboundAt: Date;
-      connectionMode: "alwaysOnline" | "temporaryOnline"; // used to alert if connection is lost
+      lastOutboundAt: Date | null;
+      lastInboundAt: Date | null;
+      connectionMode: "alwaysOnline" | "temporaryOnline";
+      version: number;
+      simId: string | null; // null, if no sim card of ours is installed
     };
 
     export interface Mqtt extends Base {
       type: "mqtt";
       username: string;
       password: string;
-      simId: string;
       clientId: string;
       host: string;
       port: number;
       mqttRetain: boolean;
       mqttQos: "0" | "1" | "2";
+      acls: AccessControlListElement[];
     }
 
     export type Object = Mqtt;
+
+    export namespace Retrieve {
+      export type Params = {
+        connectorId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        connector: JUHUU.Connector.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Connector.Object[];
+    }
   }
 
   export namespace DeviceTemplate {
@@ -1203,6 +1350,16 @@ export namespace JUHUU {
       export type Response = {
         deviceTemplate: JUHUU.DeviceTemplate.Object;
       };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.DeviceTemplate.Object[];
     }
   }
 }

@@ -34,6 +34,10 @@ export default class ProductService extends Service {
       );
     }
 
+    if (ProductListParams?.propertyId !== undefined) {
+      queryArray.push("propertyId=" + ProductListParams.propertyId);
+    }
+
     return await super.sendRequest<JUHUU.Product.List.Response>(
       {
         method: "GET",

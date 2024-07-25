@@ -31,6 +31,27 @@ export default class PointsService extends Service {
     );
   }
 
+  async list(
+    PointListParams: JUHUU.Point.List.Params,
+    PointListOptions?: JUHUU.Point.List.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Point.List.Response>> {
+    const queryArray: string[] = [];
+
+    if (PointListParams?.propertyId !== undefined) {
+      queryArray.push("propertyId=" + PointListParams.propertyId);
+    }
+
+    return await super.sendRequest<JUHUU.Point.List.Response>(
+      {
+        method: "GET",
+        url: "points?" + queryArray.join("&"),
+        body: undefined,
+        useAuthentication: false,
+      },
+      PointListOptions
+    );
+  }
+
   private toRadians(degrees: number) {
     return (degrees * Math.PI) / 180;
   }

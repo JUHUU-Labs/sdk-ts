@@ -44,6 +44,10 @@ export default class LocationsService extends Service {
       );
     }
 
+    if (LocationListParams?.propertyId !== undefined) {
+      queryArray.push("propertyId=" + LocationListParams.propertyId);
+    }
+
     return await super.sendRequest<JUHUU.Location.List.Response>(
       {
         method: "GET",

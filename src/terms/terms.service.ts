@@ -27,6 +27,27 @@ export default class TermsService extends Service {
     );
   }
 
+  async list(
+    TermListParams: JUHUU.Term.List.Params,
+    TermListOptions?: JUHUU.Term.List.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Term.List.Response>> {
+    const queryArray: string[] = [];
+
+    if (TermListParams?.propertyId !== undefined) {
+      queryArray.push("propertyId=" + TermListParams.propertyId);
+    }
+
+    return await super.sendRequest<JUHUU.Term.List.Response>(
+      {
+        method: "GET",
+        url: "terms?" + queryArray.join("&"),
+        body: undefined,
+        useAuthentication: false,
+      },
+      TermListOptions
+    );
+  }
+
   async accept(
     TermAcceptParams: JUHUU.Term.Accept.Params,
     TermAcceptOptions?: JUHUU.Term.Accept.Options
