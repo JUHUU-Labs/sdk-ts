@@ -18,6 +18,7 @@ import {
   Circumstance,
   ColorScheme,
   Command,
+  CountryCode,
   CurrencyCode,
   DeepNullable,
   DeviceStatus,
@@ -42,6 +43,7 @@ import {
   PushToken,
   Sector,
   ServiceMonth,
+  SimStatus,
   StarRating,
   TimeZone,
   Utilization,
@@ -49,6 +51,7 @@ import {
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
 import ConnectorsService from "./connectors/connectors.service";
+import PayoutsService from "./payouts/payouts.service";
 
 export * from "./types/types";
 
@@ -69,6 +72,7 @@ export class Juhuu {
     this.settings = new SettingsService(config);
     this.accountingAreas = new AccountingAreasService(config);
     this.connectors = new ConnectorsService(config);
+    this.payouts = new PayoutsService(config);
   }
 
   /**
@@ -89,6 +93,7 @@ export class Juhuu {
   readonly settings: SettingsService;
   readonly accountingAreas: AccountingAreasService;
   readonly connectors: ConnectorsService;
+  readonly payouts: PayoutsService;
 }
 
 export namespace JUHUU {
@@ -1360,6 +1365,78 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.DeviceTemplate.Object[];
+    }
+  }
+
+  export namespace Sim {
+    export type Object = {
+      id: string;
+      readonly object: "sim";
+      iccid: string;
+      status: SimStatus;
+      provider: "1nce" | null;
+      countryCode: CountryCode | null;
+      imei: string | null;
+      propertyId: string;
+      description: string | null;
+      name: string;
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        simId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        sim: JUHUU.Sim.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Sim.Object[];
+    }
+  }
+
+  export namespace ConnectorMessage {
+    export type Object = {
+      id: string;
+      readonly object: "connectorMessage";
+      message: string;
+      connectorId: string;
+      direction: "inbound" | "outbound";
+      createdAt: Date;
+      deviceId: string | null;
+      propertyId: string;
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        connectorMessageId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        connectorMessage: JUHUU.ConnectorMessage.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.ConnectorMessage.Object[];
     }
   }
 }
