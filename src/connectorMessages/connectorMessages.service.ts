@@ -23,7 +23,7 @@ export default class ConnectorMessagesService extends Service {
           "?" +
           queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        useAuthentication: true,
       },
       ConnectorMessageRetrieveOptions
     );
@@ -39,12 +39,16 @@ export default class ConnectorMessagesService extends Service {
       queryArray.push("propertyId=" + ConnectorMessageListParams.propertyId);
     }
 
+    if (ConnectorMessageListParams?.connectorId !== undefined) {
+      queryArray.push("connectorId=" + ConnectorMessageListParams.connectorId);
+    }
+
     return await super.sendRequest<JUHUU.ConnectorMessage.List.Response>(
       {
         method: "GET",
         url: "connectorMessages?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        useAuthentication: true,
       },
       ConnectorMessageListOptions
     );

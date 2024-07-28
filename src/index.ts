@@ -1280,7 +1280,7 @@ export namespace JUHUU {
     type Base = {
       id: string;
       readonly object: "connector";
-      connectionStatus: "online" | "offline";
+      status: "online" | "offline";
       description: string | null;
       name: string;
       propertyId: string;
@@ -1455,6 +1455,7 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
+        connectorId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
