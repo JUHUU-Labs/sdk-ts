@@ -12,12 +12,10 @@ export default class SimsService extends Service {
     SimRetrieveParams: JUHUU.Sim.Retrieve.Params,
     SimRetrieveOptions?: JUHUU.Sim.Retrieve.Options
   ): Promise<JUHUU.HttpResponse<JUHUU.Sim.Retrieve.Response>> {
-    const queryArray: string[] = [];
-
     return await super.sendRequest<JUHUU.Sim.Retrieve.Response>(
       {
         method: "GET",
-        url: "sims/" + SimRetrieveParams.simId + "?" + queryArray.join("&"),
+        url: "sims/" + SimRetrieveParams.simId,
         body: undefined,
         useAuthentication: false,
       },
@@ -43,6 +41,22 @@ export default class SimsService extends Service {
         useAuthentication: false,
       },
       SimListOptions
+    );
+  }
+
+  async updateFromProvider(
+    SimUpdateFromProviderParams: JUHUU.Sim.UpdateFromProvider.Params,
+    SimUpdateFromProviderOptions?: JUHUU.Sim.UpdateFromProvider.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Sim.UpdateFromProvider.Response>> {
+    return await super.sendRequest<JUHUU.Sim.UpdateFromProvider.Response>(
+      {
+        method: "PATCH",
+        url:
+          "sims/" + SimUpdateFromProviderParams.simId + "/updateFromProvider",
+        body: undefined,
+        useAuthentication: false,
+      },
+      SimUpdateFromProviderOptions
     );
   }
 }

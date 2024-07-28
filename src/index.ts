@@ -52,6 +52,8 @@ import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
 import ConnectorsService from "./connectors/connectors.service";
 import PayoutsService from "./payouts/payouts.service";
+import ConnectorMessagesService from "./connectorMessages/connectorMessages.service";
+import SimsService from "./sims/sims.service";
 
 export * from "./types/types";
 
@@ -73,6 +75,8 @@ export class Juhuu {
     this.accountingAreas = new AccountingAreasService(config);
     this.connectors = new ConnectorsService(config);
     this.payouts = new PayoutsService(config);
+    this.connectorMessages = new ConnectorMessagesService(config);
+    this.sims = new SimsService(config);
   }
 
   /**
@@ -94,6 +98,8 @@ export class Juhuu {
   readonly accountingAreas: AccountingAreasService;
   readonly connectors: ConnectorsService;
   readonly payouts: PayoutsService;
+  readonly connectorMessages: ConnectorMessagesService;
+  readonly sims: SimsService;
 }
 
 export namespace JUHUU {
@@ -1380,6 +1386,11 @@ export namespace JUHUU {
       propertyId: string;
       description: string | null;
       name: string;
+      dataQuotaMax: number | null;
+      dataQuotaCurrent: number | null;
+      dataQuotaThresholdPercentage: number | null;
+      providerUsername: string | null;
+      providerPassword: string | null;
     };
 
     export namespace Retrieve {
@@ -1402,6 +1413,18 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.Sim.Object[];
+    }
+
+    export namespace UpdateFromProvider {
+      export type Params = {
+        simId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        sim: JUHUU.Sim.Object;
+      };
     }
   }
 
