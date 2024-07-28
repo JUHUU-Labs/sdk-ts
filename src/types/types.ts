@@ -854,7 +854,7 @@ export type AccessControlListElement = {
   acc: number;
 };
 
-export type SimStatus = "online" | "offline";
+export type SimStatus = "online" | "offline" | "attached";
 
 export type Parameter =
   | {
