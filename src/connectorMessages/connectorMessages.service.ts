@@ -6,8 +6,6 @@ export default class ConnectorMessagesService extends Service {
     super(config);
   }
 
-  async create() {}
-
   async retrieve(
     ConnectorMessageRetrieveParams: JUHUU.ConnectorMessage.Retrieve.Params,
     ConnectorMessageRetrieveOptions?: JUHUU.ConnectorMessage.Retrieve.Options
