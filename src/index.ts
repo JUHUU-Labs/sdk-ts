@@ -1458,7 +1458,10 @@ export namespace JUHUU {
         connectorId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        skip?: number;
+        limit?: number;
+      } & JUHUU.RequestOptions;
 
       export type Response = JUHUU.ConnectorMessage.Object[];
     }

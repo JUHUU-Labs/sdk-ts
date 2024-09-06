@@ -43,6 +43,14 @@ export default class ConnectorMessagesService extends Service {
       queryArray.push("connectorId=" + ConnectorMessageListParams.connectorId);
     }
 
+    if (ConnectorMessageListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + ConnectorMessageListOptions.skip);
+    }
+
+    if (ConnectorMessageListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + ConnectorMessageListOptions.limit);
+    }
+
     return await super.sendRequest<JUHUU.ConnectorMessage.List.Response>(
       {
         method: "GET",
