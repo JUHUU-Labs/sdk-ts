@@ -125,7 +125,7 @@ export default class TariffsService extends Service {
       }
     }
 
-    let serviceFee = (sum * tariff.serviceFeePercentage) / 100;
+    let serviceFee = Math.round((sum * tariff.serviceFeePercentage) / 100);
 
     if (serviceFee < tariff.serviceFeeMin) {
       serviceFee = tariff.serviceFeeMin;
