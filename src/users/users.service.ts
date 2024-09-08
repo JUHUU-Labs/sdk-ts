@@ -6,8 +6,6 @@ export default class UsersService extends Service {
     super(config);
   }
 
-  async create() {}
-
   async retrieve(
     UserRetrieveParams: JUHUU.User.Retrieve.Params,
     UserRetrieveOptions?: JUHUU.User.Retrieve.Options
@@ -126,6 +124,10 @@ export default class UsersService extends Service {
 
     if (UserListParams.managementUserId !== undefined) {
       queryArray.push("managementUserId=" + UserListParams.managementUserId);
+    }
+
+    if (UserListParams.propertyId !== undefined) {
+      queryArray.push("propertyId=" + UserListParams.propertyId);
     }
 
     return await super.sendRequest<JUHUU.User.List.Response>(

@@ -362,6 +362,7 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         managementUserId?: string;
+        propertyId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -624,6 +625,29 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.Tariff.Object[];
+    }
+
+    export namespace Update {
+      export type Params = {
+        tariffId: string;
+        reminderEnabled?: boolean;
+        reminderPercentage?: number;
+        currencyCode?: CurrencyCode;
+        amount?: number[];
+        continue?: number;
+        interval?: number;
+        duration?: number;
+        autoRenewMode?: AutoRenewMode;
+        roundToMidnight?: boolean;
+        autoRenewManualEnabled?: boolean;
+        manualTerminationEnabled?: boolean;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        tariff: JUHUU.Tariff.Object;
+      };
     }
   }
 
@@ -1031,13 +1055,41 @@ export namespace JUHUU {
 
     export namespace List {
       export type Params = {
-        rentableDeviceGroupLocationId?: string;
+        rentableDeviceGroupLocationId?: string | null;
         propertyId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.Location.Object[];
+    }
+
+    export namespace Update {
+      export type Params = {
+        locationId: string;
+        name?: string;
+        address?: Partial<Address>;
+        deviceIdArray?: string[];
+        deviceId?: string;
+        maximumConcurrentSessions?: number;
+        surveyEnabled?: boolean;
+        accountingAreaId?: string;
+        logoLight?: string | null;
+        logoDark?: string | null;
+        location?: GeoPoint;
+        purposeArray?: Purpose[];
+        circumstanceArray?: Circumstance[];
+        rentOfferArray?: Offer[];
+        reservationOfferArray?: Offer[];
+        iconLight?: string | null;
+        iconDark?: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        location: JUHUU.Location.Object;
+      };
     }
   }
 

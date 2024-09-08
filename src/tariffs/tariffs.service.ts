@@ -54,11 +54,32 @@ export default class TariffsService extends Service {
     );
   }
 
-  async update() {}
-
-  async delete() {}
-
-  async terminate() {}
+  async update(
+    TariffUpdateParams: JUHUU.Tariff.Update.Params,
+    TariffUpdateOptions?: JUHUU.Tariff.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.Update.Response>> {
+    return await super.sendRequest<JUHUU.Tariff.Update.Response>(
+      {
+        method: "PATCH",
+        url: "tariffs/" + TariffUpdateParams.tariffId,
+        body: {
+          reminderEnabled: TariffUpdateParams.reminderEnabled,
+          reminderPercentage: TariffUpdateParams.reminderPercentage,
+          currencyCode: TariffUpdateParams.currencyCode,
+          amount: TariffUpdateParams.amount,
+          continue: TariffUpdateParams.continue,
+          interval: TariffUpdateParams.interval,
+          duration: TariffUpdateParams.duration,
+          autoRenewMode: TariffUpdateParams.autoRenewMode,
+          roundToMidnight: TariffUpdateParams.roundToMidnight,
+          autoRenewManualEnabled: TariffUpdateParams.autoRenewManualEnabled,
+          manualTerminationEnabled: TariffUpdateParams.manualTerminationEnabled,
+        },
+        useAuthentication: true,
+      },
+      TariffUpdateOptions
+    );
+  }
 
   /**
    * Checks if the tariff is free

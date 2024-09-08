@@ -38,9 +38,13 @@ export default class LocationsService extends Service {
     const queryArray: string[] = [];
 
     if (LocationListParams?.rentableDeviceGroupLocationId !== undefined) {
+      const rentableDeviceGroupLocationId =
+        LocationListParams.rentableDeviceGroupLocationId === null
+          ? "null"
+          : LocationListParams.rentableDeviceGroupLocationId;
+
       queryArray.push(
-        "rentableDeviceGroupLocationId=" +
-          LocationListParams.rentableDeviceGroupLocationId
+        "rentableDeviceGroupLocationId=" + rentableDeviceGroupLocationId
       );
     }
 
@@ -56,6 +60,39 @@ export default class LocationsService extends Service {
         useAuthentication: false,
       },
       LocationListOptions
+    );
+  }
+
+  async update(
+    LocationUpdateParams: JUHUU.Location.Update.Params,
+    LocationUpdateOptions?: JUHUU.Location.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Location.Update.Response>> {
+    return await super.sendRequest<JUHUU.Location.Update.Response>(
+      {
+        method: "PATCH",
+        url: "locations/" + LocationUpdateParams.locationId,
+        body: {
+          name: LocationUpdateParams.name,
+          address: LocationUpdateParams.address,
+          deviceIdArray: LocationUpdateParams.deviceIdArray,
+          deviceId: LocationUpdateParams.deviceId,
+          maximumConcurrentSessions:
+            LocationUpdateParams.maximumConcurrentSessions,
+          surveyEnabled: LocationUpdateParams.surveyEnabled,
+          accountingAreaId: LocationUpdateParams.accountingAreaId,
+          logoLight: LocationUpdateParams.logoLight,
+          logoDark: LocationUpdateParams.logoDark,
+          location: LocationUpdateParams.location,
+          purposeArray: LocationUpdateParams.purposeArray,
+          circumstanceArray: LocationUpdateParams.circumstanceArray,
+          rentOfferArray: LocationUpdateParams.rentOfferArray,
+          reservationOfferArray: LocationUpdateParams.reservationOfferArray,
+          iconLight: LocationUpdateParams.iconLight,
+          iconDark: LocationUpdateParams.iconDark,
+        },
+        useAuthentication: true,
+      },
+      LocationUpdateOptions
     );
   }
 }
