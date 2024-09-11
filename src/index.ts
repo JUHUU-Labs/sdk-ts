@@ -613,21 +613,22 @@ export namespace JUHUU {
       } & JUHUU.RequestOptions;
 
       export type Response = {
-        articleId: JUHUU.Article.Object;
+        article: JUHUU.Article.Object;
         property?: JUHUU.Property.Object;
       };
     }
 
     export namespace List {
       export type Params = {
-        limit?: number;
-        skip?: number;
         propertyId?: string;
-        parentArticleId?: string;
+        parentArticleId?: string | null;
         statusArray?: JUHUU.Article.Object["status"][];
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
       export type Response = {
         articleArray: JUHUU.Article.Object[];
@@ -639,12 +640,11 @@ export namespace JUHUU {
     export namespace Update {
       export type Params = {
         articleId: string;
-        title: LocaleString; // title of the article
-        subtitle: LocaleString; // subtitle of the article
-        parentArticleId: string | null; // id of the higher order article in the tree of articles
-        slug: string; // part of the url that points to the article e.g. if the slug is "my-article", the url will be "/slug1/my-article/slug2"
-        markdownContent: LocaleString; // markdown content of the article
-        status: "draft" | "published"; // status of the article
+        title?: LocaleString; // title of the article
+        subtitle?: LocaleString; // subtitle of the article
+        parentArticleId?: string | null; // id of the higher order article in the tree of articles
+        markdownContent?: LocaleString; // markdown content of the article
+        status?: "draft" | "published"; // status of the article
       };
 
       export type Options = JUHUU.RequestOptions;

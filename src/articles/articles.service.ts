@@ -12,8 +12,8 @@ export default class ArticlesService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.Article.List.Response>> {
     const queryArray: string[] = [];
 
-    if (ArticleListParams?.limit !== undefined) {
-      queryArray.push("limit=" + ArticleListParams.limit);
+    if (ArticleListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + ArticleListOptions.limit);
     }
 
     if (ArticleListParams?.propertyId !== undefined) {
@@ -24,8 +24,8 @@ export default class ArticlesService extends Service {
       queryArray.push("statusArray=" + ArticleListParams.statusArray.join(","));
     }
 
-    if (ArticleListParams?.skip !== undefined) {
-      queryArray.push("skip=" + ArticleListParams.skip);
+    if (ArticleListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + ArticleListOptions.skip);
     }
 
     if (ArticleListParams?.parentArticleId !== undefined) {
@@ -80,7 +80,6 @@ export default class ArticlesService extends Service {
           title: ArticleUpdateParams.title,
           subtitle: ArticleUpdateParams.subtitle,
           parentArticleId: ArticleUpdateParams.parentArticleId,
-          slug: ArticleUpdateParams.slug,
           markdownContent: ArticleUpdateParams.markdownContent,
           status: ArticleUpdateParams.status,
         },
