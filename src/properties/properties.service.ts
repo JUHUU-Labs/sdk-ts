@@ -101,8 +101,4 @@ export default class PropertiesService extends Service {
       PropertyStripeAccountUrlOptions
     );
   }
-
-  async delete() {}
-
-  async terminate() {}
 }

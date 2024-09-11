@@ -6,8 +6,6 @@ export default class TariffsService extends Service {
     super(config);
   }
 
-  async create() {}
-
   async retrieve(
     TariffRetrieveParams: JUHUU.Tariff.Retrieve.Params,
     TariffRetrieveOptions?: JUHUU.Tariff.Retrieve.Options

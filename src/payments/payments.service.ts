@@ -24,6 +24,22 @@ export default class PaymentsService extends Service {
       queryArray.push("statusArray=" + PaymentListParams.statusArray.join(","));
     }
 
+    if (PaymentListParams?.createdAt?.gte !== undefined) {
+      queryArray.push("createdAt[gte]=" + PaymentListParams.createdAt.gte);
+    }
+
+    if (PaymentListParams?.createdAt?.lte !== undefined) {
+      queryArray.push("createdAt[lte]=" + PaymentListParams.createdAt.lte);
+    }
+
+    if (PaymentListParams.limit !== undefined) {
+      queryArray.push("limit=" + PaymentListParams.limit);
+    }
+
+    if (PaymentListParams.skip !== undefined) {
+      queryArray.push("skip=" + PaymentListParams.skip);
+    }
+
     return await super.sendRequest<JUHUU.Payment.List.Response>(
       {
         method: "GET",
@@ -71,9 +87,6 @@ export default class PaymentsService extends Service {
       PaymentTokensOptions
     );
   }
-  async update() {}
-
-  async delete() {}
 
   async retrieveInvoiceUrl(
     PaymentRetrieveInvoiceUrlParams: JUHUU.Payment.RetrieveInvoiceUrl.Params,

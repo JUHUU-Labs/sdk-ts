@@ -1,0 +1,107 @@
+import { JUHUU } from "..";
+import Service from "../index.service";
+
+export default class ArticlesService extends Service {
+  constructor(config: JUHUU.SetupConfig) {
+    super(config);
+  }
+
+  async list(
+    ArticleListParams: JUHUU.Article.List.Params,
+    ArticleListOptions?: JUHUU.Article.List.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Article.List.Response>> {
+    const queryArray: string[] = [];
+
+    if (ArticleListParams?.limit !== undefined) {
+      queryArray.push("limit=" + ArticleListParams.limit);
+    }
+
+    if (ArticleListParams?.propertyId !== undefined) {
+      queryArray.push("propertyId=" + ArticleListParams.propertyId);
+    }
+
+    if (ArticleListParams?.statusArray !== undefined) {
+      queryArray.push("statusArray=" + ArticleListParams.statusArray.join(","));
+    }
+
+    if (ArticleListParams?.skip !== undefined) {
+      queryArray.push("skip=" + ArticleListParams.skip);
+    }
+
+    if (ArticleListParams?.parentArticleId !== undefined) {
+      queryArray.push("parentArticleId=" + ArticleListParams.parentArticleId);
+    }
+
+    return await super.sendRequest<JUHUU.Article.List.Response>(
+      {
+        method: "GET",
+        url: "articles?" + queryArray.join("&"),
+        body: undefined,
+        useAuthentication: false,
+      },
+      ArticleListOptions
+    );
+  }
+
+  async retrieve(
+    ArticleRetrieveParams: JUHUU.Article.Retrieve.Params,
+    ArticleRetrieveOptions?: JUHUU.Article.Retrieve.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Article.Retrieve.Response>> {
+    const queryArray: string[] = [];
+
+    if (ArticleRetrieveOptions?.expand !== undefined) {
+      queryArray.push("expand=" + ArticleRetrieveOptions.expand.join(","));
+    }
+
+    return await super.sendRequest<JUHUU.Article.Retrieve.Response>(
+      {
+        method: "GET",
+        url:
+          "articles/" +
+          ArticleRetrieveParams.articleId +
+          "?" +
+          queryArray.join("&"),
+        body: undefined,
+        useAuthentication: false,
+      },
+      ArticleRetrieveOptions
+    );
+  }
+
+  async update(
+    ArticleUpdateParams: JUHUU.Article.Update.Params,
+    ArticleUpdateOptions?: JUHUU.Article.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Article.Update.Response>> {
+    return await super.sendRequest<JUHUU.Article.Update.Response>(
+      {
+        method: "PATCH",
+        url: "articles/" + ArticleUpdateParams.articleId,
+        body: {
+          title: ArticleUpdateParams.title,
+          subtitle: ArticleUpdateParams.subtitle,
+          parentArticleId: ArticleUpdateParams.parentArticleId,
+          slug: ArticleUpdateParams.slug,
+          markdownContent: ArticleUpdateParams.markdownContent,
+          status: ArticleUpdateParams.status,
+        },
+        useAuthentication: true,
+      },
+      ArticleUpdateOptions
+    );
+  }
+
+  async delete(
+    ArticleDeleteParams: JUHUU.Article.Delete.Params,
+    ArticleDeleteOptions?: JUHUU.Article.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Article.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Article.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "articles/" + ArticleDeleteParams.articleId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      ArticleDeleteOptions
+    );
+  }
+}

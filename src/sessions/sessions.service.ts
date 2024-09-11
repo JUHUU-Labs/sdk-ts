@@ -90,6 +90,22 @@ export default class SessionService extends Service {
       queryArray.push("managementUserId=" + SessionListParams.managementUserId);
     }
 
+    if (SessionListParams.locationGroupId !== undefined) {
+      queryArray.push("locationGroupId=" + SessionListParams.locationGroupId);
+    }
+
+    if (SessionListParams.locationId !== undefined) {
+      queryArray.push("locationId=" + SessionListParams.locationId);
+    }
+
+    if (SessionListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + SessionListOptions.limit);
+    }
+
+    if (SessionListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + SessionListOptions.skip);
+    }
+
     return await super.sendRequest<JUHUU.Session.List.Response>(
       {
         method: "GET",

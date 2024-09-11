@@ -62,6 +62,12 @@ export default class Service {
           url: string;
           body: any;
           useAuthentication: boolean;
+        }
+      | {
+          method: "DELETE";
+          url: string;
+          body: undefined;
+          useAuthentication: boolean;
         },
     options: JUHUU.RequestOptions = {}
   ): Promise<JUHUU.HttpResponse<T>> {
@@ -115,6 +121,11 @@ export default class Service {
 
         case "PATCH": {
           response = await this.sendPatchRequest(token, uri, body);
+          break;
+        }
+
+        case "DELETE": {
+          response = await this.sendDeleteRequest(token, uri);
           break;
         }
       }
@@ -235,9 +246,11 @@ export default class Service {
       "Content-Type": "application/json",
       "Client-Version": this.clientVersion,
     };
+
     if (token !== undefined && token !== null) {
       headers.Authorization = `Bearer ${token}`;
     }
+
     return await fetch(uri, {
       method: "GET",
       headers,
@@ -253,9 +266,11 @@ export default class Service {
       "Content-Type": "application/json",
       "Client-Version": this.clientVersion,
     };
+
     if (token !== undefined && token !== null) {
       headers.Authorization = `Bearer ${token}`;
     }
+
     return await fetch(uri, {
       method: "POST",
       headers,
@@ -272,13 +287,33 @@ export default class Service {
       "Content-Type": "application/json",
       "Client-Version": this.clientVersion,
     };
+
     if (token !== undefined && token !== null) {
       headers.Authorization = `Bearer ${token}`;
     }
+
     return await fetch(uri, {
       method: "PATCH",
       headers,
       body: JSON.stringify(body),
+    });
+  }
+
+  private async sendDeleteRequest(
+    token: string | undefined | null,
+    uri: string
+  ): Promise<Response> {
+    const headers: any = {
+      "Content-Type": "application/json",
+      "Client-Version": this.clientVersion,
+    };
+
+    if (token !== undefined && token !== null) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    return await fetch(uri, {
+      method: "DELETE",
+      headers,
     });
   }
 

@@ -216,19 +216,19 @@ export type SessionTerminatedByType =
   | "cloudFunction"
   | "mqttCommand";
 
-export type ServiceMonth =
-  | "jan"
-  | "feb"
-  | "mar"
-  | "apr"
-  | "may"
-  | "jun"
-  | "jul"
-  | "aug"
-  | "sep"
-  | "oct"
-  | "nov"
-  | "dec";
+// export type ServiceMonth =
+//   | "jan"
+//   | "feb"
+//   | "mar"
+//   | "apr"
+//   | "may"
+//   | "jun"
+//   | "jul"
+//   | "aug"
+//   | "sep"
+//   | "oct"
+//   | "nov"
+//   | "dec";
 
 export type PermissionTypes =
   | "UserManagement"
@@ -917,6 +917,7 @@ export namespace Layout {
     type: "image";
     urlDark: string;
     urlLight: string;
+    height: number;
   }
 
   export namespace Button {
@@ -996,7 +997,7 @@ export type LayoutBlock =
   | Layout.Button.Large
   | Layout.Form.General;
 
-export type Node =
+export type GraphNode =
   | {
       id: string;
       type: "flow.start";

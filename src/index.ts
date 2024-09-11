@@ -25,6 +25,7 @@ import {
   Environment,
   FuelType,
   GeoPoint,
+  GraphNode,
   LanguageCode,
   Layout,
   LayoutBlock,
@@ -42,7 +43,6 @@ import {
   PostingRow,
   PushToken,
   Sector,
-  ServiceMonth,
   SimStatus,
   StarRating,
   TimeZone,
@@ -54,6 +54,8 @@ import ConnectorsService from "./connectors/connectors.service";
 import PayoutsService from "./payouts/payouts.service";
 import ConnectorMessagesService from "./connectorMessages/connectorMessages.service";
 import SimsService from "./sims/sims.service";
+import LicenseTemplatesService from "./licenseTemplates/licenseTemplates.service";
+import ArticlesService from "./articles/articles.service";
 
 export * from "./types/types";
 
@@ -77,6 +79,8 @@ export class Juhuu {
     this.payouts = new PayoutsService(config);
     this.connectorMessages = new ConnectorMessagesService(config);
     this.sims = new SimsService(config);
+    this.licenseTemplates = new LicenseTemplatesService(config);
+    this.articles = new ArticlesService(config);
   }
 
   /**
@@ -100,6 +104,8 @@ export class Juhuu {
   readonly payouts: PayoutsService;
   readonly connectorMessages: ConnectorMessagesService;
   readonly sims: SimsService;
+  readonly licenseTemplates: LicenseTemplatesService;
+  readonly articles: ArticlesService;
 }
 
 export namespace JUHUU {
@@ -135,7 +141,6 @@ export namespace JUHUU {
      * If this is true, a new accessToken will be requested if the current one is expired.
      */
     refreshTokensIfNecessary?: boolean;
-    expand?: Array<"property" | "tariffArray">; // Add expand property here
   };
   export type LocaleString = {
     [locale: string]: string;
@@ -252,9 +257,14 @@ export namespace JUHUU {
         userId?: string;
         managementUserId?: string;
         statusArray?: JUHUU.Session.Object["status"][];
+        locationId?: string;
+        locationGroupId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit: number;
+        skip: number;
+      } & JUHUU.RequestOptions;
 
       export type Response = JUHUU.Session.Object[];
     }
@@ -580,6 +590,81 @@ export namespace JUHUU {
     }
   }
 
+  export namespace Article {
+    export type Object = {
+      id: string;
+      readonly object: "article";
+      title: LocaleString; // title of the article
+      subtitle: LocaleString; // subtitle of the article
+      propertyId: string | null; // id of the property who owns the article. If null, the article does not belong to any property
+      parentArticleId: string | null; // id of the higher order article in the tree of articles
+      slug: string; // part of the url that points to the article e.g. if the slug is "my-article", the url will be "/slug1/my-article/slug2"
+      markdownContent: LocaleString; // markdown content of the article
+      status: "draft" | "published"; // status of the article
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        articleId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        articleId: JUHUU.Article.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        limit?: number;
+        skip?: number;
+        propertyId?: string;
+        parentArticleId?: string;
+        statusArray?: JUHUU.Article.Object["status"][];
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        articleArray: JUHUU.Article.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        articleId: string;
+        title: LocaleString; // title of the article
+        subtitle: LocaleString; // subtitle of the article
+        parentArticleId: string | null; // id of the higher order article in the tree of articles
+        slug: string; // part of the url that points to the article e.g. if the slug is "my-article", the url will be "/slug1/my-article/slug2"
+        markdownContent: LocaleString; // markdown content of the article
+        status: "draft" | "published"; // status of the article
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        article: JUHUU.Article.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        articleId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Article.Object[];
+    }
+  }
+
   export namespace Tariff {
     export type Object = {
       id: string;
@@ -660,6 +745,67 @@ export namespace JUHUU {
       propertyId: string;
       sessionId: string;
     };
+  }
+
+  export namespace LicenseTemplate {
+    type Base = {
+      id: string;
+      readonly object: "licenseTemplate";
+      name: LocaleString;
+      description: LocaleString;
+      validFor:
+        | "endOfYear" // validity is set to the end of this year
+        | "endOfMonth" // validity is set to the end of this month
+        | "endOfWeek" // validity is set to the end of this week
+        | "endOfDay" // validity is set to the end of this day
+        | "year" // validity is granted for a year from the date of creation
+        | "always" // validity is granted forever
+        | "month" // validity is granted for a month from the date of creation
+        | "week" // validity is granted for a week from the date of creation
+        | "day"; // validity is granted for a day from the date of creation
+      obtainDescription: LocaleString;
+    };
+
+    export interface RegexLicenseTemplate extends Base {
+      type: "regex";
+      regex: string;
+      propertyId: string;
+    }
+
+    export interface AutomaticLicenseTemplate extends Base {
+      type: "automatic";
+    }
+
+    export type Object = AutomaticLicenseTemplate | RegexLicenseTemplate;
+
+    export namespace Retrieve {
+      export type Params = {
+        licenseTemplateId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        licenseTemplate: JUHUU.LicenseTemplate.Object;
+        property: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        limit?: number;
+        skip?: number;
+        propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        licenseTemplateArray: JUHUU.LicenseTemplate.Object[];
+      };
+    }
   }
 
   export namespace Property {
@@ -947,6 +1093,12 @@ export namespace JUHUU {
         propertyId?: string;
         userId?: string;
         statusArray?: JUHUU.Payment.Object["status"][];
+        createdAt?: {
+          gte?: number;
+          lte?: number;
+        };
+        limit?: number;
+        skip?: number;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1074,15 +1226,12 @@ export namespace JUHUU {
         maximumConcurrentSessions?: number;
         surveyEnabled?: boolean;
         accountingAreaId?: string;
-        logoLight?: string | null;
-        logoDark?: string | null;
-        location?: GeoPoint;
+        latitude?: number;
+        longitude?: number;
         purposeArray?: Purpose[];
         circumstanceArray?: Circumstance[];
         rentOfferArray?: Offer[];
         reservationOfferArray?: Offer[];
-        iconLight?: string | null;
-        iconDark?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1138,7 +1287,9 @@ export namespace JUHUU {
         productId: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        expand: Array<"property">;
+      } & JUHUU.RequestOptions;
 
       export type Response = {
         product: Product.Object;
@@ -1256,16 +1407,20 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         statusArray?: DeviceStatus[];
-        rentable?: boolean;
         propertyId?: string;
-        visible?: boolean;
         deviceTemplateId?: string;
-        termId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Device.Object[];
+      export type Response = {
+        deviceArray: JUHUU.Device.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Realtime {
@@ -1362,7 +1517,9 @@ export namespace JUHUU {
         connectorId: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        expand: Array<"property">;
+      } & JUHUU.RequestOptions;
 
       export type Response = {
         connector: JUHUU.Connector.Object;
@@ -1388,7 +1545,7 @@ export namespace JUHUU {
       name: string; // z.B. BikeLoop V1
       propertyId: string;
       parameterArray: Parameter[]; // "values" of the parameters are used as default values for the parameters of the device
-      nodeArray: Node[]; // nodes that are being executed when an event occurs
+      nodeArray: GraphNode[]; // nodes that are being executed when an event occurs
       userLayoutBlockArray: LayoutBlock[];
       userLayoutBlockActionButton: Layout.Button.General | null;
       maintenanceLayoutBlockArray: LayoutBlock[];

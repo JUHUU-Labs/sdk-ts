@@ -46,10 +46,4 @@ export default class LinkService extends Service {
       LinkListOptions
     );
   }
-
-  async update() {}
-
-  async delete() {}
-
-  async terminate() {}
 }

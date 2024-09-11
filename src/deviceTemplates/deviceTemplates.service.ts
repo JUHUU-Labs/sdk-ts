@@ -6,8 +6,6 @@ export default class DeviceTemplatesService extends Service {
     super(config);
   }
 
-  async create() {}
-
   async retrieve(
     DeviceTemplateRetrieveParams: JUHUU.DeviceTemplate.Retrieve.Params,
     DeviceTemplateRetrieveOptions?: JUHUU.DeviceTemplate.Retrieve.Options

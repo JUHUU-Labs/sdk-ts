@@ -47,24 +47,20 @@ export default class DevicesService extends Service {
       queryArray.push("statusArray=" + DeviceListParams.statusArray.join(","));
     }
 
-    if (DeviceListParams?.rentable !== undefined) {
-      queryArray.push("rentable=" + DeviceListParams.rentable);
-    }
-
     if (DeviceListParams?.propertyId !== undefined) {
       queryArray.push("propertyId=" + DeviceListParams.propertyId);
-    }
-
-    if (DeviceListParams?.visible !== undefined) {
-      queryArray.push("visible=" + DeviceListParams.visible);
     }
 
     if (DeviceListParams?.deviceTemplateId !== undefined) {
       queryArray.push("deviceTemplateId=" + DeviceListParams.deviceTemplateId);
     }
 
-    if (DeviceListParams?.termId !== undefined) {
-      queryArray.push("termId=" + DeviceListParams.termId);
+    if (DeviceListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + DeviceListOptions.limit);
+    }
+
+    if (DeviceListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + DeviceListOptions.skip);
     }
 
     return await super.sendRequest<JUHUU.Device.List.Response>(
@@ -77,10 +73,6 @@ export default class DevicesService extends Service {
       DeviceListOptions
     );
   }
-
-  async update() {}
-
-  async delete() {}
 
   listen(
     DeviceRealtimeParams: JUHUU.Device.Realtime.Params,
