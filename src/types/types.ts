@@ -1151,7 +1151,19 @@ export type Command =
     };
 
 export interface LocaleString {
-  de: string;
-  en: string;
-  fr: string;
+  en: string; // english is mandatory
+  de?: string;
+  fr?: string;
+  it?: string;
+  nl?: string;
+  es?: string;
+  da?: string;
+  hr?: string;
+  hu?: string;
+  no?: string;
+  pl?: string;
+  sv?: string;
+  cs?: string;
+  et?: string;
+  gsw?: string;
 }

@@ -1,9 +1,26 @@
-import { JUHUU } from "..";
+import { JUHUU, LanguageCodeArray } from "..";
 import Service from "../index.service";
 
 export default class ArticlesService extends Service {
   constructor(config: JUHUU.SetupConfig) {
     super(config);
+  }
+
+  async create(
+    ArticleCreateParams: JUHUU.Article.Create.Params,
+    ArticleCreateOptions?: JUHUU.Article.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Article.Create.Response>> {
+    return await super.sendRequest<JUHUU.Article.Create.Response>(
+      {
+        method: "POST",
+        url: "articles",
+        body: {
+          propertyId: ArticleCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      ArticleCreateOptions
+    );
   }
 
   async list(
@@ -26,10 +43,6 @@ export default class ArticlesService extends Service {
 
     if (ArticleListOptions?.skip !== undefined) {
       queryArray.push("skip=" + ArticleListOptions.skip);
-    }
-
-    if (ArticleListParams?.parentArticleId !== undefined) {
-      queryArray.push("parentArticleId=" + ArticleListParams.parentArticleId);
     }
 
     return await super.sendRequest<JUHUU.Article.List.Response>(
@@ -82,6 +95,7 @@ export default class ArticlesService extends Service {
           parentArticleId: ArticleUpdateParams.parentArticleId,
           markdownContent: ArticleUpdateParams.markdownContent,
           status: ArticleUpdateParams.status,
+          languageCodeArray: ArticleUpdateParams.languageCodeArray,
         },
         useAuthentication: true,
       },
