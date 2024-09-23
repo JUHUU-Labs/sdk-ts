@@ -58,6 +58,7 @@ import LicenseTemplatesService from "./licenseTemplates/licenseTemplates.service
 import ArticlesService from "./articles/articles.service";
 import ChatsService from "./chats/chats.service";
 import ChatMessagesService from "./chatMessages/chatMessages.service";
+import ArticleEmbeddingsService from "./articleEmbeddings/articleEmbeddings.service";
 
 export * from "./types/types";
 
@@ -85,6 +86,7 @@ export class Juhuu {
     this.articles = new ArticlesService(config);
     this.chats = new ChatsService(config);
     this.chatMessages = new ChatMessagesService(config);
+    this.articleEmbeddings = new ArticleEmbeddingsService(config);
   }
 
   /**
@@ -112,6 +114,7 @@ export class Juhuu {
   readonly articles: ArticlesService;
   readonly chats: ChatsService;
   readonly chatMessages: ChatMessagesService;
+  readonly articleEmbeddings: ArticleEmbeddingsService;
 }
 
 export namespace JUHUU {
@@ -168,17 +171,44 @@ export namespace JUHUU {
   export type DeepNullable<T> = {
     [P in keyof T]?: DeepNullable<T[P]> | null;
   };
-  export enum Purpose {
-    Purpose1 = "Purpose 1",
-    Purpose2 = "Purpose 2",
-    // Add more purposes as needed
-  }
 
-  export enum Technology {
-    Tech1 = "Technology 1",
-    Tech2 = "Technology 2",
-    // Add more technologies as needed
-  }
+  export const ReadonlySectorArray = ["tourism", "mobility", "sport"] as const;
+
+  export type Sector = (typeof ReadonlySectorArray)[number];
+
+  export const ReadonlyTechnologyArray = ["analog", "digital"] as const;
+
+  export type Technology = (typeof ReadonlyTechnologyArray)[number];
+
+  export const ReadonlyCategoryArray = [
+    "bike",
+    "car",
+    "scooter",
+    "boat",
+    "moped",
+  ] as const;
+
+  export type Category = (typeof ReadonlyCategoryArray)[number];
+
+  export const ReadonlyModalityArray = [
+    "charge",
+    "store",
+    "share",
+    "wash",
+    "repair",
+  ] as const; // repair
+
+  export type Modality = (typeof ReadonlyModalityArray)[number];
+
+  export type Purpose = {
+    sector: Sector;
+    category: Category;
+    modality: Modality;
+  };
+
+  export const ReadonlyIntegrationStateArray = ["full", "partial"] as const;
+
+  export type IntegrationState = (typeof ReadonlyIntegrationStateArray)[number];
 
   export namespace Session {
     type Base = {
@@ -610,6 +640,48 @@ export namespace JUHUU {
     }
   }
 
+  export namespace ArticleEmbedding {
+    export type Object = {
+      id: string;
+      readonly object: "articleEmbedding";
+      chunk: string; // chunk of the article that was embedded
+      articleId: string; // id of th article that was embedded
+      lineFrom: number; // lineFrom of the article where the embedding was made
+      lineTo: number; // lineFrom of the article where the embedding was made
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        articleEmbeddingId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        articleEmbedding: JUHUU.ArticleEmbedding.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        articleId?: string;
+      };
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        articleEmbeddingArray: JUHUU.ArticleEmbedding.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+  }
+
   export namespace Article {
     export type Object = {
       id: string;
@@ -696,6 +768,22 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.Article.Object[];
+    }
+
+    export namespace Search {
+      export type Params = {
+        slug?: string;
+        text?: string;
+      };
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        articleArray: JUHUU.Article.Object[];
+      };
     }
   }
 
@@ -804,6 +892,7 @@ export namespace JUHUU {
 
     export interface AiChatMessage extends Base {
       type: "ai";
+      articleEmbeddingArray: JUHUU.ArticleEmbedding.Object[];
     }
 
     export type Object = AiChatMessage | UserChatMessage;

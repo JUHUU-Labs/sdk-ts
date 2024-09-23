@@ -117,4 +117,37 @@ export default class ArticlesService extends Service {
       ArticleDeleteOptions
     );
   }
+
+  async search(
+    ArticleSearchParams: JUHUU.Article.Search.Params,
+    ArticleSearchOptions?: JUHUU.Article.Search.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Article.Search.Response>> {
+    const queryArray: string[] = [];
+
+    if (ArticleSearchParams?.text !== undefined) {
+      queryArray.push("text=" + ArticleSearchParams.text);
+    }
+
+    if (ArticleSearchParams?.slug !== undefined) {
+      queryArray.push("slug=" + ArticleSearchParams.slug);
+    }
+
+    if (ArticleSearchOptions?.limit !== undefined) {
+      queryArray.push("limit=" + ArticleSearchOptions.limit);
+    }
+
+    if (ArticleSearchOptions?.skip !== undefined) {
+      queryArray.push("skip=" + ArticleSearchOptions.skip);
+    }
+
+    return await super.sendRequest<JUHUU.Article.Search.Response>(
+      {
+        method: "GET",
+        url: "articles/search?" + queryArray.join("&"),
+        body: undefined,
+        useAuthentication: false,
+      },
+      ArticleSearchOptions
+    );
+  }
 }

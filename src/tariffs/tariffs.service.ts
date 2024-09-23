@@ -160,4 +160,19 @@ export default class TariffsService extends Service {
   calculateMaximumAmount(tariff: JUHUU.Tariff.Object): number {
     return this.calculateAmount(tariff, tariff.duration);
   }
+
+  /**
+   * Returns a date object containing the timestamp that a session would have to end at if it was created right now
+   */
+  getEndDate(tariff: JUHUU.Tariff.Object): Date {
+    if (tariff.roundToMidnight === false) {
+      return new Date(Date.now() + tariff.duration * 1000);
+    }
+
+    const end = new Date(Date.now() + tariff.duration * 1000);
+
+    end.setHours(23, 59, 59, 999);
+
+    return end;
+  }
 }

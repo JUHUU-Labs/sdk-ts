@@ -1151,7 +1151,7 @@ export type Command =
     };
 
 export interface LocaleString {
-  en: string; // english is mandatory
+  en?: string; // english is mandatory!
   de?: string;
   fr?: string;
   it?: string;
