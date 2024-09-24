@@ -58,4 +58,27 @@ export default class LicenseTemplatesService extends Service {
       useAuthentication: true,
     });
   }
+
+  async regexValidate(
+    LicenseTemplateRegexValidateParams: JUHUU.LicenseTemplate.RegexValidate.Params,
+    LicenseTemplateRegexValidateOptions?: JUHUU.LicenseTemplate.RegexValidate.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.LicenseTemplate.RegexValidate.Response>> {
+    return await super.sendRequest<JUHUU.LicenseTemplate.RegexValidate.Response>(
+      {
+        method: "POST",
+        url:
+          "licenseTemplates/" +
+          LicenseTemplateRegexValidateParams.licenseTemplateId +
+          "/regex/validate",
+        body: {
+          userId: LicenseTemplateRegexValidateParams.userId,
+          text: LicenseTemplateRegexValidateParams.text,
+          licenseTemplateId:
+            LicenseTemplateRegexValidateParams.licenseTemplateId,
+        },
+        useAuthentication: true,
+      },
+      LicenseTemplateRegexValidateOptions
+    );
+  }
 }

@@ -357,6 +357,31 @@ export namespace JUHUU {
         session: JUHUU.Session.Object;
       };
     }
+
+    export namespace AttachUser {
+      export type Params = {
+        sessionId: string;
+        userId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        session: JUHUU.Session.Object;
+      };
+    }
+
+    export namespace DetachUser {
+      export type Params = {
+        sessionId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        session: JUHUU.Session.Object;
+      };
+    }
   }
 
   export namespace User {
@@ -520,7 +545,7 @@ export namespace JUHUU {
       };
     }
 
-    export namespace InviteEmployee {
+    export namespace InviteMember {
       export type Params = {
         userId: string;
 
@@ -540,10 +565,10 @@ export namespace JUHUU {
       export type Response = void;
     }
 
-    export namespace RemoveEmployee {
+    export namespace RemoveMember {
       export type Params = {
-        userId: string;
-        userIdToRemove?: string;
+        managementUserId: string;
+        memberUserId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1081,6 +1106,20 @@ export namespace JUHUU {
 
       export type Response = {
         licenseTemplateArray: JUHUU.LicenseTemplate.Object[];
+      };
+    }
+
+    export namespace RegexValidate {
+      export type Params = {
+        userId: string;
+        licenseTemplateId: string;
+        text: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        licenseTemplate: JUHUU.LicenseTemplate.Object;
       };
     }
   }

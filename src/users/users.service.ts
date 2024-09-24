@@ -165,38 +165,40 @@ export default class UsersService extends Service {
     );
   }
 
-  async inviteEmployee(
-    UserInviteEmployeeParams: JUHUU.User.InviteEmployee.Params,
-    UserInviteEmployeeOptions?: JUHUU.User.InviteEmployee.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.User.InviteEmployee.Response>> {
-    return await super.sendRequest<JUHUU.User.InviteEmployee.Response>(
+  async memberCreate(
+    UserInviteMemberParams: JUHUU.User.InviteMember.Params,
+    UserInviteMemberOptions?: JUHUU.User.InviteMember.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.User.InviteMember.Response>> {
+    return await super.sendRequest<JUHUU.User.InviteMember.Response>(
       {
         method: "POST",
-        url: "users/" + UserInviteEmployeeParams.userId + "/inviteEmployee",
+        url: "users/" + UserInviteMemberParams.userId + "/members",
         body: {
-          userId: UserInviteEmployeeParams?.userIdToInvite,
-          email: UserInviteEmployeeParams?.email,
+          userId: UserInviteMemberParams?.userIdToInvite,
+          email: UserInviteMemberParams?.email,
         },
         useAuthentication: true,
       },
-      UserInviteEmployeeOptions
+      UserInviteMemberOptions
     );
   }
 
-  async removeEmployee(
-    UserRemoveEmployeeParams: JUHUU.User.RemoveEmployee.Params,
-    UserRemoveEmployeeOptions?: JUHUU.User.RemoveEmployee.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.User.RemoveEmployee.Response>> {
-    return await super.sendRequest<JUHUU.User.RemoveEmployee.Response>(
+  async memberDelete(
+    UserRemoveMemberParams: JUHUU.User.RemoveMember.Params,
+    UserRemoveMemberOptions?: JUHUU.User.RemoveMember.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.User.RemoveMember.Response>> {
+    return await super.sendRequest<JUHUU.User.RemoveMember.Response>(
       {
-        method: "PATCH",
-        url: "users/" + UserRemoveEmployeeParams.userId + "/removeEmployee",
-        body: {
-          userId: UserRemoveEmployeeParams.userIdToRemove,
-        },
+        method: "DELETE",
+        url:
+          "users/" +
+          UserRemoveMemberParams.managementUserId +
+          "/members/" +
+          UserRemoveMemberParams.memberUserId,
+        body: undefined,
         useAuthentication: true,
       },
-      UserRemoveEmployeeOptions
+      UserRemoveMemberOptions
     );
   }
 }

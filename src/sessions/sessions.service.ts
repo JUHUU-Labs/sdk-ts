@@ -167,4 +167,36 @@ export default class SessionService extends Service {
       SessionTerminateOptions
     );
   }
+
+  async attachUser(
+    SessionAttachUserParams: JUHUU.Session.AttachUser.Params,
+    SessionAttachUserOptions?: JUHUU.Session.AttachUser.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Session.AttachUser.Response>> {
+    return await super.sendRequest<JUHUU.Session.AttachUser.Response>(
+      {
+        method: "POST",
+        url: "sessions/" + SessionAttachUserParams.sessionId + "/user",
+        body: {
+          userId: SessionAttachUserParams.userId,
+        },
+        useAuthentication: true,
+      },
+      SessionAttachUserOptions
+    );
+  }
+
+  async detachUser(
+    SessionDetachUserParams: JUHUU.Session.DetachUser.Params,
+    SessionDetachUserOptions?: JUHUU.Session.DetachUser.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Session.DetachUser.Response>> {
+    return await super.sendRequest<JUHUU.Session.DetachUser.Response>(
+      {
+        method: "DELETE",
+        url: "sessions/" + SessionDetachUserParams.sessionId + "/user",
+        body: undefined,
+        useAuthentication: true,
+      },
+      SessionDetachUserOptions
+    );
+  }
 }
