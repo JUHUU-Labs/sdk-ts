@@ -6,7 +6,22 @@ export default class DevicesService extends Service {
     super(config);
   }
 
-  async create() {}
+  async create(
+    DeviceCreateParams: JUHUU.Device.Create.Params,
+    DeviceCreateOptions?: JUHUU.Device.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Device.Create.Response>> {
+    return await super.sendRequest<JUHUU.Device.Create.Response>(
+      {
+        method: "POST",
+        url: "devices",
+        body: {
+          propertyId: DeviceCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      DeviceCreateOptions
+    );
+  }
 
   async retrieve(
     DeviceRetrieveParams: JUHUU.Device.Retrieve.Params,

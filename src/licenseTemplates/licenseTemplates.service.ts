@@ -6,6 +6,23 @@ export default class LicenseTemplatesService extends Service {
     super(config);
   }
 
+  async create(
+    LicenseTemplateCreateParams: JUHUU.LicenseTemplate.Create.Params,
+    LicenseTemplateCreateOptions?: JUHUU.LicenseTemplate.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.LicenseTemplate.Create.Response>> {
+    return await super.sendRequest<JUHUU.LicenseTemplate.Create.Response>(
+      {
+        method: "POST",
+        url: "licenseTemplates",
+        body: {
+          propertyId: LicenseTemplateCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      LicenseTemplateCreateOptions
+    );
+  }
+
   async list(
     LicenseTemplateListParams: JUHUU.LicenseTemplate.List.Params,
     LicenseTemplateListOptions?: JUHUU.LicenseTemplate.List.Options
