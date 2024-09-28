@@ -1651,7 +1651,7 @@ export namespace JUHUU {
 
       export type Options = {
         expand: Array<"property">;
-      };
+      } & JUHUU.RequestOptions;
 
       export type Response = {
         link: JUHUU.Link.Object;

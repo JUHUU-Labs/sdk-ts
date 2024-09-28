@@ -76,7 +76,6 @@ export const LanguageCodeArray = [
   "da", // danish
   "es", // spanish
   "et", // estonian
-  "gsw", // swiss german
   "hr", // croatian
   "hu", // hungarian
   "no", // norwegian

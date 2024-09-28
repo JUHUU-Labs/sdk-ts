@@ -14,12 +14,15 @@ export default class LinkService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.Link.Retrieve.Response>> {
     const queryArray: string[] = [];
 
-    return await super.sendRequest<JUHUU.Link.Retrieve.Response>({
-      method: "GET",
-      url: "links/" + LinkRetrieveParams.linkId + "?" + queryArray.join("&"),
-      body: undefined,
-      useAuthentication: false,
-    });
+    return await super.sendRequest<JUHUU.Link.Retrieve.Response>(
+      {
+        method: "GET",
+        url: "links/" + LinkRetrieveParams.linkId + "?" + queryArray.join("&"),
+        body: undefined,
+        useAuthentication: false,
+      },
+      LinkRetrieveOptions
+    );
   }
 
   async list(
