@@ -639,6 +639,24 @@ export namespace JUHUU {
       ZUONR: string | null;
     };
 
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name: string;
+        creditPostingRowDescription?: string;
+        orderNumber?: string;
+        BGTXT?: string | null;
+        SGTXT?: string | null;
+        ZUONR?: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        accountingArea: JUHUU.AccountingArea.Object;
+      };
+    }
+
     export namespace Retrieve {
       export type Params = {
         accountingAreaId: string;
@@ -1079,6 +1097,21 @@ export namespace JUHUU {
     }
 
     export type Object = AutomaticLicenseTemplate | RegexLicenseTemplate;
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name?: LocaleString;
+        type: string;
+        regex?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        licenseTemplate: JUHUU.LicenseTemplate.Object;
+      };
+    }
 
     export namespace Retrieve {
       export type Params = {
@@ -1703,6 +1736,20 @@ export namespace JUHUU {
       connectorParameter: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
     };
 
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name: string;
+        deviceTemplateId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        device: JUHUU.Device.Object;
+      };
+    }
+
     export namespace Retrieve {
       export type Params = {
         deviceId: string;
@@ -1813,6 +1860,30 @@ export namespace JUHUU {
       version: number;
       simId: string | null; // null, if no sim card of ours is installed
     };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name: string;
+        username?: string;
+        password?: string;
+        clientId?: string;
+        host?: string;
+        port?: number;
+        mqttRetain?: boolean;
+        mqttQos?: "0" | "1" | "2";
+        description?: string;
+        simId?: string;
+        connectionMode?: "alwaysOnline" | "temporaryOnline";
+        type: ["type"];
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        connector: JUHUU.Connector.Object;
+      };
+    }
 
     export interface Mqtt extends Base {
       type: "mqtt";

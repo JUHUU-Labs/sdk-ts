@@ -6,6 +6,23 @@ export default class AccountingAreasService extends Service {
     super(config);
   }
 
+  async create(
+    AccountingAreaCreateParams: JUHUU.AccountingArea.Create.Params,
+    AccountingAreaCreateOptions?: JUHUU.AccountingArea.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.AccountingArea.Create.Response>> {
+    return await super.sendRequest<JUHUU.AccountingArea.Create.Response>(
+      {
+        method: "POST",
+        url: "accountingAreas",
+        body: {
+          propertyId: AccountingAreaCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      AccountingAreaCreateOptions
+    );
+  }
+
   async retrieve(
     AccountingAreaRetrieveParams: JUHUU.AccountingArea.Retrieve.Params,
     AccountingAreaRetrieveOptions?: JUHUU.AccountingArea.Retrieve.Options

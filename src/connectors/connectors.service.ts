@@ -6,6 +6,23 @@ export default class ConnectorsService extends Service {
     super(config);
   }
 
+  async create(
+    ConnectorCreateParams: JUHUU.Connector.Create.Params,
+    ConnectorCreateOptions?: JUHUU.Connector.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Connector.Create.Response>> {
+    return await super.sendRequest<JUHUU.Connector.Create.Response>(
+      {
+        method: "POST",
+        url: "connectors",
+        body: {
+          propertyId: ConnectorCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      ConnectorCreateOptions
+    );
+  }
+
   async retrieve(
     ConnectorRetrieveParams: JUHUU.Connector.Retrieve.Params,
     ConnectorRetrieveOptions?: JUHUU.Connector.Retrieve.Options
