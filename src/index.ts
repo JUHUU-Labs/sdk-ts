@@ -432,19 +432,6 @@ export namespace JUHUU {
 
     export type Object = Standard | Management;
 
-    export namespace Create {
-      export type Params = {
-        type: string;
-        name: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        user: JUHUU.User.Object;
-      };
-    }
-
     export namespace Retrieve {
       export type Params = {
         userId: string;
