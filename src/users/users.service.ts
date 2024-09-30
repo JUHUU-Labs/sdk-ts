@@ -6,6 +6,23 @@ export default class UsersService extends Service {
     super(config);
   }
 
+  async create(
+    UserCreateParams: JUHUU.User.Create.Params,
+    UserCreateOptions?: JUHUU.User.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.User.Create.Response>> {
+    return await super.sendRequest<JUHUU.User.Create.Response>(
+      {
+        method: "POST",
+        url: "users",
+        body: {
+          userId: UserCreateParams,
+        },
+        useAuthentication: true,
+      },
+      UserCreateOptions
+    );
+  }
+
   async retrieve(
     UserRetrieveParams: JUHUU.User.Retrieve.Params,
     UserRetrieveOptions?: JUHUU.User.Retrieve.Options

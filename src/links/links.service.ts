@@ -6,7 +6,22 @@ export default class LinkService extends Service {
     super(config);
   }
 
-  async create() {}
+  async create(
+    LinkCreateParams: JUHUU.Link.Create.Params,
+    LinkCreateOptions?: JUHUU.Link.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Link.Create.Response>> {
+    return await super.sendRequest<JUHUU.Link.Create.Response>(
+      {
+        method: "POST",
+        url: "links",
+        body: {
+          propertyId: LinkCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      LinkCreateOptions
+    );
+  }
 
   async retrieve(
     LinkRetrieveParams: JUHUU.Link.Retrieve.Params,

@@ -6,6 +6,23 @@ export default class ProductService extends Service {
     super(config);
   }
 
+  async create(
+    ProductCreateParams: JUHUU.Product.Create.Params,
+    ProductCreateOptions?: JUHUU.Product.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Product.Create.Response>> {
+    return await super.sendRequest<JUHUU.Product.Create.Response>(
+      {
+        method: "POST",
+        url: "products",
+        body: {
+          propertyId: ProductCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      ProductCreateOptions
+    );
+  }
+
   async list(
     ProductListParams: JUHUU.Product.List.Params,
     ProductListOptions?: JUHUU.Product.List.Options

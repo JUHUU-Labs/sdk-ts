@@ -432,6 +432,19 @@ export namespace JUHUU {
 
     export type Object = Standard | Management;
 
+    export namespace Create {
+      export type Params = {
+        type: string;
+        name: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        user: JUHUU.User.Object;
+      };
+    }
+
     export namespace Retrieve {
       export type Params = {
         userId: string;
@@ -587,6 +600,19 @@ export namespace JUHUU {
       dsgvoUrl: string; // ein Link zu den vom Betreiber zur Verfügung gestellten DSGVO
       propertyId: string; // die property Id zu dem die AGB gehört
     };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        term: JUHUU.Term.Object;
+      };
+    }
 
     export namespace Retrieve {
       export type Params = {
@@ -1007,6 +1033,23 @@ export namespace JUHUU {
       serviceFeeMax: number; // maximum amount of the serviceFee
     };
 
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        duration?: string;
+        name?: string;
+        amount?: number[];
+        continue?: number;
+        currencyCode?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        tariff: JUHUU.Tariff.Object;
+      };
+    }
+
     export namespace Retrieve {
       export type Params = {
         tariffId: string;
@@ -1358,6 +1401,18 @@ export namespace JUHUU {
       stripeConnectedAccountId: string;
     };
 
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        payout: JUHUU.Payout.Object;
+      };
+    }
+
     export namespace Retrieve {
       export type Params = {
         payoutId: string;
@@ -1538,6 +1593,20 @@ export namespace JUHUU {
 
     export type Object = RentableDeviceGroup | RentableDevice | UseableDevice;
 
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name: string;
+        type: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        location: JUHUU.Location.Object;
+      };
+    }
+
     export namespace Retrieve {
       export type Params = {
         locationId: string;
@@ -1631,6 +1700,19 @@ export namespace JUHUU {
 
     export type Object = PhysicalProduct | DigitalProduct;
 
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        product: JUHUU.Product.Object;
+      };
+    }
+
     export namespace Retrieve {
       export type Params = {
         productId: string;
@@ -1676,6 +1758,20 @@ export namespace JUHUU {
     }
 
     export type Object = FiveLetterQr;
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name: string;
+        fiveLetterQr: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        link: JUHUU.Link.Object;
+      };
+    }
 
     export namespace Retrieve {
       export type Params = {
@@ -1946,6 +2042,20 @@ export namespace JUHUU {
       callToAction: LocaleString;
     };
 
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name: string;
+        productId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceTemplate: JUHUU.DeviceTemplate.Object;
+      };
+    }
+
     export namespace Retrieve {
       export type Params = {
         deviceTemplateId: string;
@@ -1988,6 +2098,20 @@ export namespace JUHUU {
       providerUsername: string | null;
       providerPassword: string | null;
     };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        iccid: string;
+        name?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        payout: JUHUU.Sim.Object;
+      };
+    }
 
     export namespace Retrieve {
       export type Params = {

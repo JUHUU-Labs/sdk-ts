@@ -6,7 +6,22 @@ export default class SimsService extends Service {
     super(config);
   }
 
-  async create() {}
+  async create(
+    SimCreateParams: JUHUU.Sim.Create.Params,
+    SimCreateOptions?: JUHUU.Sim.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Sim.Create.Response>> {
+    return await super.sendRequest<JUHUU.Sim.Create.Response>(
+      {
+        method: "POST",
+        url: "sims",
+        body: {
+          simId: SimCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      SimCreateOptions
+    );
+  }
 
   async retrieve(
     SimRetrieveParams: JUHUU.Sim.Retrieve.Params,

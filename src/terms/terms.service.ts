@@ -6,6 +6,23 @@ export default class TermsService extends Service {
     super(config);
   }
 
+  async create(
+    TermCreateParams: JUHUU.Term.Create.Params,
+    TermCreateOptions?: JUHUU.Term.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Term.Create.Response>> {
+    return await super.sendRequest<JUHUU.Term.Create.Response>(
+      {
+        method: "POST",
+        url: "terms",
+        body: {
+          termId: TermCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      TermCreateOptions
+    );
+  }
+
   async retrieve(
     TermRetrieveParams: JUHUU.Term.Retrieve.Params,
     TermRetrieveOptions?: JUHUU.Term.Retrieve.Options

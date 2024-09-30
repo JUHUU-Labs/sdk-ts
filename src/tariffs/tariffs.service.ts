@@ -6,6 +6,23 @@ export default class TariffsService extends Service {
     super(config);
   }
 
+  async create(
+    TariffCreateParams: JUHUU.Tariff.Create.Params,
+    TariffCreateOptions?: JUHUU.Tariff.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.Create.Response>> {
+    return await super.sendRequest<JUHUU.Tariff.Create.Response>(
+      {
+        method: "POST",
+        url: "tariffs",
+        body: {
+          tariffId: TariffCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      TariffCreateOptions
+    );
+  }
+
   async retrieve(
     TariffRetrieveParams: JUHUU.Tariff.Retrieve.Params,
     TariffRetrieveOptions?: JUHUU.Tariff.Retrieve.Options

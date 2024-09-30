@@ -6,6 +6,23 @@ export default class LocationsService extends Service {
     super(config);
   }
 
+  async create(
+    LocationCreateParams: JUHUU.Location.Create.Params,
+    LocationCreateOptions?: JUHUU.Location.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Location.Create.Response>> {
+    return await super.sendRequest<JUHUU.Location.Create.Response>(
+      {
+        method: "POST",
+        url: "locations",
+        body: {
+          propertyId: LocationCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      LocationCreateOptions
+    );
+  }
+
   async retrieve(
     LocationRetrieveParams: JUHUU.Location.Retrieve.Params,
     LocationRetrieveOptions?: JUHUU.Location.Retrieve.Options

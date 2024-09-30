@@ -6,6 +6,23 @@ export default class PayoutsService extends Service {
     super(config);
   }
 
+  async create(
+    PayoutCreateParams: JUHUU.Payout.Create.Params,
+    PayoutCreateOptions?: JUHUU.Payout.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Payout.Create.Response>> {
+    return await super.sendRequest<JUHUU.Payout.Create.Response>(
+      {
+        method: "POST",
+        url: "payouts",
+        body: {
+          propertyId: PayoutCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      PayoutCreateOptions
+    );
+  }
+
   async retrieve(
     PayoutRetrieveParams: JUHUU.Payout.Retrieve.Params,
     PayoutRetrieveOptions?: JUHUU.Payout.Retrieve.Options

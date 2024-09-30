@@ -6,6 +6,23 @@ export default class DeviceTemplatesService extends Service {
     super(config);
   }
 
+  async create(
+    DeviceTemplateCreateParams: JUHUU.DeviceTemplate.Create.Params,
+    DeviceTemplateCreateOptions?: JUHUU.DeviceTemplate.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.DeviceTemplate.Create.Response>> {
+    return await super.sendRequest<JUHUU.DeviceTemplate.Create.Response>(
+      {
+        method: "POST",
+        url: "deviceTemplates",
+        body: {
+          propertyId: DeviceTemplateCreateParams.propertyId,
+        },
+        useAuthentication: true,
+      },
+      DeviceTemplateCreateOptions
+    );
+  }
+
   async retrieve(
     DeviceTemplateRetrieveParams: JUHUU.DeviceTemplate.Retrieve.Params,
     DeviceTemplateRetrieveOptions?: JUHUU.DeviceTemplate.Retrieve.Options
