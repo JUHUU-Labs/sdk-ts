@@ -676,11 +676,6 @@ export namespace JUHUU {
       export type Params = {
         propertyId: string;
         name: string;
-        creditPostingRowDescription?: string;
-        orderNumber?: string;
-        BGTXT?: string | null;
-        SGTXT?: string | null;
-        ZUONR?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1171,9 +1166,9 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        name?: LocaleString;
+        name: LocaleString;
         type: string;
-        regex?: string;
+        regex: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1438,18 +1433,6 @@ export namespace JUHUU {
       stripeConnectedAccountId: string;
     };
 
-    export namespace Create {
-      export type Params = {
-        propertyId: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        payout: JUHUU.Payout.Object;
-      };
-    }
-
     export namespace Retrieve {
       export type Params = {
         payoutId: string;
@@ -1468,16 +1451,6 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = JUHUU.Payout.Object[];
-    }
-
-    export namespace Delete {
-      export type Params = {
-        payoutId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2142,7 +2115,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        name: string;
+        name?: string;
         productId: string;
       };
 

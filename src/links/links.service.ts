@@ -16,6 +16,8 @@ export default class LinkService extends Service {
         url: "links",
         body: {
           propertyId: LinkCreateParams.propertyId,
+          name: LinkCreateParams.name,
+          fiveLetterQr: LinkCreateParams.fiveLetterQr,
         },
         useAuthentication: true,
       },

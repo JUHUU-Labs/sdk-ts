@@ -16,6 +16,8 @@ export default class SimsService extends Service {
         url: "sims",
         body: {
           simId: SimCreateParams.propertyId,
+          iccid: SimCreateParams.iccid,
+          name: SimCreateParams.name,
         },
         useAuthentication: true,
       },

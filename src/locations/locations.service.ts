@@ -16,6 +16,8 @@ export default class LocationsService extends Service {
         url: "locations",
         body: {
           propertyId: LocationCreateParams.propertyId,
+          name: LocationCreateParams.name,
+          type: LocationCreateParams.type,
         },
         useAuthentication: true,
       },

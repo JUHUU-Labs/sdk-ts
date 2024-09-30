@@ -16,6 +16,9 @@ export default class LicenseTemplatesService extends Service {
         url: "licenseTemplates",
         body: {
           propertyId: LicenseTemplateCreateParams.propertyId,
+          type: LicenseTemplateCreateParams.type,
+          regex: LicenseTemplateCreateParams.regex,
+          name: LicenseTemplateCreateParams.name,
         },
         useAuthentication: true,
       },

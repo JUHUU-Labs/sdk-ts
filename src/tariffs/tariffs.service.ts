@@ -16,6 +16,11 @@ export default class TariffsService extends Service {
         url: "tariffs",
         body: {
           tariffId: TariffCreateParams.propertyId,
+          duration: TariffCreateParams.duration,
+          currencyCode: TariffCreateParams.currencyCode,
+          amount: TariffCreateParams.amount,
+          continue: TariffCreateParams.continue,
+          name: TariffCreateParams.name,
         },
         useAuthentication: true,
       },

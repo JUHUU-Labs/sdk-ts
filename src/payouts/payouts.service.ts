@@ -6,23 +6,6 @@ export default class PayoutsService extends Service {
     super(config);
   }
 
-  async create(
-    PayoutCreateParams: JUHUU.Payout.Create.Params,
-    PayoutCreateOptions?: JUHUU.Payout.Create.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.Payout.Create.Response>> {
-    return await super.sendRequest<JUHUU.Payout.Create.Response>(
-      {
-        method: "POST",
-        url: "payouts",
-        body: {
-          propertyId: PayoutCreateParams.propertyId,
-        },
-        useAuthentication: true,
-      },
-      PayoutCreateOptions
-    );
-  }
-
   async retrieve(
     PayoutRetrieveParams: JUHUU.Payout.Retrieve.Params,
     PayoutRetrieveOptions?: JUHUU.Payout.Retrieve.Options
@@ -66,21 +49,6 @@ export default class PayoutsService extends Service {
         useAuthentication: false,
       },
       PayoutListOptions
-    );
-  }
-
-  async delete(
-    PayoutDeleteParams: JUHUU.Payout.Delete.Params,
-    PayoutDeleteOptions?: JUHUU.Payout.Delete.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.Payout.Delete.Response>> {
-    return await super.sendRequest<JUHUU.Payout.Delete.Response>(
-      {
-        method: "DELETE",
-        url: "payouts/" + PayoutDeleteParams.payoutId,
-        useAuthentication: true,
-        body: undefined,
-      },
-      PayoutDeleteOptions
     );
   }
 }

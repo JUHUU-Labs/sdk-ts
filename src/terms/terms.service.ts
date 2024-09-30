@@ -15,7 +15,8 @@ export default class TermsService extends Service {
         method: "POST",
         url: "terms",
         body: {
-          termId: TermCreateParams.propertyId,
+          propertyId: TermCreateParams.propertyId,
+          name: TermCreateParams.name,
         },
         useAuthentication: true,
       },

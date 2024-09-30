@@ -16,6 +16,7 @@ export default class ProductService extends Service {
         url: "products",
         body: {
           propertyId: ProductCreateParams.propertyId,
+          name: ProductCreateParams.name,
         },
         useAuthentication: true,
       },

@@ -16,6 +16,7 @@ export default class AccountingAreasService extends Service {
         url: "accountingAreas",
         body: {
           propertyId: AccountingAreaCreateParams.propertyId,
+          name: AccountingAreaCreateParams.name,
         },
         useAuthentication: true,
       },
