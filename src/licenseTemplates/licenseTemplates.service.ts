@@ -98,4 +98,20 @@ export default class LicenseTemplatesService extends Service {
       LicenseTemplateRegexValidateOptions
     );
   }
+
+  async delete(
+    LicenseTemplateDeleteParams: JUHUU.LicenseTemplate.Delete.Params,
+    LicenseTemplateDeleteOptions?: JUHUU.LicenseTemplate.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.LicenseTemplate.Delete.Response>> {
+    return await super.sendRequest<JUHUU.LicenseTemplate.Delete.Response>(
+      {
+        method: "DELETE",
+        url:
+          "licenseTemplates/" + LicenseTemplateDeleteParams.licenseTemplateId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      LicenseTemplateDeleteOptions
+    );
+  }
 }

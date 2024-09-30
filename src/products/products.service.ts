@@ -86,4 +86,19 @@ export default class ProductService extends Service {
       options
     );
   }
+
+  async delete(
+    ProductDeleteParams: JUHUU.Product.Delete.Params,
+    ProductDeleteOptions?: JUHUU.Product.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Product.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Product.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "products/" + ProductDeleteParams.productId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      ProductDeleteOptions
+    );
+  }
 }

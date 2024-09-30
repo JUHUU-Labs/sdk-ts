@@ -81,4 +81,19 @@ export default class TermsService extends Service {
       TermAcceptOptions
     );
   }
+
+  async delete(
+    TermDeleteParams: JUHUU.Term.Delete.Params,
+    TermDeleteOptions?: JUHUU.Term.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Term.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Term.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "terms/" + TermDeleteParams.termId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      TermDeleteOptions
+    );
+  }
 }

@@ -68,4 +68,19 @@ export default class PayoutsService extends Service {
       PayoutListOptions
     );
   }
+
+  async delete(
+    PayoutDeleteParams: JUHUU.Payout.Delete.Params,
+    PayoutDeleteOptions?: JUHUU.Payout.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Payout.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Payout.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "payouts/" + PayoutDeleteParams.payoutId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      PayoutDeleteOptions
+    );
+  }
 }

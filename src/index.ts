@@ -590,6 +590,16 @@ export namespace JUHUU {
         user: JUHUU.User.Object;
       };
     }
+
+    export namespace Delete {
+      export type Params = {
+        userId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.User.Object[];
+    }
   }
 
   export namespace Term {
@@ -651,6 +661,16 @@ export namespace JUHUU {
         term: JUHUU.Term.Object;
       };
     }
+
+    export namespace Delete {
+      export type Params = {
+        termId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Term.Object[];
+    }
   }
 
   export namespace AccountingArea {
@@ -701,6 +721,16 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.AccountingArea.Object[];
+    }
+
+    export namespace Delete {
+      export type Params = {
+        accountingAreaId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1097,6 +1127,16 @@ export namespace JUHUU {
         tariff: JUHUU.Tariff.Object;
       };
     }
+
+    export namespace Delete {
+      export type Params = {
+        tariffId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Tariff.Object[];
+    }
   }
 
   export namespace Survey {
@@ -1197,6 +1237,16 @@ export namespace JUHUU {
       export type Response = {
         licenseTemplate: JUHUU.LicenseTemplate.Object;
       };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        licenseTemplateId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.LicenseTemplate.Object[];
     }
   }
 
@@ -1437,6 +1487,16 @@ export namespace JUHUU {
 
       export type Response = JUHUU.Payout.Object[];
     }
+
+    export namespace Delete {
+      export type Params = {
+        payoutId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Payout.Object[];
+    }
   }
 
   export namespace Payment {
@@ -1658,6 +1718,16 @@ export namespace JUHUU {
         location: JUHUU.Location.Object;
       };
     }
+
+    export namespace Delete {
+      export type Params = {
+        locationId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Location.Object[];
+    }
   }
 
   export namespace Product {
@@ -1740,6 +1810,16 @@ export namespace JUHUU {
 
       export type Response = Product.Object[];
     }
+
+    export namespace Delete {
+      export type Params = {
+        productId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Product.Object[];
+    }
   }
 
   export namespace Link {
@@ -1795,6 +1875,16 @@ export namespace JUHUU {
       };
 
       export type Options = {};
+
+      export type Response = JUHUU.Link.Object[];
+    }
+
+    export namespace Delete {
+      export type Params = {
+        linkId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.Link.Object[];
     }
@@ -1940,6 +2030,16 @@ export namespace JUHUU {
         device: JUHUU.Device.Object;
       };
     }
+
+    export namespace Delete {
+      export type Params = {
+        deviceId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Device.Object[];
+    }
   }
 
   export namespace Connector {
@@ -2018,6 +2118,16 @@ export namespace JUHUU {
 
       export type Response = JUHUU.Connector.Object[];
     }
+
+    export namespace Delete {
+      export type Params = {
+        connectorId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Connector.Object[];
+    }
   }
 
   export namespace DeviceTemplate {
@@ -2072,6 +2182,16 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.DeviceTemplate.Object[];
+    }
+
+    export namespace Delete {
+      export type Params = {
+        deviceTemplateId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2145,6 +2265,16 @@ export namespace JUHUU {
       export type Response = {
         sim: JUHUU.Sim.Object;
       };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        simId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Sim.Object[];
     }
   }
 

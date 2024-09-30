@@ -68,4 +68,19 @@ export default class DeviceTemplatesService extends Service {
       DeviceTemplateListOptions
     );
   }
+
+  async delete(
+    DeviceTemplateDeleteParams: JUHUU.DeviceTemplate.Delete.Params,
+    DeviceTemplateDeleteOptions?: JUHUU.DeviceTemplate.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.DeviceTemplate.Delete.Response>> {
+    return await super.sendRequest<JUHUU.DeviceTemplate.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "deviceTemplates/" + DeviceTemplateDeleteParams.deviceTemplateId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      DeviceTemplateDeleteOptions
+    );
+  }
 }

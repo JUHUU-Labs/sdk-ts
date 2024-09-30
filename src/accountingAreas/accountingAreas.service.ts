@@ -70,4 +70,19 @@ export default class AccountingAreasService extends Service {
       AccountingAreaListOptions
     );
   }
+
+  async delete(
+    AccountingAreaDeleteParams: JUHUU.AccountingArea.Delete.Params,
+    AccountingAreaDeleteOptions?: JUHUU.AccountingArea.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.AccountingArea.Delete.Response>> {
+    return await super.sendRequest<JUHUU.AccountingArea.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "accountingAreas/" + AccountingAreaDeleteParams.accountingAreaId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      AccountingAreaDeleteOptions
+    );
+  }
 }

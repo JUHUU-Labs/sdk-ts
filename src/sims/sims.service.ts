@@ -74,4 +74,19 @@ export default class SimsService extends Service {
       SimUpdateFromProviderOptions
     );
   }
+
+  async delete(
+    SimDeleteParams: JUHUU.Sim.Delete.Params,
+    SimDeleteOptions?: JUHUU.Sim.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Sim.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Sim.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "sims/" + SimDeleteParams.simId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      SimDeleteOptions
+    );
+  }
 }

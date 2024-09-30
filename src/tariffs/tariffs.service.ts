@@ -192,4 +192,19 @@ export default class TariffsService extends Service {
 
     return end;
   }
+
+  async delete(
+    TariffDeleteParams: JUHUU.Tariff.Delete.Params,
+    TariffDeleteOptions?: JUHUU.Tariff.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Tariff.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "tariffs/" + TariffDeleteParams.tariffId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      TariffDeleteOptions
+    );
+  }
 }

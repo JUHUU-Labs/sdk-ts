@@ -61,4 +61,19 @@ export default class LinkService extends Service {
       LinkListOptions
     );
   }
+
+  async delete(
+    LinkDeleteParams: JUHUU.Link.Delete.Params,
+    LinkDeleteOptions?: JUHUU.Link.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Link.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Link.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "links/" + LinkDeleteParams.linkId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      LinkDeleteOptions
+    );
+  }
 }

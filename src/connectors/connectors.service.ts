@@ -68,4 +68,19 @@ export default class ConnectorsService extends Service {
       ConnectorListOptions
     );
   }
+
+  async delete(
+    ConnectorDeleteParams: JUHUU.Connector.Delete.Params,
+    ConnectorDeleteOptions?: JUHUU.Connector.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Connector.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Connector.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "connectors/" + ConnectorDeleteParams.connectorId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      ConnectorDeleteOptions
+    );
+  }
 }

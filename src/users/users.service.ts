@@ -218,4 +218,19 @@ export default class UsersService extends Service {
       UserRemoveMemberOptions
     );
   }
+
+  async delete(
+    UserDeleteParams: JUHUU.User.Delete.Params,
+    UserDeleteOptions?: JUHUU.User.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.User.Delete.Response>> {
+    return await super.sendRequest<JUHUU.User.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "users/" + UserDeleteParams.userId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      UserDeleteOptions
+    );
+  }
 }

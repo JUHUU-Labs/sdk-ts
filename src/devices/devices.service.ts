@@ -168,4 +168,19 @@ export default class DevicesService extends Service {
       DeviceCommandExecuteOptions
     );
   }
+
+  async delete(
+    DeviceDeleteParams: JUHUU.Device.Delete.Params,
+    DeviceDeleteOptions?: JUHUU.Device.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Device.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Device.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "devices/" + DeviceDeleteParams.deviceId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      DeviceDeleteOptions
+    );
+  }
 }

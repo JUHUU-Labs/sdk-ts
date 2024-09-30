@@ -107,4 +107,19 @@ export default class LocationsService extends Service {
       LocationUpdateOptions
     );
   }
+
+  async delete(
+    LocationDeleteParams: JUHUU.Location.Delete.Params,
+    LocationDeleteOptions?: JUHUU.Location.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Location.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Location.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "locations/" + LocationDeleteParams.locationId,
+        useAuthentication: true,
+        body: undefined,
+      },
+      LocationDeleteOptions
+    );
+  }
 }
