@@ -15,7 +15,7 @@ export default class TariffsService extends Service {
         method: "POST",
         url: "tariffs",
         body: {
-          tariffId: TariffCreateParams.propertyId,
+          propertyId: TariffCreateParams.propertyId,
           duration: TariffCreateParams.duration,
           currencyCode: TariffCreateParams.currencyCode,
           amount: TariffCreateParams.amount,
