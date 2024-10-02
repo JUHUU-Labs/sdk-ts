@@ -312,8 +312,8 @@ export namespace JUHUU {
       };
 
       export type Options = {
-        limit: number;
-        skip: number;
+        limit?: number;
+        skip?: number;
       } & JUHUU.RequestOptions;
 
       export type Response = JUHUU.Session.Object[];
