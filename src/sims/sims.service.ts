@@ -15,7 +15,7 @@ export default class SimsService extends Service {
         method: "POST",
         url: "sims",
         body: {
-          simId: SimCreateParams.propertyId,
+          propertyId: SimCreateParams.propertyId,
           iccid: SimCreateParams.iccid,
           name: SimCreateParams.name,
         },
