@@ -1164,5 +1164,4 @@ export interface LocaleString {
   sv?: string;
   cs?: string;
   et?: string;
-  gsw?: string;
 }
