@@ -19,7 +19,7 @@ export default class DeviceTemplatesService extends Service {
           productId: DeviceTemplateCreateParams.productId,
           name: DeviceTemplateCreateParams.name,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       DeviceTemplateCreateOptions
     );
@@ -44,7 +44,7 @@ export default class DeviceTemplatesService extends Service {
           "?" +
           queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       DeviceTemplateRetrieveOptions
     );
@@ -65,7 +65,7 @@ export default class DeviceTemplatesService extends Service {
         method: "GET",
         url: "deviceTemplates?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       DeviceTemplateListOptions
     );
@@ -79,7 +79,7 @@ export default class DeviceTemplatesService extends Service {
       {
         method: "DELETE",
         url: "deviceTemplates/" + DeviceTemplateDeleteParams.deviceTemplateId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       DeviceTemplateDeleteOptions

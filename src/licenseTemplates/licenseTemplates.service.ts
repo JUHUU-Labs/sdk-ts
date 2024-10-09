@@ -20,7 +20,7 @@ export default class LicenseTemplatesService extends Service {
           regex: LicenseTemplateCreateParams.regex,
           name: LicenseTemplateCreateParams.name,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       LicenseTemplateCreateOptions
     );
@@ -49,7 +49,7 @@ export default class LicenseTemplatesService extends Service {
         method: "GET",
         url: "licenseTemplates?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       LicenseTemplateListOptions
     );
@@ -75,7 +75,7 @@ export default class LicenseTemplatesService extends Service {
         "?" +
         queryArray.join("&"),
       body: undefined,
-      useAuthentication: true,
+      authenticationNotOptional: true,
     });
   }
 
@@ -96,7 +96,7 @@ export default class LicenseTemplatesService extends Service {
           licenseTemplateId:
             LicenseTemplateRegexValidateParams.licenseTemplateId,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       LicenseTemplateRegexValidateOptions
     );
@@ -111,7 +111,7 @@ export default class LicenseTemplatesService extends Service {
         method: "DELETE",
         url:
           "licenseTemplates/" + LicenseTemplateDeleteParams.licenseTemplateId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       LicenseTemplateDeleteOptions

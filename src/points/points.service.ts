@@ -25,7 +25,7 @@ export default class PointsService extends Service {
         method: "GET",
         url: "points/map?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       PointListOptions
     );
@@ -46,7 +46,7 @@ export default class PointsService extends Service {
         method: "GET",
         url: "points?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       PointListOptions
     );

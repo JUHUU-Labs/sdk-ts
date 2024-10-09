@@ -29,7 +29,7 @@ export default class ArticleEmbeddingsService extends Service {
         method: "GET",
         url: "articleEmbeddingEmbeddings?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       ArticleEmbeddingListOptions
     );
@@ -56,7 +56,7 @@ export default class ArticleEmbeddingsService extends Service {
           "?" +
           queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       ArticleEmbeddingRetrieveOptions
     );

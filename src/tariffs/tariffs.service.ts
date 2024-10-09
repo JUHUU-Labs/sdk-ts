@@ -22,7 +22,7 @@ export default class TariffsService extends Service {
           continue: TariffCreateParams.continue,
           name: TariffCreateParams.name,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       TariffCreateOptions
     );
@@ -47,7 +47,7 @@ export default class TariffsService extends Service {
           "?" +
           queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       TariffRetrieveOptions
     );
@@ -68,7 +68,7 @@ export default class TariffsService extends Service {
         method: "GET",
         url: "tariffs?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       TariffListOptions
     );
@@ -95,7 +95,7 @@ export default class TariffsService extends Service {
           autoRenewManualEnabled: TariffUpdateParams.autoRenewManualEnabled,
           manualTerminationEnabled: TariffUpdateParams.manualTerminationEnabled,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       TariffUpdateOptions
     );
@@ -206,7 +206,7 @@ export default class TariffsService extends Service {
       {
         method: "DELETE",
         url: "tariffs/" + TariffDeleteParams.tariffId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       TariffDeleteOptions

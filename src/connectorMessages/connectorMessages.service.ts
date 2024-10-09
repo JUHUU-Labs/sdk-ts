@@ -21,7 +21,7 @@ export default class ConnectorMessagesService extends Service {
           "?" +
           queryArray.join("&"),
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       ConnectorMessageRetrieveOptions
     );
@@ -54,7 +54,7 @@ export default class ConnectorMessagesService extends Service {
         method: "GET",
         url: "connectorMessages?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       ConnectorMessageListOptions
     );

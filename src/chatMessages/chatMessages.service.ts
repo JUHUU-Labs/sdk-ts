@@ -19,7 +19,7 @@ export default class ChatMessagesService extends Service {
           message: ChatMessageCreateParams.message,
           userId: ChatMessageCreateParams.userId,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       ChatMessageCreateOptions
     );
@@ -52,7 +52,7 @@ export default class ChatMessagesService extends Service {
         method: "GET",
         url: "chatMessages?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       ChatMessageListOptions
     );
@@ -72,7 +72,7 @@ export default class ChatMessagesService extends Service {
         "?" +
         queryArray.join("&"),
       body: undefined,
-      useAuthentication: true,
+      authenticationNotOptional: true,
     });
   }
 }

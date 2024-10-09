@@ -19,7 +19,7 @@ export default class LocationsService extends Service {
           name: LocationCreateParams.name,
           type: LocationCreateParams.type,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       LocationCreateOptions
     );
@@ -44,7 +44,7 @@ export default class LocationsService extends Service {
           "?" +
           queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       LocationRetrieveOptions
     );
@@ -76,7 +76,7 @@ export default class LocationsService extends Service {
         method: "GET",
         url: "locations?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       LocationListOptions
     );
@@ -104,7 +104,7 @@ export default class LocationsService extends Service {
           rentOfferArray: LocationUpdateParams.rentOfferArray,
           reservationOfferArray: LocationUpdateParams.reservationOfferArray,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       LocationUpdateOptions
     );
@@ -118,7 +118,7 @@ export default class LocationsService extends Service {
       {
         method: "DELETE",
         url: "locations/" + LocationDeleteParams.locationId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       LocationDeleteOptions

@@ -18,7 +18,7 @@ export default class ProductService extends Service {
           propertyId: ProductCreateParams.propertyId,
           name: ProductCreateParams.name,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       ProductCreateOptions
     );
@@ -61,7 +61,7 @@ export default class ProductService extends Service {
         method: "GET",
         url: "products?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       ProductListOptions
     );
@@ -82,7 +82,7 @@ export default class ProductService extends Service {
         method: "GET",
         url: "products/" + params.productId + "?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       options
     );
@@ -96,7 +96,7 @@ export default class ProductService extends Service {
       {
         method: "DELETE",
         url: "products/" + ProductDeleteParams.productId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       ProductDeleteOptions

@@ -18,7 +18,7 @@ export default class TermsService extends Service {
           propertyId: TermCreateParams.propertyId,
           name: TermCreateParams.name,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       TermCreateOptions
     );
@@ -39,7 +39,7 @@ export default class TermsService extends Service {
         method: "GET",
         url: "terms/" + TermRetrieveParams.termId + "?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       TermRetrieveOptions
     );
@@ -60,7 +60,7 @@ export default class TermsService extends Service {
         method: "GET",
         url: "terms?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       TermListOptions
     );
@@ -77,7 +77,7 @@ export default class TermsService extends Service {
         body: {
           userId: TermAcceptParams.userId,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       TermAcceptOptions
     );
@@ -91,7 +91,7 @@ export default class TermsService extends Service {
       {
         method: "DELETE",
         url: "terms/" + TermDeleteParams.termId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       TermDeleteOptions

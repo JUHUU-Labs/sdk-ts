@@ -17,7 +17,7 @@ export default class ChatsService extends Service {
         body: {
           userId: ChatCreateParams.userId,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       ChatCreateOptions
     );
@@ -46,7 +46,7 @@ export default class ChatsService extends Service {
         method: "GET",
         url: "chats?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       ChatListOptions
     );
@@ -63,7 +63,7 @@ export default class ChatsService extends Service {
         method: "GET",
         url: "chats/" + ChatRetrieveParams.chatId + "?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       ChatRetrieveOptions
     );
@@ -80,7 +80,7 @@ export default class ChatsService extends Service {
         body: {
           title: ChatUpdateParams.title,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       ChatUpdateOptions
     );
@@ -94,7 +94,7 @@ export default class ChatsService extends Service {
       {
         method: "DELETE",
         url: "chats/" + ChatDeleteParams.chatId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       ChatDeleteOptions
@@ -110,7 +110,7 @@ export default class ChatsService extends Service {
         method: "PATCH",
         url: "chats/" + ChatUpdateParams.chatId + "/complete",
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       ChatUpdateOptions
     );

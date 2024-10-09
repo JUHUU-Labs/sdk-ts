@@ -11,7 +11,7 @@ export default class SettingsService extends Service {
       method: "GET",
       url: "sessions/",
       body: undefined,
-      useAuthentication: false,
+      authenticationNotOptional: false,
     });
   }
 }

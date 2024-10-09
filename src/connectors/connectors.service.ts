@@ -29,7 +29,7 @@ export default class ConnectorsService extends Service {
           connectionMode: ConnectorCreateParams.connectionMode,
           type: ConnectorCreateParams.type,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       ConnectorCreateOptions
     );
@@ -54,7 +54,7 @@ export default class ConnectorsService extends Service {
           "?" +
           queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       ConnectorRetrieveOptions
     );
@@ -75,7 +75,7 @@ export default class ConnectorsService extends Service {
         method: "GET",
         url: "connectors?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       ConnectorListOptions
     );
@@ -89,7 +89,7 @@ export default class ConnectorsService extends Service {
       {
         method: "DELETE",
         url: "connectors/" + ConnectorDeleteParams.connectorId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       ConnectorDeleteOptions

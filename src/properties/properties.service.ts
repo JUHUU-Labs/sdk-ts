@@ -20,7 +20,7 @@ export default class PropertiesService extends Service {
         name: PropertyCreateParams.name,
         type: PropertyCreateParams.type,
       },
-      useAuthentication: true,
+      authenticationNotOptional: true,
     });
   }
 
@@ -38,7 +38,7 @@ export default class PropertiesService extends Service {
         "?" +
         queryArray.join("&"),
       body: undefined,
-      useAuthentication: false,
+      authenticationNotOptional: false,
     });
   }
 
@@ -53,7 +53,7 @@ export default class PropertiesService extends Service {
         method: "GET",
         url: "properties?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       PropertyListOptions
     );
@@ -78,7 +78,7 @@ export default class PropertiesService extends Service {
           colorScheme: PropertyUpdateParams.colorScheme,
           contactUrl: PropertyUpdateParams.contactUrl,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       PropertyUpdateOptions
     );
@@ -96,7 +96,7 @@ export default class PropertiesService extends Service {
           PropertyStripeAccountUrlParams.propertyId +
           "/stripeAccountUrl",
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       PropertyStripeAccountUrlOptions
     );

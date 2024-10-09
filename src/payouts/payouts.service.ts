@@ -25,7 +25,7 @@ export default class PayoutsService extends Service {
           "?" +
           queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       PayoutRetrieveOptions
     );
@@ -46,7 +46,7 @@ export default class PayoutsService extends Service {
         method: "GET",
         url: "payouts?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       PayoutListOptions
     );

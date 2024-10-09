@@ -17,7 +17,7 @@ export default class ArticlesService extends Service {
         body: {
           propertyId: ArticleCreateParams.propertyId,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       ArticleCreateOptions
     );
@@ -50,7 +50,7 @@ export default class ArticlesService extends Service {
         method: "GET",
         url: "articles?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       ArticleListOptions
     );
@@ -75,7 +75,7 @@ export default class ArticlesService extends Service {
           "?" +
           queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       ArticleRetrieveOptions
     );
@@ -97,7 +97,7 @@ export default class ArticlesService extends Service {
           status: ArticleUpdateParams.status,
           languageCodeArray: ArticleUpdateParams.languageCodeArray,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       ArticleUpdateOptions
     );
@@ -111,7 +111,7 @@ export default class ArticlesService extends Service {
       {
         method: "DELETE",
         url: "articles/" + ArticleDeleteParams.articleId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       ArticleDeleteOptions
@@ -145,7 +145,7 @@ export default class ArticlesService extends Service {
         method: "GET",
         url: "articles/search?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       ArticleSearchOptions
     );

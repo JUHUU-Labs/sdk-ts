@@ -19,7 +19,7 @@ export default class SimsService extends Service {
           iccid: SimCreateParams.iccid,
           name: SimCreateParams.name,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       SimCreateOptions
     );
@@ -34,7 +34,7 @@ export default class SimsService extends Service {
         method: "GET",
         url: "sims/" + SimRetrieveParams.simId,
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       SimRetrieveOptions
     );
@@ -55,7 +55,7 @@ export default class SimsService extends Service {
         method: "GET",
         url: "sims?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       SimListOptions
     );
@@ -71,7 +71,7 @@ export default class SimsService extends Service {
         url:
           "sims/" + SimUpdateFromProviderParams.simId + "/updateFromProvider",
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       SimUpdateFromProviderOptions
     );
@@ -85,7 +85,7 @@ export default class SimsService extends Service {
       {
         method: "DELETE",
         url: "sims/" + SimDeleteParams.simId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       SimDeleteOptions

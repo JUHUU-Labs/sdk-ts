@@ -23,7 +23,7 @@ export default class UsersService extends Service {
         method: "GET",
         url: "users/" + UserRetrieveParams.userId + "?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       UserRetrieveOptions
     );
@@ -38,7 +38,7 @@ export default class UsersService extends Service {
         method: "GET",
         url: "users/exists?email=" + UserExistsParams.email,
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       UserExistsOptions
     );
@@ -56,7 +56,7 @@ export default class UsersService extends Service {
           email: UserRegisterEmailPasswordParams.email,
           password: UserRegisterEmailPasswordParams.password,
         },
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       UserRegisterEmailPasswordOptions
     );
@@ -74,7 +74,7 @@ export default class UsersService extends Service {
           email: UserLoginEmailPasswordParams.email,
           password: UserLoginEmailPasswordParams.password,
         },
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       UserLoginEmailPasswordOptions
     );
@@ -92,7 +92,7 @@ export default class UsersService extends Service {
           UserPaymentMethodTokensParams.userId +
           "/paymentMethodTokens",
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       UserPaymentMethodTokensOptions
     );
@@ -107,7 +107,7 @@ export default class UsersService extends Service {
         method: "GET",
         url: "auth/refresh",
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       {
         accessToken: UserRefreshAccessTokenParams?.refreshToken,
@@ -135,7 +135,7 @@ export default class UsersService extends Service {
         method: "GET",
         url: "users?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       UserListOptions
     );
@@ -159,7 +159,7 @@ export default class UsersService extends Service {
           vat: UserUpdateParams?.vat,
           acceptedTermIdArray: UserUpdateParams?.acceptedTermIdArray,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       UserUpdateOptions
     );
@@ -177,7 +177,7 @@ export default class UsersService extends Service {
           userId: UserInviteMemberParams?.userIdToInvite,
           email: UserInviteMemberParams?.email,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       UserInviteMemberOptions
     );
@@ -196,7 +196,7 @@ export default class UsersService extends Service {
           "/members/" +
           UserRemoveMemberParams.memberUserId,
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       UserRemoveMemberOptions
     );
@@ -210,7 +210,7 @@ export default class UsersService extends Service {
       {
         method: "DELETE",
         url: "users/" + UserDeleteParams.userId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       UserDeleteOptions

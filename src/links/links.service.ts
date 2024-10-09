@@ -19,7 +19,7 @@ export default class LinkService extends Service {
           name: LinkCreateParams.name,
           fiveLetterQr: LinkCreateParams.fiveLetterQr,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       LinkCreateOptions
     );
@@ -36,7 +36,7 @@ export default class LinkService extends Service {
         method: "GET",
         url: "links/" + LinkRetrieveParams.linkId + "?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       LinkRetrieveOptions
     );
@@ -61,7 +61,7 @@ export default class LinkService extends Service {
         method: "GET",
         url: "links?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: false,
       },
       LinkListOptions
     );
@@ -75,7 +75,7 @@ export default class LinkService extends Service {
       {
         method: "DELETE",
         url: "links/" + LinkDeleteParams.linkId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       LinkDeleteOptions

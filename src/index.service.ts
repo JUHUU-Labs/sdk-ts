@@ -43,31 +43,31 @@ export default class Service {
       url,
       method,
       body = undefined,
-      useAuthentication,
+      authenticationNotOptional,
     }:
       | {
           method: "GET";
           url: string;
           body: undefined;
-          useAuthentication: boolean;
+          authenticationNotOptional: boolean;
         }
       | {
           method: "POST";
           url: string;
           body: any;
-          useAuthentication: boolean;
+          authenticationNotOptional: boolean;
         }
       | {
           method: "PATCH";
           url: string;
           body: any;
-          useAuthentication: boolean;
+          authenticationNotOptional: boolean;
         }
       | {
           method: "DELETE";
           url: string;
           body: undefined;
-          useAuthentication: boolean;
+          authenticationNotOptional: boolean;
         },
     options: JUHUU.RequestOptions = {}
   ): Promise<JUHUU.HttpResponse<T>> {
@@ -90,7 +90,10 @@ export default class Service {
 
     console.log("accessToken:", token);
 
-    if ((token === null || token === undefined) && useAuthentication === true) {
+    if (
+      (token === null || token === undefined) &&
+      authenticationNotOptional === true
+    ) {
       console.error(
         "endpoint",
         url,
@@ -173,7 +176,7 @@ export default class Service {
             method: "GET",
             url: "auth/refresh",
             body: undefined,
-            useAuthentication: true,
+            authenticationNotOptional: true,
           },
           {
             accessToken: oldRefreshToken, // use old refresh token instead of access token
@@ -204,7 +207,7 @@ export default class Service {
             url,
             method,
             body,
-            useAuthentication,
+            authenticationNotOptional,
           },
           {
             accessToken: accessToken,

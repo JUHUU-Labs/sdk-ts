@@ -22,7 +22,7 @@ export default class SessionService extends Service {
           isOffSession: SessionCreateParams.isOffSession,
           userId: SessionCreateParams.userId,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       SessionCreateOptions
     );
@@ -40,7 +40,7 @@ export default class SessionService extends Service {
           propertyId: SessionExportParams.propertyId,
           outputType: SessionExportParams.outputType,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       SessionExportOptions
     );
@@ -64,7 +64,7 @@ export default class SessionService extends Service {
         "?" +
         queryArray.join("&"),
       body: undefined,
-      useAuthentication: true,
+      authenticationNotOptional: true,
     });
   }
 
@@ -111,7 +111,7 @@ export default class SessionService extends Service {
         method: "GET",
         url: "sessions?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       SessionListOptions
     );
@@ -128,7 +128,7 @@ export default class SessionService extends Service {
         body: {
           autoRenew: SessionUpdateParams?.autoRenew,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       SessionUpdateOptions
     );
@@ -145,7 +145,7 @@ export default class SessionService extends Service {
         body: {
           isOffSession: SessionTerminateParams.isOffSession,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       SessionTerminateOptions
     );
@@ -162,7 +162,7 @@ export default class SessionService extends Service {
         body: {
           locationId: SessionTerminateParams.locationId,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       SessionTerminateOptions
     );
@@ -179,7 +179,7 @@ export default class SessionService extends Service {
         body: {
           userId: SessionAttachUserParams.userId,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       SessionAttachUserOptions
     );
@@ -194,7 +194,7 @@ export default class SessionService extends Service {
         method: "DELETE",
         url: "sessions/" + SessionDetachUserParams.sessionId + "/user",
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       SessionDetachUserOptions
     );

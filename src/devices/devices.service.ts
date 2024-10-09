@@ -19,7 +19,7 @@ export default class DevicesService extends Service {
           deviceTemplateId: DeviceCreateParams.deviceTemplateId,
           name: DeviceCreateParams.name,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       DeviceCreateOptions
     );
@@ -48,7 +48,7 @@ export default class DevicesService extends Service {
           "?" +
           queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       DeviceRetrieveOptions
     );
@@ -85,7 +85,7 @@ export default class DevicesService extends Service {
         method: "GET",
         url: "devices?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       DeviceListOptions
     );
@@ -125,7 +125,7 @@ export default class DevicesService extends Service {
         body: {
           message: DeviceMessageParams.message,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       DeviceMessageOptions
     );
@@ -146,7 +146,7 @@ export default class DevicesService extends Service {
         body: {
           value: DeviceParameterParams.value,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       DeviceParameterOptions
     );
@@ -165,7 +165,7 @@ export default class DevicesService extends Service {
           "/command/" +
           DeviceCommandExecuteParams.commandName,
         body: {},
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       DeviceCommandExecuteOptions
     );
@@ -179,7 +179,7 @@ export default class DevicesService extends Service {
       {
         method: "DELETE",
         url: "devices/" + DeviceDeleteParams.deviceId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       DeviceDeleteOptions

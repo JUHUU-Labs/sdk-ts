@@ -45,7 +45,7 @@ export default class PaymentsService extends Service {
         method: "GET",
         url: "payments?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       PaymentListOptions
     );
@@ -69,7 +69,7 @@ export default class PaymentsService extends Service {
         "?" +
         queryArray.join("&"),
       body: undefined,
-      useAuthentication: true,
+      authenticationNotOptional: true,
     });
   }
 
@@ -82,7 +82,7 @@ export default class PaymentsService extends Service {
         method: "GET",
         url: "payments/" + PaymentTokensParams.paymentId + "/tokens",
         body: undefined,
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       PaymentTokensOptions
     );
@@ -99,7 +99,7 @@ export default class PaymentsService extends Service {
       url:
         "payments/" + PaymentRetrieveInvoiceUrlParams.paymentId + "/invoiceUrl",
       body: undefined,
-      useAuthentication: true,
+      authenticationNotOptional: true,
     });
   }
 }

@@ -18,7 +18,7 @@ export default class AccountingAreasService extends Service {
           propertyId: AccountingAreaCreateParams.propertyId,
           name: AccountingAreaCreateParams.name,
         },
-        useAuthentication: true,
+        authenticationNotOptional: true,
       },
       AccountingAreaCreateOptions
     );
@@ -45,7 +45,7 @@ export default class AccountingAreasService extends Service {
           "?" +
           queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       AccountingAreaRetrieveOptions
     );
@@ -66,7 +66,7 @@ export default class AccountingAreasService extends Service {
         method: "GET",
         url: "accountingAreas?" + queryArray.join("&"),
         body: undefined,
-        useAuthentication: false,
+        authenticationNotOptional: false,
       },
       AccountingAreaListOptions
     );
@@ -80,7 +80,7 @@ export default class AccountingAreasService extends Service {
       {
         method: "DELETE",
         url: "accountingAreas/" + AccountingAreaDeleteParams.accountingAreaId,
-        useAuthentication: true,
+        authenticationNotOptional: true,
         body: undefined,
       },
       AccountingAreaDeleteOptions
