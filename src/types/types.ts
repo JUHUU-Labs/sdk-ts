@@ -132,7 +132,6 @@ export const CurrencyCodeArray = [
   "pln", // poland
   "czk", // czech republic
   "huf", // hungary
-  "hrk", // croatia
   "bam", // bosnia and herzegovina
   "rsd", // serbia
   "isk", // iceland
