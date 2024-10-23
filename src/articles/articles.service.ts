@@ -150,4 +150,21 @@ export default class ArticlesService extends Service {
       ArticleSearchOptions
     );
   }
+
+  async translate(
+    ArticleTranslateParams: JUHUU.Article.Translate.Params,
+    ArticleTranslateOptions?: JUHUU.Article.Translate.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Article.Translate.Response>> {
+    return await super.sendRequest<JUHUU.Article.Translate.Response>(
+      {
+        method: "PATCH",
+        url: "articles/" + ArticleTranslateParams.articleId + "/translate",
+        body: {
+          languageCode: ArticleTranslateParams.languageCode,
+        },
+        authenticationNotOptional: false,
+      },
+      ArticleTranslateOptions
+    );
+  }
 }

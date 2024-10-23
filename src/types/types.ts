@@ -369,15 +369,12 @@ export type Purpose = {
   modality: Modality;
 };
 
-export const ReadonlyIntegrationStateArray = ["full", "partial"] as const;
-
-export type IntegrationState = (typeof ReadonlyIntegrationStateArray)[number];
-
 export type GeoPoint = {
   type: "Point";
   coordinates: [number, number]; // Note that longitude comes first in a GeoJSON coordinate array, not latitude.
 };
 
+export type VisualPriority = "none" | "highlight" | "important";
 export type PlatformUrl = {
   ios: string;
   android: string;
@@ -385,7 +382,6 @@ export type PlatformUrl = {
 };
 
 export interface MapFilter {
-  integrationStateArray: IntegrationState[];
   categoryArray: Category[];
   modalityArray: Modality[];
   sectorArray: Sector[];
