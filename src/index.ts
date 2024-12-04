@@ -207,6 +207,18 @@ export namespace JUHUU {
     modality: Modality;
   };
 
+  export namespace Settings {
+    export namespace SendSupportRequest {
+      export type Params = {
+        message: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = undefined;
+    }
+  }
+
   export namespace Session {
     type Base = {
       id: string;
@@ -295,6 +307,18 @@ export namespace JUHUU {
       export type Response = {
         session: JUHUU.Session.Object;
         property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace Search {
+      export type Params = {
+        paymentId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        session: JUHUU.Session.Object;
       };
     }
 
@@ -1266,9 +1290,7 @@ export namespace JUHUU {
       bannerImageDark: string | null;
       iconLight: string | null; // url of image is used as a small icon for the property for previews such as the list of properties
       iconDark: string | null;
-      version: number; // 2.0.0
-      deviceIconLight: string | null; // url of image is used when a new device is created; this is the default image to use
-      deviceIconDark: string | null;
+      version: number;
       colorScheme: ColorScheme;
       contactUrl: string | null;
     };
@@ -1532,6 +1554,18 @@ export namespace JUHUU {
       };
     }
 
+    export namespace Search {
+      export type Params = {
+        providerPaymentId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        payment: JUHUU.Payment.Object;
+      };
+    }
+
     export namespace List {
       export type Params = {
         propertyId?: string;
@@ -1587,10 +1621,8 @@ export namespace JUHUU {
       readonly object: "location";
       logoLight: string | null;
       logoDark: string | null;
-      location: GeoPoint;
-      altitudeRange: [number, number]; // from, to
-      invalidAt: Date; // timestamp this location is no longer valid and can be deleted from the database
-      utilization: Utilization | null;
+      location: GeoPoint | null;
+      invalidAt: Date | null; // timestamp this location is no longer valid and can be deleted from the database
       purposeArray: Purpose[];
       circumstanceArray: Circumstance[];
       propertyId: string;
@@ -1600,9 +1632,10 @@ export namespace JUHUU {
       reservationOfferArray: Offer[];
       iconLight: string | null;
       iconDark: string | null;
-      address: Address;
-      termId: string;
-      timeZone: TimeZone;
+      address: Address | null;
+      termId: string | null;
+      timeZone: TimeZone | null;
+      version: number;
     };
 
     export interface RentableDeviceGroup extends Base {
@@ -1728,6 +1761,7 @@ export namespace JUHUU {
       technologyArray: JUHUU.Technology[];
       invalidAt: Date;
       source: "fluctuo" | null;
+      articleId: string | null;
     };
 
     export interface PhysicalProduct extends Base {
@@ -1891,7 +1925,7 @@ export namespace JUHUU {
       version: number;
       deviceTemplateId: string;
       source: "fluctuo" | null;
-      location: GeoPoint;
+      location: GeoPoint | null;
       fuel: {
         type: FuelType;
         level: number; // percentage between 0 and 100
@@ -2114,7 +2148,7 @@ export namespace JUHUU {
     export type Object = {
       id: string;
       readonly object: "deviceTemplate";
-      productId: string;
+      productId: string | null;
       name: string; // z.B. BikeLoop V1
       propertyId: string;
       parameterArray: Parameter[]; // "values" of the parameters are used as default values for the parameters of the device

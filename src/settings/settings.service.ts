@@ -14,4 +14,21 @@ export default class SettingsService extends Service {
       authenticationNotOptional: false,
     });
   }
+
+  async sendSupportRequest(
+    SessionCreateParams: JUHUU.Settings.SendSupportRequest.Params,
+    SessionCreateOptions?: JUHUU.Settings.SendSupportRequest.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Settings.SendSupportRequest.Response>> {
+    return await super.sendRequest<JUHUU.Settings.SendSupportRequest.Response>(
+      {
+        method: "POST",
+        url: "settings/sendSupportRequest",
+        body: {
+          message: SessionCreateParams.message,
+        },
+        authenticationNotOptional: false,
+      },
+      SessionCreateOptions
+    );
+  }
 }

@@ -73,6 +73,29 @@ export default class PaymentsService extends Service {
     });
   }
 
+  async search(
+    PaymentSearchParams: JUHUU.Payment.Search.Params,
+    PaymentSearchOptions?: JUHUU.Payment.Search.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Payment.Search.Response>> {
+    const queryArray: string[] = [];
+
+    if (PaymentSearchParams.providerPaymentId !== undefined) {
+      queryArray.push(
+        "providerPaymentId=" + PaymentSearchParams.providerPaymentId
+      );
+    }
+
+    return await super.sendRequest<JUHUU.Payment.Search.Response>(
+      {
+        method: "GET",
+        url: "payments/search?" + queryArray.join("&"),
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      PaymentSearchOptions
+    );
+  }
+
   async tokens(
     PaymentTokensParams: JUHUU.Payment.Tokens.Params,
     PaymentTokensOptions?: JUHUU.Payment.Tokens.Options

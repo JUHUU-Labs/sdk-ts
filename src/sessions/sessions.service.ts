@@ -117,6 +117,27 @@ export default class SessionService extends Service {
     );
   }
 
+  async search(
+    SessionSearchParams: JUHUU.Session.Search.Params,
+    SessionSearchOptions?: JUHUU.Session.Search.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Session.Search.Response>> {
+    const queryArray: string[] = [];
+
+    if (SessionSearchParams.paymentId !== undefined) {
+      queryArray.push("paymentId=" + SessionSearchParams.paymentId);
+    }
+
+    return await super.sendRequest<JUHUU.Session.Search.Response>(
+      {
+        method: "GET",
+        url: "sessions/search?" + queryArray.join("&"),
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      SessionSearchOptions
+    );
+  }
+
   async update(
     SessionUpdateParams: JUHUU.Session.Update.Params,
     SessionUpdateOptions?: JUHUU.Session.Update.Options
@@ -152,19 +173,19 @@ export default class SessionService extends Service {
   }
 
   async attachLocation(
-    SessionTerminateParams: JUHUU.Session.AttachLocation.Params,
-    SessionTerminateOptions?: JUHUU.Session.AttachLocation.Options
+    SessionAttachLocationParams: JUHUU.Session.AttachLocation.Params,
+    SessionLocationOptions?: JUHUU.Session.AttachLocation.Options
   ): Promise<JUHUU.HttpResponse<JUHUU.Session.AttachLocation.Response>> {
     return await super.sendRequest<JUHUU.Session.AttachLocation.Response>(
       {
-        method: "PATCH",
-        url: "sessions/" + SessionTerminateParams.sessionId + "/attachLocation",
+        method: "POST",
+        url: "sessions/" + SessionAttachLocationParams.sessionId + "/location",
         body: {
-          locationId: SessionTerminateParams.locationId,
+          locationId: SessionAttachLocationParams.locationId,
         },
         authenticationNotOptional: true,
       },
-      SessionTerminateOptions
+      SessionLocationOptions
     );
   }
 
