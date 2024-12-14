@@ -14,6 +14,10 @@ export interface Offer {
   offerTime: OfferTime;
 }
 
+export type DevicePermission = {
+  type: "boldBluetooth";
+};
+
 export type OfferTime = {
   mon: {
     startMinutes: number; // minutes from midnight
@@ -1047,6 +1051,17 @@ export type GraphNode =
       type: "device.message"; // device cannot have multiple connectors
       nodeIdArray: string[];
       message: string;
+    }
+  | {
+      id: string;
+      /**
+       * uses the deviceId of the current device and the userId of
+       * the currently logged in user to fetch the configuration of
+       * BoldLock and then uses the bold SDK to connect to the lock via
+       * bluetooth and activate it
+       */
+      type: "device.boldLock.activate";
+      nodeIdArray: string[];
     }
   | {
       id: string;

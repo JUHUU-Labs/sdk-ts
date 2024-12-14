@@ -75,4 +75,23 @@ export default class ChatMessagesService extends Service {
       authenticationNotOptional: true,
     });
   }
+
+  async update(
+    ChatMessageUpdateParams: JUHUU.ChatMessage.Update.Params,
+    ChatMessageUpdateOptions?: JUHUU.ChatMessage.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.ChatMessage.Update.Response>> {
+    return await super.sendRequest<JUHUU.ChatMessage.Update.Response>(
+      {
+        method: "PATCH",
+        url: "chatMessages/" + ChatMessageUpdateParams.chatMessageId,
+        body: {
+          rating: ChatMessageUpdateParams.rating,
+          feedbackText: ChatMessageUpdateParams.feedbackText,
+          message: ChatMessageUpdateParams.message,
+        },
+        authenticationNotOptional: true,
+      },
+      ChatMessageUpdateOptions
+    );
+  }
 }

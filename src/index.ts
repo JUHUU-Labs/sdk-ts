@@ -21,6 +21,7 @@ import {
   CountryCode,
   CurrencyCode,
   DeepNullable,
+  DevicePermission,
   DeviceStatus,
   Environment,
   FuelType,
@@ -42,7 +43,6 @@ import {
   Platform,
   PostingRow,
   PushToken,
-  Sector,
   SimStatus,
   StarRating,
   TimeZone,
@@ -60,6 +60,7 @@ import ArticlesService from "./articles/articles.service";
 import ChatsService from "./chats/chats.service";
 import ChatMessagesService from "./chatMessages/chatMessages.service";
 import ArticleEmbeddingsService from "./articleEmbeddings/articleEmbeddings.service";
+import BoldLockService from "./boldLock/boldLock.service";
 
 export * from "./types/types";
 
@@ -88,6 +89,7 @@ export class Juhuu {
     this.chats = new ChatsService(config);
     this.chatMessages = new ChatMessagesService(config);
     this.articleEmbeddings = new ArticleEmbeddingsService(config);
+    this.boldLock = new BoldLockService(config);
   }
 
   /**
@@ -116,6 +118,7 @@ export class Juhuu {
   readonly chats: ChatsService;
   readonly chatMessages: ChatMessagesService;
   readonly articleEmbeddings: ArticleEmbeddingsService;
+  readonly boldLock: BoldLockService;
 }
 
 export namespace JUHUU {
@@ -610,6 +613,24 @@ export namespace JUHUU {
     }
   }
 
+  export namespace BoldLock {
+    export namespace Configuration {
+      export type Params = {
+        deviceId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        boldClientId: string;
+        boldClientSecret: string;
+        boldRedirectUri: string;
+        boldAuthorizationCode: string;
+        boldDeviceId: number;
+      };
+    }
+  }
+
   export namespace Term {
     export type Object = {
       id: string;
@@ -1011,7 +1032,7 @@ export namespace JUHUU {
     export interface AiChatMessage extends Base {
       type: "ai";
       articleEmbeddingArray: JUHUU.ArticleEmbedding.Object[];
-      starRating: 1 | 2 | 3 | 4 | 5 | null; // 1 is worst, 5 is best
+      rating: "good" | "bad" | null; // thumbs up or thumbs down
       feedbackText: string | null; // null if no feedback
       contradictionDetection: {
         status: "neutral" | "contradiction" | "entailment";
@@ -1063,6 +1084,21 @@ export namespace JUHUU {
 
       export type Response = {
         chatMessageArray: JUHUU.ChatMessage.Object[];
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        chatMessageId: string;
+        rating?: JUHUU.ChatMessage.AiChatMessage["rating"];
+        message?: string;
+        feedbackText?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        chatMessage: JUHUU.ChatMessage.Object;
       };
     }
   }
@@ -1636,6 +1672,7 @@ export namespace JUHUU {
       termId: string | null;
       timeZone: TimeZone | null;
       version: number;
+      devicePermissionArray: DevicePermission[];
     };
 
     export interface RentableDeviceGroup extends Base {
@@ -2164,6 +2201,7 @@ export namespace JUHUU {
       deviceImageDark: string;
       deviceImageLight: string;
       callToAction: LocaleString;
+      devicePermissionArray: DevicePermission[];
     };
 
     export namespace Create {
