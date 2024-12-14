@@ -220,4 +220,19 @@ export default class SessionService extends Service {
       SessionDetachUserOptions
     );
   }
+
+  async delete(
+    SessionDeleteUserParams: JUHUU.Session.Delete.Params,
+    SessionDeleteUserOptions?: JUHUU.Session.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Session.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Session.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "sessions/" + SessionDeleteUserParams.sessionId,
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      SessionDeleteUserOptions
+    );
+  }
 }

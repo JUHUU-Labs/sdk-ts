@@ -406,6 +406,16 @@ export namespace JUHUU {
         session: JUHUU.Session.Object;
       };
     }
+
+    export namespace Delete {
+      export type Params = {
+        sessionId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Session.Object;
+    }
   }
 
   export namespace User {
@@ -609,7 +619,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.User.Object[];
+      export type Response = JUHUU.User.Object;
     }
   }
 
@@ -698,7 +708,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Term.Object[];
+      export type Response = JUHUU.Term.Object;
     }
   }
 
@@ -759,7 +769,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.AccountingArea.Object[];
+      export type Response = JUHUU.AccountingArea.Object;
     }
   }
 
@@ -893,7 +903,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Article.Object[];
+      export type Response = JUHUU.Article.Object;
     }
 
     export namespace Search {
@@ -996,7 +1006,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Chat.Object[];
+      export type Response = JUHUU.Chat.Object;
     }
 
     export namespace Complete {
@@ -1197,7 +1207,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Tariff.Object[];
+      export type Response = JUHUU.Tariff.Object;
     }
   }
 
@@ -1308,7 +1318,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.LicenseTemplate.Object[];
+      export type Response = JUHUU.LicenseTemplate.Object;
     }
   }
 
@@ -1776,7 +1786,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Location.Object[];
+      export type Response = JUHUU.Location.Object;
     }
   }
 
@@ -1869,7 +1879,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Product.Object[];
+      export type Response = JUHUU.Product.Object;
     }
   }
 
@@ -1937,7 +1947,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Link.Object[];
+      export type Response = JUHUU.Link.Object;
     }
   }
 
@@ -2089,7 +2099,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Device.Object[];
+      export type Response = JUHUU.Device.Object;
     }
   }
 
@@ -2177,7 +2187,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Connector.Object[];
+      export type Response = JUHUU.Connector.Object;
     }
   }
 
@@ -2248,7 +2258,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.DeviceTemplate.Object[];
+      export type Response = JUHUU.DeviceTemplate.Object;
     }
   }
 
@@ -2326,7 +2336,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Sim.Object[];
+      export type Response = JUHUU.Sim.Object;
     }
   }
 
