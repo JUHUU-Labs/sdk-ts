@@ -624,8 +624,9 @@ export namespace JUHUU {
   }
 
   export namespace BoldLock {
-    export namespace Configuration {
+    export namespace Credentials {
       export type Params = {
+        userId: string;
         deviceId: string;
       };
 
@@ -634,9 +635,21 @@ export namespace JUHUU {
       export type Response = {
         boldClientId: string;
         boldClientSecret: string;
-        boldRedirectUri: string;
         boldAuthorizationCode: string;
-        boldDeviceId: number;
+        boldRedirectUri: string;
+      };
+    }
+
+    export namespace GrantAccess {
+      export type Params = {
+        userId: string;
+        deviceId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        device: JUHUU.Device.Object;
       };
     }
   }
@@ -2004,13 +2017,14 @@ export namespace JUHUU {
       };
 
       export type Options = {
-        expand?: Array<"property" | "deviceTemplate">;
+        expand?: Array<"property" | "deviceTemplate" | "connector">;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         device: JUHUU.Device.Object;
         deviceTemplate?: JUHUU.DeviceTemplate.Object;
         property?: JUHUU.Property.Object;
+        connector?: JUHUU.Connector.Object;
       };
     }
 
@@ -2115,7 +2129,7 @@ export namespace JUHUU {
       lastInboundAt: Date | null;
       connectionMode: "alwaysOnline" | "temporaryOnline";
       version: number;
-      simId: string | null; // null, if no sim card of ours is installed
+      simId: string | null; // null, if no sim card is installed or the sim card should not be tracked by us
     };
 
     export namespace Create {
@@ -2154,7 +2168,14 @@ export namespace JUHUU {
       acls: AccessControlListElement[];
     }
 
-    export type Object = Mqtt;
+    export interface BoldLock extends Base {
+      type: "boldLock";
+      boldClientId: string;
+      boldClientSecret: string;
+      boldOrganizationId: number;
+      boldDeviceId: number; // this is the "deviceId" in the bold documentation
+    }
+    export type Object = Mqtt | BoldLock;
 
     export namespace Retrieve {
       export type Params = {
