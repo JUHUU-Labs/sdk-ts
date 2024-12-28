@@ -1269,9 +1269,9 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        name: LocaleString;
+        name?: LocaleString;
         type: string;
-        regex: string;
+        regex?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1729,7 +1729,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        name: string;
+        name?: string;
         type: string;
       };
 
@@ -1847,7 +1847,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        name: string;
+        name?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1916,8 +1916,9 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        name: string;
-        fiveLetterQr: string;
+        name?: string;
+        fiveLetterQr?: string;
+        type: JUHUU.Link.Object["type"];
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1999,7 +2000,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        name: string;
+        name?: string;
         deviceTemplateId: string;
       };
 
@@ -2135,7 +2136,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        name: string;
+        name?: string;
         username?: string;
         password?: string;
         clientId?: string;
@@ -2305,7 +2306,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        iccid: string;
+        iccid?: string;
         name?: string;
       };
 
