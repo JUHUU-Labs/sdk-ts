@@ -1730,7 +1730,7 @@ export namespace JUHUU {
       export type Params = {
         propertyId: string;
         name?: string;
-        type: string;
+        type: JUHUU.Location.Object["type"];
       };
 
       export type Options = JUHUU.RequestOptions;
