@@ -15,7 +15,7 @@ export interface Offer {
 }
 
 export type DevicePermission = {
-  type: "boldBluetooth";
+  type: "bluetooth";
 };
 
 export type OfferTime = {
