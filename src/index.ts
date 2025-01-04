@@ -1270,7 +1270,7 @@ export namespace JUHUU {
       export type Params = {
         propertyId: string;
         name?: LocaleString;
-        type: string;
+        type: JUHUU.LicenseTemplate.Object["type"];
         regex?: string;
       };
 
@@ -1381,7 +1381,7 @@ export namespace JUHUU {
       export type Params = {
         userId?: string;
         name: string;
-        type?: Object["type"];
+        type?: JUHUU.Property.Object["type"];
       };
 
       export type Options = {};
@@ -1804,45 +1804,23 @@ export namespace JUHUU {
   }
 
   export namespace Product {
-    export type Base = {
+    export type Object = {
       id: string;
       readonly object: "product";
-      name: string;
-      propertyId: string;
-      version: number;
-      previewText: JUHUU.LocaleString;
-      description: JUHUU.LocaleString;
-      bannerImageDark: string[];
-      bannerImageLight: string[];
-      model3d: string | null;
-      datasheet: JUHUU.DeepNullable<JUHUU.LocaleString>;
-      highlightArray: JUHUU.LocaleString[];
-      purposeArray: JUHUU.Purpose[];
-      technologyArray: JUHUU.Technology[];
-      invalidAt: Date;
-      source: "fluctuo" | null;
-      articleId: string | null;
+      name: string; // name or title of product
+      propertyId: string; // id of property that offers this product
+      version: number; // version number of this typescript interface
+      previewText: LocaleString; // text that is displayed on product overview page
+      description: LocaleString; // text that is displayed if a user clicks on product
+      bannerImageDark: string[]; // array of urls to images for darkmode
+      bannerImageLight: string[]; // array of urls to images for lightmode
+      model3d: string | null; // url to a 3d model of product
+      datasheet: DeepNullable<LocaleString>; // url to a datasheet of product
+      highlightArray: LocaleString[];
+      purposeArray: Purpose[];
+      technologyArray: Technology[]; // in the future maybe "mechanical", "virtual", ...
+      articleId: string | null; // id to an article with more information on a product
     };
-
-    export interface PhysicalProduct extends Base {
-      type: "physicalProduct";
-      weight: number; // in kilograms
-      dimensions: {
-        length: number; // in meters
-        width: number; // in meters
-        height: number; // in meters
-      };
-      material: string;
-      color: string;
-    }
-
-    export interface DigitalProduct extends Base {
-      type: "digitalProduct";
-      fileSize: number; // in megabytes
-      downloadUrl: string;
-    }
-
-    export type Object = PhysicalProduct | DigitalProduct;
 
     export namespace Create {
       export type Params = {
@@ -2147,7 +2125,7 @@ export namespace JUHUU {
         description?: string;
         simId?: string;
         connectionMode?: "alwaysOnline" | "temporaryOnline";
-        type: ["type"];
+        type: JUHUU.Connector.Object["type"];
       };
 
       export type Options = JUHUU.RequestOptions;
