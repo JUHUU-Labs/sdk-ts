@@ -24,6 +24,7 @@ import {
   DevicePermission,
   DeviceStatus,
   Environment,
+  Frontend,
   FuelType,
   GeoPoint,
   GraphNode,
@@ -46,6 +47,7 @@ import {
   SimStatus,
   StarRating,
   TimeZone,
+  UserGroup,
   Utilization,
   VisualPriority,
 } from "./types/types";
@@ -452,6 +454,7 @@ export namespace JUHUU {
           pushTokenArray: PushToken[];
         };
       };
+      group: UserGroup;
     };
 
     export interface Standard extends Base {
@@ -512,6 +515,7 @@ export namespace JUHUU {
         billingAddress?: DeepNullable<Address>;
         vat?: string | null;
         acceptedTermIdArray?: string[];
+        group?: UserGroup;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1002,7 +1006,19 @@ export namespace JUHUU {
     export namespace Update {
       export type Params = {
         chatId: string;
-        title?: string;
+        title?: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        chat: JUHUU.Chat.Object;
+      };
+    }
+
+    export namespace GenerateTitle {
+      export type Params = {
+        chatId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1045,6 +1061,15 @@ export namespace JUHUU {
       originalMessage: string; // originalMessage of the chatMessage in the original language
       translatedMessage: string; // translated originalMessage of the chatMessage
       languageCode: LanguageCode; // language code of the original or translated message
+      context: {
+        imageArray?: string[]; // array of string that are image URLs
+        articleIdArray?: string[]; // array of string that are article IDs
+        ownerPropertyId?: string; // id of the property the user has selected in the dashboard
+        userName?: string; // name of the user
+        userGroup?: UserGroup; // group of the user
+        platform?: Platform; // platform of the user
+        frontend?: Frontend; // frontend the user uses to chat with juhuu buddy
+      } | null; // context of the message
     };
 
     export interface UserChatMessage extends Base {
@@ -1054,14 +1079,8 @@ export namespace JUHUU {
 
     export interface AiChatMessage extends Base {
       type: "ai";
-      articleEmbeddingArray: JUHUU.ArticleEmbedding.Object[];
       rating: "good" | "bad" | null; // thumbs up or thumbs down
       feedbackText: string | null; // null if no feedback
-      contradictionDetection: {
-        status: "neutral" | "contradiction" | "entailment";
-        contradictionConfidence: number;
-        isContradiction: boolean;
-      } | null;
     }
 
     export type Object = AiChatMessage | UserChatMessage;
@@ -1071,6 +1090,7 @@ export namespace JUHUU {
         userId: string;
         message: string;
         chatId: string;
+        context?: JUHUU.ChatMessage.Object["context"];
       };
 
       export type Options = JUHUU.RequestOptions;

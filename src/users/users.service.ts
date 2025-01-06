@@ -158,6 +158,7 @@ export default class UsersService extends Service {
           billingAddress: UserUpdateParams?.billingAddress,
           vat: UserUpdateParams?.vat,
           acceptedTermIdArray: UserUpdateParams?.acceptedTermIdArray,
+          group: UserUpdateParams?.group,
         },
         authenticationNotOptional: true,
       },

@@ -86,6 +86,21 @@ export default class ChatsService extends Service {
     );
   }
 
+  async generateTitle(
+    ChatGenerateTitleParams: JUHUU.Chat.GenerateTitle.Params,
+    ChatGenerateTitleOptions?: JUHUU.Chat.GenerateTitle.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Chat.GenerateTitle.Response>> {
+    return await super.sendRequest<JUHUU.Chat.GenerateTitle.Response>(
+      {
+        method: "PATCH",
+        url: "chats/" + ChatGenerateTitleParams.chatId + "/generateTitle",
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      ChatGenerateTitleOptions
+    );
+  }
+
   async delete(
     ChatDeleteParams: JUHUU.Chat.Delete.Params,
     ChatDeleteOptions?: JUHUU.Chat.Delete.Options

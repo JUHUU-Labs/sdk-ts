@@ -7,6 +7,8 @@ export type PushToken = {
   token: string;
 };
 export type ExtractType<T> = T extends { type: infer U } ? U : never;
+export type UserGroup = "retailer" | "engineer" | "operator" | "user";
+export type Frontend = "dashboard" | "app";
 
 export interface Offer {
   tariffId: string;

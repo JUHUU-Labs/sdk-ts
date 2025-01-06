@@ -18,6 +18,7 @@ export default class ChatMessagesService extends Service {
           chatId: ChatMessageCreateParams.chatId,
           message: ChatMessageCreateParams.message,
           userId: ChatMessageCreateParams.userId,
+          context: ChatMessageCreateParams.context,
         },
         authenticationNotOptional: true,
       },
