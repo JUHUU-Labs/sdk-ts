@@ -1424,7 +1424,9 @@ export namespace JUHUU {
     }
 
     export namespace List {
-      export type Params = {};
+      export type Params = {
+        userId?: string;
+      };
 
       export type Options = JUHUU.RequestOptions;
 
@@ -1455,6 +1457,21 @@ export namespace JUHUU {
         faqUrl?: string;
         colorScheme?: Partial<ColorScheme>;
         contactUrl?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        property: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace Onboarding {
+      export type Params = {
+        logo: string;
+        primaryColor: string;
+        backgroundColor: string;
+        name: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2286,7 +2303,7 @@ export namespace JUHUU {
     export type Object = {
       id: string;
       readonly object: "sim";
-      iccid: string;
+      iccid: string | null;
       status: SimStatus;
       provider: "1nce" | null;
       countryCode: CountryCode | null;

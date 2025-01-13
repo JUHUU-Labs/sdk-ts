@@ -48,6 +48,10 @@ export default class PropertiesService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.Property.List.Response>> {
     const queryArray: string[] = [];
 
+    if (PropertyListParams.userId !== undefined) {
+      queryArray.push("userId=" + PropertyListParams.userId);
+    }
+
     return await super.sendRequest<JUHUU.Property.List.Response>(
       {
         method: "GET",
@@ -81,6 +85,26 @@ export default class PropertiesService extends Service {
         authenticationNotOptional: true,
       },
       PropertyUpdateOptions
+    );
+  }
+
+  async onboarding(
+    PropertyOnboardingParams: JUHUU.Property.Onboarding.Params,
+    PropertyOnboardingOptions?: JUHUU.Property.Onboarding.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Property.Onboarding.Response>> {
+    return await super.sendRequest<JUHUU.Property.Onboarding.Response>(
+      {
+        method: "POST",
+        url: "properties/onboarding",
+        body: {
+          primaryColor: PropertyOnboardingParams.primaryColor,
+          backgroundColor: PropertyOnboardingParams.backgroundColor,
+          logo: PropertyOnboardingParams.logo,
+          name: PropertyOnboardingParams.name,
+        },
+        authenticationNotOptional: true,
+      },
+      PropertyOnboardingOptions
     );
   }
 
