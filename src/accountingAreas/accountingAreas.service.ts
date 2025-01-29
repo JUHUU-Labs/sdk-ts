@@ -72,6 +72,26 @@ export default class AccountingAreasService extends Service {
     );
   }
 
+  async update(
+    AccountingAreaUpdateParams: JUHUU.AccountingArea.Update.Params,
+    AccountingAreaUpdateOptions?: JUHUU.AccountingArea.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.AccountingArea.Update.Response>> {
+    return await super.sendRequest<JUHUU.AccountingArea.Update.Response>(
+      {
+        method: "PATCH",
+        url: "accountingAreas/" + AccountingAreaUpdateParams.accountingAreaId,
+        body: {
+          name: AccountingAreaUpdateParams.name,
+          creditPostingRowDescription:
+            AccountingAreaUpdateParams.creditPostingRowDescription,
+          orderNumber: AccountingAreaUpdateParams.orderNumber,
+        },
+        authenticationNotOptional: true,
+      },
+      AccountingAreaUpdateOptions
+    );
+  }
+
   async delete(
     AccountingAreaDeleteParams: JUHUU.AccountingArea.Delete.Params,
     AccountingAreaDeleteOptions?: JUHUU.AccountingArea.Delete.Options

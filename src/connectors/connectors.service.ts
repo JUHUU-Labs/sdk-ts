@@ -81,6 +81,26 @@ export default class ConnectorsService extends Service {
     );
   }
 
+  async update(
+    ConnectorUpdateParams: JUHUU.Connector.Update.Params,
+    ConnectorUpdateOptions?: JUHUU.Connector.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Connector.Update.Response>> {
+    return await super.sendRequest<JUHUU.Connector.Update.Response>(
+      {
+        method: "PATCH",
+        url: "connectors/" + ConnectorUpdateParams.connectorId,
+        body: {
+          name: ConnectorUpdateParams.name,
+          description: ConnectorUpdateParams.description,
+          connectionMode: ConnectorUpdateParams.connectionMode,
+          simId: ConnectorUpdateParams.simId,
+        },
+        authenticationNotOptional: true,
+      },
+      ConnectorUpdateOptions
+    );
+  }
+
   async delete(
     ConnectorDeleteParams: JUHUU.Connector.Delete.Params,
     ConnectorDeleteOptions?: JUHUU.Connector.Delete.Options

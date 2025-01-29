@@ -88,6 +88,29 @@ export default class ProductService extends Service {
     );
   }
 
+  async update(
+    ProductUpdateParams: JUHUU.Product.Update.Params,
+    ProductUpdateOptions?: JUHUU.Product.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Product.Update.Response>> {
+    return await super.sendRequest<JUHUU.Product.Update.Response>(
+      {
+        method: "PATCH",
+        url: "products/" + ProductUpdateParams.productId,
+        body: {
+          name: ProductUpdateParams.name,
+          previewText: ProductUpdateParams.previewText,
+          description: ProductUpdateParams.description,
+          highlightArray: ProductUpdateParams.highlightArray,
+          purposeArray: ProductUpdateParams.purposeArray,
+          technologyArray: ProductUpdateParams.technologyArray,
+          articleId: ProductUpdateParams.articleId,
+        },
+        authenticationNotOptional: true,
+      },
+      ProductUpdateOptions
+    );
+  }
+
   async delete(
     ProductDeleteParams: JUHUU.Product.Delete.Params,
     ProductDeleteOptions?: JUHUU.Product.Delete.Options

@@ -66,6 +66,25 @@ export default class TermsService extends Service {
     );
   }
 
+  async update(
+    TermUpdateParams: JUHUU.Term.Update.Params,
+    TermUpdateOptions?: JUHUU.Term.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Term.Update.Response>> {
+    return await super.sendRequest<JUHUU.Term.Update.Response>(
+      {
+        method: "PATCH",
+        url: "terms/" + TermUpdateParams.termId,
+        body: {
+          name: TermUpdateParams.name,
+          address: TermUpdateParams.dsgvoUrl,
+          deviceIdArray: TermUpdateParams.url,
+        },
+        authenticationNotOptional: true,
+      },
+      TermUpdateOptions
+    );
+  }
+
   async accept(
     TermAcceptParams: JUHUU.Term.Accept.Params,
     TermAcceptOptions?: JUHUU.Term.Accept.Options

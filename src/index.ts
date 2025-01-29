@@ -705,6 +705,21 @@ export namespace JUHUU {
       export type Response = JUHUU.Term.Object[];
     }
 
+    export namespace Update {
+      export type Params = {
+        termId: string;
+        name?: string;
+        url?: string;
+        dsgvoUrl?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        term: JUHUU.Term.Object;
+      };
+    }
+
     export namespace Accept {
       export type Params = {
         termId: string;
@@ -777,6 +792,21 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.AccountingArea.Object[];
+    }
+
+    export namespace Update {
+      export type Params = {
+        accountingAreaId: string;
+        name?: string; // title of the article
+        creditPostingRowDescription?: string; // subtitle of the article
+        orderNumber?: string; // id of the higher order article in the tree of articles
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        accountingArea: JUHUU.AccountingArea.Object;
+      };
     }
 
     export namespace Delete {
@@ -1900,6 +1930,25 @@ export namespace JUHUU {
       export type Response = Product.Object[];
     }
 
+    export namespace Update {
+      export type Params = {
+        productId: string;
+        name?: string;
+        previewText?: LocaleString; // text that is displayed on the product overview page
+        description?: LocaleString; // text that is displayed once a user clicks on product
+        highlightArray?: LocaleString[];
+        purposeArray?: Purpose[];
+        technologyArray?: Technology[]; // in the future maybe "mechanical", "virtual", ...
+        articleId?: string | null; // id to an article with more information
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        product: JUHUU.Product.Object;
+      };
+    }
+
     export namespace Delete {
       export type Params = {
         productId?: string;
@@ -2063,6 +2112,30 @@ export namespace JUHUU {
       };
     }
 
+    export namespace Update {
+      export type Params = {
+        deviceId: string;
+        name?: string;
+        status?: JUHUU.Device.Object["status"];
+        description?: string | null;
+        latitude?: number | null;
+        longitude?: number | null;
+        fuel?: {
+          type?: FuelType;
+          level?: number; // percentage between 0 and 100
+        } | null; // null if not in use
+        rangeRemaining?: number | null; // in km, null if not in use
+        connectorId?: string | null; // connector that is used to send messages to the device, null if the device has no connector
+        connectorParameter?: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        device: JUHUU.Device.Object;
+      };
+    }
+
     export namespace Realtime {
       export type Params = {
         deviceId: string;
@@ -2217,6 +2290,22 @@ export namespace JUHUU {
       export type Response = JUHUU.Connector.Object[];
     }
 
+    export namespace Update {
+      export type Params = {
+        connectorId: string;
+        name?: string;
+        description?: string | null;
+        connectionMode?: "alwaysOnline" | "temporaryOnline";
+        simId?: string | null; // null, if no sim card is installed or the sim card should not be tracked by us
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        connector: JUHUU.Connector.Object;
+      };
+    }
+
     export namespace Delete {
       export type Params = {
         connectorId?: string;
@@ -2328,7 +2417,7 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        payout: JUHUU.Sim.Object;
+        sim: JUHUU.Sim.Object;
       };
     }
 

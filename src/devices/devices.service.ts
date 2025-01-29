@@ -91,6 +91,30 @@ export default class DevicesService extends Service {
     );
   }
 
+  async update(
+    DeviceUpdateParams: JUHUU.Device.Update.Params,
+    DeviceUpdateOptions?: JUHUU.Device.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Device.Update.Response>> {
+    return await super.sendRequest<JUHUU.Device.Update.Response>(
+      {
+        method: "PATCH",
+        url: "devices/" + DeviceUpdateParams.deviceId,
+        body: {
+          name: DeviceUpdateParams.name,
+          description: DeviceUpdateParams.description,
+          latitude: DeviceUpdateParams.latitude,
+          longitude: DeviceUpdateParams.longitude,
+          fuel: DeviceUpdateParams.fuel,
+          rangeRemaining: DeviceUpdateParams.rangeRemaining,
+          connectorId: DeviceUpdateParams.connectorId,
+          connectorParameter: DeviceUpdateParams.connectorParameter,
+        },
+        authenticationNotOptional: true,
+      },
+      DeviceUpdateOptions
+    );
+  }
+
   listen(
     DeviceRealtimeParams: JUHUU.Device.Realtime.Params,
     DeviceRealtimeOptions?: JUHUU.Device.Realtime.Options

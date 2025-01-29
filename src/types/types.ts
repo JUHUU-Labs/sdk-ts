@@ -1067,6 +1067,17 @@ export type GraphNode =
     }
   | {
       id: string;
+
+      /**
+       * uses the deviceId of the current device, the userId of
+       * the currently logged in user and the tapkey SDK to connect to the lock via
+       * bluetooth and activate it
+       */
+      type: "device.tapkey.activate";
+      nodeIdArray: string[];
+    }
+  | {
+      id: string;
       type: "property.notify";
       nodeIdArray: string[];
       subject: string;
