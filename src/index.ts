@@ -2239,6 +2239,33 @@ export namespace JUHUU {
       simId: string | null; // null, if no sim card is installed or the sim card should not be tracked by us
     };
 
+    export interface Mqtt extends Base {
+      type: "mqtt";
+      username: string;
+      password: string;
+      clientId: string;
+      host: string;
+      port: number;
+      mqttRetain: boolean;
+      mqttQos: "0" | "1" | "2";
+      acls: AccessControlListElement[];
+    }
+
+    export interface BoldLock extends Base {
+      type: "boldLock";
+      boldClientId: string;
+      boldClientSecret: string;
+      boldOrganizationId: number;
+      boldDeviceId: number; // this is the "deviceId" in the bold documentation
+    }
+
+    export interface Tapkey extends Base {
+      type: "tapkey";
+      physicalLockId: string;
+    }
+
+    export type Object = Mqtt | BoldLock | Tapkey;
+
     export namespace Create {
       export type Params = {
         propertyId: string;
@@ -2262,27 +2289,6 @@ export namespace JUHUU {
         connector: JUHUU.Connector.Object;
       };
     }
-
-    export interface Mqtt extends Base {
-      type: "mqtt";
-      username: string;
-      password: string;
-      clientId: string;
-      host: string;
-      port: number;
-      mqttRetain: boolean;
-      mqttQos: "0" | "1" | "2";
-      acls: AccessControlListElement[];
-    }
-
-    export interface BoldLock extends Base {
-      type: "boldLock";
-      boldClientId: string;
-      boldClientSecret: string;
-      boldOrganizationId: number;
-      boldDeviceId: number; // this is the "deviceId" in the bold documentation
-    }
-    export type Object = Mqtt | BoldLock;
 
     export namespace Retrieve {
       export type Params = {
