@@ -63,6 +63,7 @@ import ChatsService from "./chats/chats.service";
 import ChatMessagesService from "./chatMessages/chatMessages.service";
 import ArticleEmbeddingsService from "./articleEmbeddings/articleEmbeddings.service";
 import BoldLockService from "./boldLock/boldLock.service";
+import TapkeyService from "./tapkey/tapkey.service";
 
 export * from "./types/types";
 
@@ -92,6 +93,7 @@ export class Juhuu {
     this.chatMessages = new ChatMessagesService(config);
     this.articleEmbeddings = new ArticleEmbeddingsService(config);
     this.boldLock = new BoldLockService(config);
+    this.tapkey = new TapkeyService(config);
   }
 
   /**
@@ -121,6 +123,7 @@ export class Juhuu {
   readonly chatMessages: ChatMessagesService;
   readonly articleEmbeddings: ArticleEmbeddingsService;
   readonly boldLock: BoldLockService;
+  readonly tapkey: TapkeyService;
 }
 
 export namespace JUHUU {
@@ -654,6 +657,21 @@ export namespace JUHUU {
 
       export type Response = {
         device: JUHUU.Device.Object;
+      };
+    }
+  }
+
+  export namespace Tapkey {
+    export namespace Credentials {
+      export type Params = {
+        userId: string;
+        deviceId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        tapkeyJwt: string;
       };
     }
   }

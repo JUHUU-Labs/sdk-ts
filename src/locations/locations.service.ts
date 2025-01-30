@@ -103,6 +103,8 @@ export default class LocationsService extends Service {
           circumstanceArray: LocationUpdateParams.circumstanceArray,
           rentOfferArray: LocationUpdateParams.rentOfferArray,
           reservationOfferArray: LocationUpdateParams.reservationOfferArray,
+          latitude: LocationUpdateParams.latitude,
+          longitude: LocationUpdateParams.longitude,
         },
         authenticationNotOptional: true,
       },
