@@ -76,8 +76,8 @@ export default class TermsService extends Service {
         url: "terms/" + TermUpdateParams.termId,
         body: {
           name: TermUpdateParams.name,
-          address: TermUpdateParams.dsgvoUrl,
-          deviceIdArray: TermUpdateParams.url,
+          dsgvoUrl: TermUpdateParams.dsgvoUrl,
+          url: TermUpdateParams.url,
         },
         authenticationNotOptional: true,
       },
