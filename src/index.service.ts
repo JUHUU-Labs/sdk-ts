@@ -144,7 +144,7 @@ export default class Service {
         status: response.status,
       };
     } catch (error) {
-      console.error(error);
+      console.error("JUHUU SDK, error sending request: ", error);
 
       responseObject = {
         ok: false,

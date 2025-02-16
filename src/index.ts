@@ -37,6 +37,8 @@ import {
   Party,
   PaymentMethod,
   PaymentReason,
+  PaymentRefundReason,
+  PaymentRefundStatus,
   PaymentServiceProvider,
   PaymentStatus,
   PayoutStatus,
@@ -64,6 +66,7 @@ import ChatMessagesService from "./chatMessages/chatMessages.service";
 import ArticleEmbeddingsService from "./articleEmbeddings/articleEmbeddings.service";
 import BoldLockService from "./boldLock/boldLock.service";
 import TapkeyService from "./tapkey/tapkey.service";
+import PaymentRefundsService from "./paymentRefunds/paymentRefunds.service";
 
 export * from "./types/types";
 
@@ -73,6 +76,7 @@ export class Juhuu {
     this.links = new LinksService(config);
     this.users = new UsersService(config);
     this.payments = new PaymentsService(config);
+    this.paymentRefunds = new PaymentRefundsService(config);
     this.properties = new PropertiesService(config);
     this.points = new PointsService(config);
     this.devices = new DevicesService(config);
@@ -103,6 +107,7 @@ export class Juhuu {
   readonly links: LinksService;
   readonly users: UsersService;
   readonly payments: PaymentsService;
+  readonly paymentRefunds: PaymentRefundsService;
   readonly properties: PropertiesService;
   readonly points: PointsService;
   readonly devices: DevicesService;
@@ -672,6 +677,19 @@ export namespace JUHUU {
 
       export type Response = {
         tapkeyJwt: string;
+      };
+    }
+
+    export namespace GrantAccess {
+      export type Params = {
+        userId: string;
+        deviceId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        device: JUHUU.Device.Object;
       };
     }
   }
@@ -1267,6 +1285,7 @@ export namespace JUHUU {
         amount?: number[];
         continue?: number;
         interval?: number;
+        name?: LocaleString;
         duration?: number;
         autoRenewMode?: AutoRenewMode;
         roundToMidnight?: boolean;
@@ -1656,6 +1675,7 @@ export namespace JUHUU {
       amountFinal: number | null; // amount that was withdrawn from the user
       amountCaptured: number; // amount that was captured from the user
       amountToPayout: number | null;
+      amountRefunded: number; // sum of all refunds for this payment
       createdAt: Date;
       billingAddress: DeepNullable<Address>;
       invoicePdfId: string | null;
@@ -1755,6 +1775,94 @@ export namespace JUHUU {
           publishableKey: string;
           clientSecret: string;
         };
+      };
+    }
+  }
+
+  export namespace PaymentRefund {
+    export type Object = {
+      id: string;
+      version: number;
+      provider: PaymentServiceProvider | null; // always the same es the service provider of the payment
+      status: PaymentRefundStatus;
+      paymentId: string;
+      propertyId: string;
+      currencyCode: CurrencyCode;
+      number: number; // either a number of the property's accounting area or our accounting area (the one that is used for the payouts e.g. J0000149)
+      paymentNumberToRefund: number; // number of the payment that is refunded
+      createdAt: Date;
+      userId: string; // user who payed and received the refund
+      reason: PaymentRefundReason; // reason for the paymentRefund
+      transactionFee: number; // fees that the merchant took to process the refund
+      serviceFee: number; // service fee that JUHUU adds to the property's payout (either 0 or =transactionFee; if 0, JUHUU covers the costs for the refund; if =transactionFee, the property covers the costs)
+      billingAddress: DeepNullable<Address>;
+      vat: string | null;
+      accountingAreaId: string;
+      estimatedArrivalAt: Date;
+      postingRowArray: PostingRow[]; // text displayed on the users invoice
+      amountToArriveAtUser: number; // amount of the paymentRefund (the amount that will be refunded to the user)
+      invoicePdfId: string;
+      providerPaymentRefundId: string;
+      paymentMethod: PaymentMethod | null; // payment method the user will be refunded with (always the same as the payment method of the payment)
+      payoutId: string | null; // always null, if costs are covered by JUHUU
+    };
+
+    export namespace Create {
+      export type Params = {
+        paymentId: string;
+        amountToArriveAtUser: number;
+        reason: JUHUU.PaymentRefund.Object["reason"];
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        payment: JUHUU.Payment.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        paymentRefundId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        paymentRefund: JUHUU.PaymentRefund.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+        userId?: string;
+        statusArray?: JUHUU.Payment.Object["status"][];
+        createdAt?: {
+          gte?: number;
+          lte?: number;
+        };
+        limit?: number;
+        skip?: number;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.PaymentRefund.Object[];
+    }
+
+    export namespace RetrieveInvoiceUrl {
+      export type Params = {
+        paymentRefundId: string;
+      };
+
+      export type Options = {} & JUHUU.RequestOptions;
+
+      export type Response = {
+        invoiceUrl: string;
       };
     }
   }
@@ -2261,7 +2369,10 @@ export namespace JUHUU {
 
     export interface Tapkey extends Base {
       type: "tapkey";
-      physicalLockId: string;
+      tapkeyBase64PysicalLockId: string; // https://developers.tapkey.io/mobile/concepts/lock_ids/#tlcp-lock-id
+      tapkeyOwnerAccountId: string;
+      tapkeyIpId: string;
+      tapkeyBoundLockId: string;
     }
 
     export type Object = Mqtt | BoldLock | Tapkey;

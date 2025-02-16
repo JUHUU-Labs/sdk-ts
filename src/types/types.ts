@@ -209,7 +209,12 @@ export type PaymentMethod =
   | "unknown";
 
 export type PaymentReason = "session";
-export type RefundReason = "requestdByUser";
+export type PaymentRefundReason =
+  | "requestedByUser"
+  | "expiredUncapturedCharge"
+  | "fraudulent"
+  | "duplicate"
+  | "unknown";
 export type SessionStatus = "waitingForPayment" | "ready" | "completed";
 export type AutoRenewMode = "off" | "optIn" | "optOut" | "on";
 export type RefundStatus = "inTransitToUser" | "succeeded";
@@ -331,6 +336,8 @@ export type PaymentStatus =
   | "captured" // the funds arrived at the payment service provider
   | "inTransitToProperty" // the funds are on their way to the property
   | "payedOut"; // the funds arrived at the property
+
+export type PaymentRefundStatus = "inTransitToUser" | "succeeded";
 
 export type PaymentServiceProvider = "stripe";
 

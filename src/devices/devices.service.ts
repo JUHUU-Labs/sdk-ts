@@ -100,6 +100,7 @@ export default class DevicesService extends Service {
         method: "PATCH",
         url: "devices/" + DeviceUpdateParams.deviceId,
         body: {
+          status: DeviceUpdateParams.status,
           name: DeviceUpdateParams.name,
           description: DeviceUpdateParams.description,
           latitude: DeviceUpdateParams.latitude,

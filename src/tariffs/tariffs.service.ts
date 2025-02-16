@@ -90,6 +90,7 @@ export default class TariffsService extends Service {
           continue: TariffUpdateParams.continue,
           interval: TariffUpdateParams.interval,
           duration: TariffUpdateParams.duration,
+          name: TariffUpdateParams.name,
           autoRenewMode: TariffUpdateParams.autoRenewMode,
           roundToMidnight: TariffUpdateParams.roundToMidnight,
           autoRenewManualEnabled: TariffUpdateParams.autoRenewManualEnabled,

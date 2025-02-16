@@ -25,4 +25,24 @@ export default class TapkeyService extends Service {
       TapkeyCredentialsOptions
     );
   }
+
+  async grantAccess(
+    TapkeyGrantAccessParams: JUHUU.Tapkey.GrantAccess.Params,
+    TapkeyGrantAccessOptions?: JUHUU.Tapkey.GrantAccess.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Tapkey.GrantAccess.Response>> {
+    const queryArray: string[] = [];
+
+    return await super.sendRequest<JUHUU.Tapkey.GrantAccess.Response>(
+      {
+        method: "POST",
+        url: "tapkey/grantAccess",
+        body: {
+          userId: TapkeyGrantAccessParams.userId,
+          deviceId: TapkeyGrantAccessParams.deviceId,
+        },
+        authenticationNotOptional: true,
+      },
+      TapkeyGrantAccessOptions
+    );
+  }
 }
