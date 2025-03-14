@@ -44,6 +44,7 @@ import {
   PayoutStatus,
   Person,
   Platform,
+  PlatformString,
   PostingRow,
   PushToken,
   SimStatus,
@@ -1328,16 +1329,6 @@ export namespace JUHUU {
       readonly object: "licenseTemplate";
       name: LocaleString;
       description: LocaleString;
-      validFor:
-        | "endOfYear" // validity is set to the end of this year
-        | "endOfMonth" // validity is set to the end of this month
-        | "endOfWeek" // validity is set to the end of this week
-        | "endOfDay" // validity is set to the end of this day
-        | "year" // validity is granted for a year from the date of creation
-        | "always" // validity is granted forever
-        | "month" // validity is granted for a month from the date of creation
-        | "week" // validity is granted for a week from the date of creation
-        | "day"; // validity is granted for a day from the date of creation
       obtainDescription: LocaleString;
     };
 
@@ -1351,7 +1342,28 @@ export namespace JUHUU {
       type: "automatic";
     }
 
-    export type Object = AutomaticLicenseTemplate | RegexLicenseTemplate;
+    export interface UrlLicenseTemplate extends Base {
+      type: "url";
+      url: PlatformString;
+      propertyId: string | null; // if the propertyId is null, the licenseTemplate is managed by the system and can be used by everyone
+      attachRedirectUrl: boolean; // if true, the app or web app will attach a redirect url parameter to the url
+      contentWarning: boolean; // if true, the app displays an alert that the user will be forwarded to a third-party website
+      attachUserId: boolean; // if true, the app attaches the userId to the url
+      attachPropertyId: boolean; // if true, the app attaches the propertyId to the url
+      linkText: LocaleString;
+    }
+
+    export interface StripeIdentityLicenseTemplate extends Base {
+      type: "stripeIdentity";
+      url: string;
+      propertyId: string;
+    }
+
+    export type Object =
+      | AutomaticLicenseTemplate
+      | RegexLicenseTemplate
+      | UrlLicenseTemplate
+      | StripeIdentityLicenseTemplate;
 
     export namespace Create {
       export type Params = {
@@ -2207,11 +2219,6 @@ export namespace JUHUU {
       deviceTemplateId: string;
       source: "fluctuo" | null;
       location: GeoPoint | null;
-      fuel: {
-        type: FuelType;
-        level: number; // percentage between 0 and 100
-      } | null; // null if not in use
-      rangeRemaining: number | null; // in km, null if not in use
       invalidAt: Date | null;
       connectorId: string | null; // connector that is used to send messages to the device, null if the device has no connector
       connectorParameter: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
@@ -2278,11 +2285,6 @@ export namespace JUHUU {
         description?: string | null;
         latitude?: number | null;
         longitude?: number | null;
-        fuel?: {
-          type?: FuelType;
-          level?: number; // percentage between 0 and 100
-        } | null; // null if not in use
-        rangeRemaining?: number | null; // in km, null if not in use
         connectorId?: string | null; // connector that is used to send messages to the device, null if the device has no connector
         connectorParameter?: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
         disabled?: boolean; // if disabled is true, the device cannot be used by users which are not property admins

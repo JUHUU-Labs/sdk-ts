@@ -393,7 +393,7 @@ export type GeoPoint = {
 };
 
 export type VisualPriority = "none" | "highlight" | "important";
-export type PlatformUrl = {
+export type PlatformString = {
   ios: string;
   android: string;
   web: string;
@@ -1064,7 +1064,7 @@ export type GraphNode =
       id: string;
       type: "open.browser";
       nodeIdArray: string[];
-      url: PlatformUrl;
+      url: PlatformString;
     }
   | {
       id: string;

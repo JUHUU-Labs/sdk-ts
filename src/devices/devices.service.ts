@@ -105,8 +105,6 @@ export default class DevicesService extends Service {
           description: DeviceUpdateParams.description,
           latitude: DeviceUpdateParams.latitude,
           longitude: DeviceUpdateParams.longitude,
-          fuel: DeviceUpdateParams.fuel,
-          rangeRemaining: DeviceUpdateParams.rangeRemaining,
           connectorId: DeviceUpdateParams.connectorId,
           connectorParameter: DeviceUpdateParams.connectorParameter,
           disabled: DeviceUpdateParams.disabled,
