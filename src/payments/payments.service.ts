@@ -117,12 +117,32 @@ export default class PaymentsService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.Payment.RetrieveInvoiceUrl.Response>> {
     const queryArray: string[] = [];
 
-    return await super.sendRequest<JUHUU.Payment.RetrieveInvoiceUrl.Response>({
-      method: "GET",
-      url:
-        "payments/" + PaymentRetrieveInvoiceUrlParams.paymentId + "/invoiceUrl",
-      body: undefined,
-      authenticationNotOptional: true,
-    });
+    return await super.sendRequest<JUHUU.Payment.RetrieveInvoiceUrl.Response>(
+      {
+        method: "GET",
+        url:
+          "payments/" +
+          PaymentRetrieveInvoiceUrlParams.paymentId +
+          "/invoiceUrl",
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      PaymentRetrieveInvoiceUrlOptions
+    );
+  }
+
+  async capture(
+    PaymentCaptureParams: JUHUU.Payment.Capture.Params,
+    PaymentCaptureOptions?: JUHUU.Payment.Capture.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Payment.Capture.Response>> {
+    return await super.sendRequest<JUHUU.Payment.Capture.Response>(
+      {
+        method: "PATCH",
+        url: "payments/" + PaymentCaptureParams.paymentId + "/capture",
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      PaymentCaptureOptions
+    );
   }
 }

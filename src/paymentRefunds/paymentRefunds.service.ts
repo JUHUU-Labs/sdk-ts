@@ -65,6 +65,10 @@ export default class PaymentRefundsService extends Service {
       queryArray.push("skip=" + PaymentRefundListParams.skip);
     }
 
+    if (PaymentRefundListParams.paymentId !== undefined) {
+      queryArray.push("paymentId=" + PaymentRefundListParams.paymentId);
+    }
+
     return await super.sendRequest<JUHUU.PaymentRefund.List.Response>(
       {
         method: "GET",

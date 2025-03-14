@@ -1760,6 +1760,18 @@ export namespace JUHUU {
       };
     }
 
+    export namespace Capture {
+      export type Params = {
+        paymentId: string;
+      };
+
+      export type Options = {} & JUHUU.RequestOptions;
+
+      export type Response = {
+        payment: JUHUU.Payment.Object;
+      };
+    }
+
     export namespace Tokens {
       export type Params = {
         paymentId: string;
@@ -1847,6 +1859,7 @@ export namespace JUHUU {
         };
         limit?: number;
         skip?: number;
+        paymentId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1889,6 +1902,8 @@ export namespace JUHUU {
       timeZone: TimeZone | null;
       version: number;
       devicePermissionArray: DevicePermission[];
+      disabled: boolean; // if disabled is true, no new sessions can be created
+      disabledBy: "propertyAdmin" | "deviceNodeArray" | null;
     };
 
     export interface RentableDeviceGroup extends Base {
@@ -1976,6 +1991,7 @@ export namespace JUHUU {
         circumstanceArray?: Circumstance[];
         rentOfferArray?: Offer[];
         reservationOfferArray?: Offer[];
+        disabled?: boolean; // if disabled is true, no new sessions can be created
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2133,6 +2149,20 @@ export namespace JUHUU {
       };
     }
 
+    export namespace Search {
+      export type Params = {
+        q: string;
+      };
+
+      export type Options = {} & JUHUU.RequestOptions;
+
+      export type Response = {
+        linkArray: JUHUU.Link.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
     export namespace List {
       export type Params = {
         fiveLetterQr?: string;
@@ -2185,6 +2215,8 @@ export namespace JUHUU {
       invalidAt: Date | null;
       connectorId: string | null; // connector that is used to send messages to the device, null if the device has no connector
       connectorParameter: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
+      disabled: boolean; // if disabled is true, the device cannot be used by users which are not property admins
+      disabledBy: "propertyAdmin" | "nodeArray" | null;
     };
 
     export namespace Create {
@@ -2253,6 +2285,7 @@ export namespace JUHUU {
         rangeRemaining?: number | null; // in km, null if not in use
         connectorId?: string | null; // connector that is used to send messages to the device, null if the device has no connector
         connectorParameter?: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
+        disabled?: boolean; // if disabled is true, the device cannot be used by users which are not property admins
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2449,6 +2482,50 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.Connector.Object;
+    }
+  }
+
+  export namespace Event {
+    type Base = {
+      id: string;
+      readonly object: "event";
+      createdAt: string;
+    };
+
+    export interface CreatePayment extends Base {
+      type: "payment.create";
+      payment: JUHUU.AccountingArea.Object;
+    }
+
+    export type Object = CreatePayment;
+
+    export namespace Retrieve {
+      export type Params = {
+        eventId: string;
+      };
+
+      export type Options = {
+        expand: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        event: JUHUU.Event.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+        paymentId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        eventArray: JUHUU.Event.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
   }
 

@@ -105,6 +105,7 @@ export default class LocationsService extends Service {
           reservationOfferArray: LocationUpdateParams.reservationOfferArray,
           latitude: LocationUpdateParams.latitude,
           longitude: LocationUpdateParams.longitude,
+          disabled: LocationUpdateParams.disabled,
         },
         authenticationNotOptional: true,
       },

@@ -337,7 +337,12 @@ export type PaymentStatus =
   | "inTransitToProperty" // the funds are on their way to the property
   | "payedOut"; // the funds arrived at the property
 
-export type PaymentRefundStatus = "inTransitToUser" | "succeeded";
+export type PaymentRefundStatus =
+  | "waitingForArrivalAtUser"
+  | "waitingForPayout" // refund was successful and is now waiting to be included in the next payout
+  | "inTransitToProperty" // the funds are on their way to the property
+  | "payedOut" // the funds arrived at the property
+  | "failed"; // if the paymentRefund failed, the funds are back in our stripe account
 
 export type PaymentServiceProvider = "stripe";
 
@@ -471,6 +476,18 @@ export type Circumstance =
   | {
       type: "childSeat";
       hasChildSeat: boolean;
+    }
+  | {
+      type: "fuelType";
+      fuelType: FuelType;
+    }
+  | {
+      type: "fuelLevel";
+      level: number; // level between 0 and 100%
+    }
+  | {
+      type: "rangeRemaining";
+      rangeRemaining: number; // remaining range in meters
     };
 
 const TimeZoneArray = [

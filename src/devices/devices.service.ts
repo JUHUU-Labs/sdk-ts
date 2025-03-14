@@ -109,6 +109,7 @@ export default class DevicesService extends Service {
           rangeRemaining: DeviceUpdateParams.rangeRemaining,
           connectorId: DeviceUpdateParams.connectorId,
           connectorParameter: DeviceUpdateParams.connectorParameter,
+          disabled: DeviceUpdateParams.disabled,
         },
         authenticationNotOptional: true,
       },
@@ -146,7 +147,7 @@ export default class DevicesService extends Service {
     return await super.sendRequest<JUHUU.Device.Message.Response>(
       {
         method: "POST",
-        url: "devices?" + DeviceMessageParams.deviceId + "/message",
+        url: "devices/" + DeviceMessageParams.deviceId + "/message",
         body: {
           message: DeviceMessageParams.message,
         },

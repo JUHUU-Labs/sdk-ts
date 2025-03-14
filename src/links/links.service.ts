@@ -6,6 +6,27 @@ export default class LinkService extends Service {
     super(config);
   }
 
+  async search(
+    LinkSearchParams: JUHUU.Link.Search.Params,
+    LinkSearchOptions?: JUHUU.Link.Search.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Link.Search.Response>> {
+    const queryArray: string[] = [];
+
+    if (LinkSearchParams.q !== undefined) {
+      queryArray.push("q=" + LinkSearchParams.q);
+    }
+
+    return await super.sendRequest<JUHUU.Link.Search.Response>(
+      {
+        method: "GET",
+        url: "links/search?" + queryArray.join("&"),
+        body: undefined,
+        authenticationNotOptional: false,
+      },
+      LinkSearchOptions
+    );
+  }
+
   async create(
     LinkCreateParams: JUHUU.Link.Create.Params,
     LinkCreateOptions?: JUHUU.Link.Create.Options
