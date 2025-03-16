@@ -12,7 +12,16 @@ export type Frontend = "dashboard" | "app";
 
 export interface Offer {
   tariffId: string;
-  licenseTemplateIdArray: string[];
+  licenseTemplateIdArray?: string[];
+
+  /**
+   * Array of arrays of licenseTemplateIds
+   * The first array is and "or" and the second array is an "and" condition.
+   * Example: [["licenseTemplateId1", "licenseTemplateId2"], ["licenseTemplateId3", "licenseTemplateId4"]]
+   * This would mean that the offer is only valid if the user has either (licenseTemplateId1 and licenseTemplateId2) or (licenseTemplateId3 and licenseTemplateId4)
+   * If the user does not own a license the app will guide the user to acquire the necessary licenses in the order of the array.
+   */
+  licenseTemplateCascadeArray?: string[][];
   offerTime: OfferTime;
 }
 
@@ -430,65 +439,12 @@ export type DeepNullable<T> = {
 
 export type SessionCannotTerminateReason = "retractBikeDrawer" | "closeDoor";
 
-export type Circumstance =
-  | {
-      type: "wheelchairAccessible";
-      isWheelchairAccessible: boolean;
-    }
-  | {
-      type: "height";
-      height: number;
-    }
-  | {
-      type: "width";
-      width: number;
-    }
-  | {
-      type: "videoSurveillance";
-      hasVideoSurveillance: boolean;
-    }
-  | {
-      type: "stackableParking";
-      isStackableParking: boolean;
-    }
-  | {
-      type: "socket";
-      hasFreeSocketAvailable: boolean;
-      socketType: "Schuko" | "CEE" | "Type2";
-    }
-  | {
-      type: "cargoHold";
-      hasCargoHold: boolean;
-    }
-  | {
-      type: "tandem";
-      isTandem: boolean;
-    }
-  | {
-      type: "propulsion";
-      propulsion:
-        | "manual"
-        | "electric"
-        | "hybrid"
-        | "combustion"
-        | "manualAssist";
-    }
-  | {
-      type: "childSeat";
-      hasChildSeat: boolean;
-    }
-  | {
-      type: "fuelType";
-      fuelType: FuelType;
-    }
-  | {
-      type: "fuelLevel";
-      level: number; // level between 0 and 100%
-    }
-  | {
-      type: "rangeRemaining";
-      rangeRemaining: number; // remaining range in meters
-    };
+export type Circumstance = {
+  type: "custom";
+  icon: string;
+  title: LocaleString;
+  description: LocaleString;
+};
 
 const TimeZoneArray = [
   "Europe/Andorra",
@@ -1104,15 +1060,15 @@ export type GraphNode =
       id: string;
       type: "property.notify";
       nodeIdArray: string[];
-      subject: string;
-      message: string;
+      subject: LocaleString;
+      message: LocaleString;
     }
   | {
       id: string;
       type: "user.notify";
       nodeIdArray: string[];
-      subject: string;
-      message: string;
+      subject: LocaleString;
+      message: LocaleString;
     }
   | {
       id: string;

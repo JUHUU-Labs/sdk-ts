@@ -61,11 +61,11 @@ export default class LicenseTemplatesService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.LicenseTemplate.Retrieve.Response>> {
     const queryArray: string[] = [];
 
-    if (LicenseTemplateRetrieveOptions?.expand !== undefined) {
-      queryArray.push(
-        "expand=" + LicenseTemplateRetrieveOptions.expand.join(",")
-      );
-    }
+    // if (LicenseTemplateRetrieveOptions?.expand !== undefined) {
+    //   queryArray.push(
+    //     "expand=" + LicenseTemplateRetrieveOptions.expand.join(",")
+    //   );
+    // }
 
     return await super.sendRequest<JUHUU.LicenseTemplate.Retrieve.Response>({
       method: "GET",

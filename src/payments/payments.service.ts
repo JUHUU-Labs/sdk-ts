@@ -145,4 +145,19 @@ export default class PaymentsService extends Service {
       PaymentCaptureOptions
     );
   }
+
+  async cancel(
+    PaymentCancelParams: JUHUU.Payment.Cancel.Params,
+    PaymentCancelOptions?: JUHUU.Payment.Cancel.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Payment.Cancel.Response>> {
+    return await super.sendRequest<JUHUU.Payment.Cancel.Response>(
+      {
+        method: "PATCH",
+        url: "payments/" + PaymentCancelParams.paymentId + "/cancel",
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      PaymentCancelOptions
+    );
+  }
 }

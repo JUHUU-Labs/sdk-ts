@@ -151,7 +151,6 @@ export default class UsersService extends Service {
         url: "users/" + UserUpdateParams.userId,
         body: {
           name: UserUpdateParams?.name,
-          licenseArray: UserUpdateParams?.licenseArray,
           platform: UserUpdateParams?.platform,
           languageCode: UserUpdateParams?.languageCode,
           appVersion: UserUpdateParams?.appVersion,

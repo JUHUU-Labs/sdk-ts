@@ -443,7 +443,10 @@ export namespace JUHUU {
       defaultPaymentMethodId: string | null;
       defaultPaymentMethodProvider: "stripe" | "not_set"; // "stripe" | "paypal"
       acceptedTermIdArray: string[];
-      licenseArray: JUHUU.License.Object[];
+      licenseArray: {
+        validUntil: Date | null; // if null, the license is valid forever
+        licenseTemplateId: string;
+      }[];
       languageCode: LanguageCode | null;
       billingAddress: DeepNullable<Address>;
       billingEmail: string | null; // primary email that must never be empty
@@ -517,7 +520,6 @@ export namespace JUHUU {
       export type Params = {
         userId: string;
         name?: string;
-        licenseArray?: string[];
         platform?: Platform;
         languageCode?: LanguageCode;
         appVersion?: string;
@@ -1233,6 +1235,8 @@ export namespace JUHUU {
       serviceFeePercentage: number; // once the amount for the tariff is calculated the service fee is also calculated and added to the amount yielding the total amount
       serviceFeeMin: number; // minimum amount of the serviceFee
       serviceFeeMax: number; // maximum amount of the serviceFee
+      shortDescription: LocaleString | null;
+      longDescription: LocaleString | null;
     };
 
     export namespace Create {
@@ -1335,7 +1339,7 @@ export namespace JUHUU {
     export interface RegexLicenseTemplate extends Base {
       type: "regex";
       regex: string;
-      propertyId: string;
+      propertyId: string | null;
     }
 
     export interface AutomaticLicenseTemplate extends Base {
@@ -1356,7 +1360,6 @@ export namespace JUHUU {
     export interface StripeIdentityLicenseTemplate extends Base {
       type: "stripeIdentity";
       url: string;
-      propertyId: string;
     }
 
     export type Object =
@@ -1385,9 +1388,7 @@ export namespace JUHUU {
         licenseTemplateId: string;
       };
 
-      export type Options = {
-        expand?: Array<"property">;
-      } & JUHUU.RequestOptions;
+      export type Options = JUHUU.RequestOptions;
 
       export type Response = {
         licenseTemplate: JUHUU.LicenseTemplate.Object;
@@ -1777,7 +1778,19 @@ export namespace JUHUU {
         paymentId: string;
       };
 
-      export type Options = {} & JUHUU.RequestOptions;
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        payment: JUHUU.Payment.Object;
+      };
+    }
+
+    export namespace Cancel {
+      export type Params = {
+        paymentId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
 
       export type Response = {
         payment: JUHUU.Payment.Object;
@@ -2195,15 +2208,6 @@ export namespace JUHUU {
 
       export type Response = JUHUU.Link.Object;
     }
-  }
-
-  export namespace License {
-    export type Object = {
-      id: string;
-      validUntil: Date | null; // if null, the license is valid forever
-      licenseTemplateId: string | null; // if null, the license is handle by us
-      version: number;
-    };
   }
 
   export namespace Device {
