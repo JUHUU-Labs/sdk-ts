@@ -30,16 +30,19 @@ export default class PropertiesService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.Property.Retrieve.Response>> {
     const queryArray: string[] = [];
 
-    return await super.sendRequest<JUHUU.Property.Retrieve.Response>({
-      method: "GET",
-      url:
-        "properties/" +
-        PropertyRetrieveParams.propertyId +
-        "?" +
-        queryArray.join("&"),
-      body: undefined,
-      authenticationNotOptional: false,
-    });
+    return await super.sendRequest<JUHUU.Property.Retrieve.Response>(
+      {
+        method: "GET",
+        url:
+          "properties/" +
+          PropertyRetrieveParams.propertyId +
+          "?" +
+          queryArray.join("&"),
+        body: undefined,
+        authenticationNotOptional: false,
+      },
+      PropertyRetrieveOptions
+    );
   }
 
   async list(
@@ -81,6 +84,7 @@ export default class PropertiesService extends Service {
           faqUrl: PropertyUpdateParams.faqUrl,
           colorScheme: PropertyUpdateParams.colorScheme,
           contactUrl: PropertyUpdateParams.contactUrl,
+          stripeEmail: PropertyUpdateParams.stripeEmail,
         },
         authenticationNotOptional: true,
       },
@@ -123,6 +127,26 @@ export default class PropertiesService extends Service {
         authenticationNotOptional: true,
       },
       PropertyStripeAccountUrlOptions
+    );
+  }
+
+  async retrieveStripeCustomerPortalUrl(
+    PropertyRetrieveStripeCustomerPortalUrlParams: JUHUU.Property.RetrieveStripeCustomerPortalUrl.Params,
+    PropertyRetrieveStripeCustomerPortalUrlOptions?: JUHUU.Property.RetrieveStripeCustomerPortalUrl.Options
+  ): Promise<
+    JUHUU.HttpResponse<JUHUU.Property.RetrieveStripeCustomerPortalUrl.Response>
+  > {
+    return await super.sendRequest<JUHUU.Property.RetrieveStripeCustomerPortalUrl.Response>(
+      {
+        method: "GET",
+        url:
+          "properties/" +
+          PropertyRetrieveStripeCustomerPortalUrlParams.propertyId +
+          "/retrieveStripeCustomerPortalUrl",
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      PropertyRetrieveStripeCustomerPortalUrlOptions
     );
   }
 }

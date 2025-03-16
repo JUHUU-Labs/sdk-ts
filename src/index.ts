@@ -1469,6 +1469,16 @@ export namespace JUHUU {
       automaticPayoutsEnabled: boolean;
       payoutCurrencyCode: CurrencyCode;
       timeZone: TimeZone;
+
+      /**
+       * Used to charge the property
+       */
+      stripeCustomerId: string | null;
+
+      /**
+       * Email only used for Stripe
+       */
+      stripeEmail: string | null;
     }
 
     export interface External extends Base {
@@ -1525,6 +1535,18 @@ export namespace JUHUU {
       };
     }
 
+    export namespace RetrieveStripeCustomerPortalUrl {
+      export type Params = {
+        propertyId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        url: string;
+      };
+    }
+
     export namespace Update {
       export type Params = {
         propertyId: string;
@@ -1537,6 +1559,7 @@ export namespace JUHUU {
         faqUrl?: string;
         colorScheme?: Partial<ColorScheme>;
         contactUrl?: string;
+        stripeEmail?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
