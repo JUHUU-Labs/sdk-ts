@@ -12,16 +12,19 @@ export default class PropertiesService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.Property.Create.Response>> {
     const queryArray: string[] = [];
 
-    return await super.sendRequest<JUHUU.Property.Create.Response>({
-      method: "POST",
-      url: "properties",
-      body: {
-        userId: PropertyCreateParams.userId,
-        name: PropertyCreateParams.name,
-        type: PropertyCreateParams.type,
+    return await super.sendRequest<JUHUU.Property.Create.Response>(
+      {
+        method: "POST",
+        url: "properties",
+        body: {
+          userId: PropertyCreateParams.userId,
+          name: PropertyCreateParams.name,
+          type: PropertyCreateParams.type,
+        },
+        authenticationNotOptional: true,
       },
-      authenticationNotOptional: true,
-    });
+      PropertyCreateOptions
+    );
   }
 
   async retrieve(
@@ -112,21 +115,23 @@ export default class PropertiesService extends Service {
     );
   }
 
-  async stripeAccountUrl(
-    PropertyStripeAccountUrlParams: JUHUU.Property.StripeAccountUrl.Params,
-    PropertyStripeAccountUrlOptions?: JUHUU.Property.StripeAccountUrl.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.Property.StripeAccountUrl.Response>> {
-    return await super.sendRequest<JUHUU.Property.StripeAccountUrl.Response>(
+  async retrieveStripeConnectPortalUrl(
+    PropertyRetrieveStripeConnectPortalUrlParams: JUHUU.Property.RetrieveStripeConnectPortalUrl.Params,
+    PropertyRetrieveStripeConnectPortalUrlOptions?: JUHUU.Property.RetrieveStripeConnectPortalUrl.Options
+  ): Promise<
+    JUHUU.HttpResponse<JUHUU.Property.RetrieveStripeConnectPortalUrl.Response>
+  > {
+    return await super.sendRequest<JUHUU.Property.RetrieveStripeConnectPortalUrl.Response>(
       {
         method: "GET",
         url:
           "properties/" +
-          PropertyStripeAccountUrlParams.propertyId +
-          "/stripeAccountUrl",
+          PropertyRetrieveStripeConnectPortalUrlParams.propertyId +
+          "/retrieveStripeConnectPortalUrl",
         body: undefined,
         authenticationNotOptional: true,
       },
-      PropertyStripeAccountUrlOptions
+      PropertyRetrieveStripeConnectPortalUrlOptions
     );
   }
 
@@ -147,6 +152,68 @@ export default class PropertiesService extends Service {
         authenticationNotOptional: true,
       },
       PropertyRetrieveStripeCustomerPortalUrlOptions
+    );
+  }
+
+  async retrieveStripeSubscriptionStartUrl(
+    PropertyRetrieveStripeSubscriptionStartUrlParams: JUHUU.Property.RetrieveStripeSubscriptionStartUrl.Params,
+    PropertyRetrieveStripeSubscriptionStartUrlOptions?: JUHUU.Property.RetrieveStripeSubscriptionStartUrl.Options
+  ): Promise<
+    JUHUU.HttpResponse<JUHUU.Property.RetrieveStripeSubscriptionStartUrl.Response>
+  > {
+    return await super.sendRequest<JUHUU.Property.RetrieveStripeSubscriptionStartUrl.Response>(
+      {
+        method: "GET",
+        url:
+          "properties/" +
+          PropertyRetrieveStripeSubscriptionStartUrlParams.propertyId +
+          "/retrieveStripeSubscriptionStartUrl",
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      PropertyRetrieveStripeSubscriptionStartUrlOptions
+    );
+  }
+
+  async enableCapability(
+    PropertyEnableCapabilityParams: JUHUU.Property.EnableCapability.Params,
+    PropertyEnableCapabilityOptions?: JUHUU.Property.EnableCapability.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Property.EnableCapability.Response>> {
+    return await super.sendRequest<JUHUU.Property.EnableCapability.Response>(
+      {
+        method: "PATCH",
+        url:
+          "properties/" +
+          PropertyEnableCapabilityParams.propertyId +
+          "/enableCapability",
+        body: {
+          capabilityType: PropertyEnableCapabilityParams.capabilityType,
+          acceptTermsThatApplyToThatCapability:
+            PropertyEnableCapabilityParams.acceptTermsThatApplyToThatCapability,
+        },
+        authenticationNotOptional: true,
+      },
+      PropertyEnableCapabilityOptions
+    );
+  }
+
+  async acceptLatestAgreement(
+    PropertyAcceptLatestAgreementParams: JUHUU.Property.AcceptLatestAgreement.Params,
+    PropertyAcceptLatestAgreementOptions?: JUHUU.Property.AcceptLatestAgreement.Options
+  ): Promise<
+    JUHUU.HttpResponse<JUHUU.Property.AcceptLatestAgreement.Response>
+  > {
+    return await super.sendRequest<JUHUU.Property.AcceptLatestAgreement.Response>(
+      {
+        method: "PATCH",
+        url:
+          "properties/" +
+          PropertyAcceptLatestAgreementParams.propertyId +
+          "/acceptLatestAgreement",
+        body: {},
+        authenticationNotOptional: true,
+      },
+      PropertyAcceptLatestAgreementOptions
     );
   }
 }

@@ -14,6 +14,7 @@ import {
   AccessControlListElement,
   Address,
   AutoRenewMode,
+  Capability,
   Category,
   Circumstance,
   ColorScheme,
@@ -1456,13 +1457,13 @@ export namespace JUHUU {
 
     export interface Internal extends Base {
       type: "internal";
-      legalName: string;
-      emailSignature: string;
-      billingAddress: Address;
+      legalName: string | null;
+      emailSignature: string | null;
+      billingAddress: Address | null;
       vat: string;
       invoiceImage: string;
       invoiceNumberPrefix: string;
-      stripeConnectedAccountId: string;
+      stripeConnectedAccountId: string | null;
       payoutPostProcessIdentifier: "oebbV1" | null;
       iban: string;
       bic: string;
@@ -1479,6 +1480,31 @@ export namespace JUHUU {
        * Email only used for Stripe
        */
       stripeEmail: string | null;
+
+      /**
+       * Timestamp of the next subscription update
+       * A subscription update retrieves all the information of
+       * a property that it will be charged for and then updates
+       * the stripe subscription with the new information.
+       */
+      nextSubscriptionUpdateAt: Date | null;
+
+      /**
+       * ID of the subscription from stripe
+       * If null, the property is not subscribed to a plan
+       */
+      stripeSubscriptionId: string | null;
+
+      subscriptionStatus:
+        | "manual"
+        | "inactive"
+        | "waitingForActivationConfirmation"
+        | "active"
+        | "waitingForExpiry";
+
+      capabilityArray: Capability[];
+
+      agreement: string | null;
     }
 
     export interface External extends Base {
@@ -1523,7 +1549,7 @@ export namespace JUHUU {
       export type Response = JUHUU.Property.Object[];
     }
 
-    export namespace StripeAccountUrl {
+    export namespace RetrieveStripeConnectPortalUrl {
       export type Params = {
         propertyId: string;
       };
@@ -1547,12 +1573,50 @@ export namespace JUHUU {
       };
     }
 
+    export namespace RetrieveStripeSubscriptionStartUrl {
+      export type Params = {
+        propertyId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        url: string;
+      };
+    }
+
+    export namespace EnableCapability {
+      export type Params = {
+        propertyId: string;
+        capabilityType: Capability["type"];
+        acceptTermsThatApplyToThatCapability: boolean;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        property: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace AcceptLatestAgreement {
+      export type Params = {
+        propertyId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        property: JUHUU.Property.Object;
+      };
+    }
+
     export namespace Update {
       export type Params = {
         propertyId: string;
         name?: string;
         legalName?: string;
-        billingAddress?: Partial<Address>;
+        billingAddress?: Address | null;
         email?: string;
         website?: string;
         phone?: string;
@@ -1560,6 +1624,12 @@ export namespace JUHUU {
         colorScheme?: Partial<ColorScheme>;
         contactUrl?: string;
         stripeEmail?: string;
+        payoutCurrencyCode?: CurrencyCode;
+        invoiceNumberPrefix?: string;
+        timeZone?: TimeZone;
+        languageCode?: LanguageCode;
+        emailSignature?: string;
+        vat?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1575,6 +1645,7 @@ export namespace JUHUU {
         primaryColor: string;
         backgroundColor: string;
         name: string;
+        eligibleToCreateOnBehalfOfBusiness: boolean;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1952,6 +2023,7 @@ export namespace JUHUU {
       devicePermissionArray: DevicePermission[];
       disabled: boolean; // if disabled is true, no new sessions can be created
       disabledBy: "propertyAdmin" | "deviceNodeArray" | null;
+      visible: boolean; // if false, the location is accessible but is not shown in the UI of the app
     };
 
     export interface RentableDeviceGroup extends Base {
@@ -2016,6 +2088,7 @@ export namespace JUHUU {
       export type Params = {
         rentableDeviceGroupLocationId?: string | null;
         propertyId?: string;
+        visible?: boolean;
       };
 
       export type Options = JUHUU.RequestOptions;

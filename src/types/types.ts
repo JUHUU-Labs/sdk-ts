@@ -10,6 +10,20 @@ export type ExtractType<T> = T extends { type: infer U } ? U : never;
 export type UserGroup = "retailer" | "engineer" | "operator" | "user";
 export type Frontend = "dashboard" | "app";
 
+export type Capability =
+  | {
+      type: "predictiveMaintenance";
+      stripePriceId: string | null;
+      grantedAt: Date;
+      requestedByUserId: string;
+    }
+  | {
+      type: "userSupport";
+      stripePriceId: string | null;
+      grantedAt: Date;
+      requestedByUserId: string;
+    };
+
 export interface Offer {
   tariffId: string;
   licenseTemplateIdArray?: string[];
