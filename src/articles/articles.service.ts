@@ -37,6 +37,10 @@ export default class ArticlesService extends Service {
       queryArray.push("propertyId=" + ArticleListParams.propertyId);
     }
 
+    if (ArticleListParams?.articleGroupId !== undefined) {
+      queryArray.push("articleGroupId=" + ArticleListParams.articleGroupId);
+    }
+
     if (ArticleListParams?.statusArray !== undefined) {
       queryArray.push("statusArray=" + ArticleListParams.statusArray.join(","));
     }

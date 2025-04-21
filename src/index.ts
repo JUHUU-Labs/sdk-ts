@@ -69,6 +69,7 @@ import ArticleEmbeddingsService from "./articleEmbeddings/articleEmbeddings.serv
 import BoldLockService from "./boldLock/boldLock.service";
 import TapkeyService from "./tapkey/tapkey.service";
 import PaymentRefundsService from "./paymentRefunds/paymentRefunds.service";
+import ArticleGroupsService from "./articleGroups/articleGroups.service";
 
 export * from "./types/types";
 
@@ -100,6 +101,7 @@ export class Juhuu {
     this.articleEmbeddings = new ArticleEmbeddingsService(config);
     this.boldLock = new BoldLockService(config);
     this.tapkey = new TapkeyService(config);
+    this.articleGroups = new ArticleGroupsService(config);
   }
 
   /**
@@ -131,6 +133,7 @@ export class Juhuu {
   readonly articleEmbeddings: ArticleEmbeddingsService;
   readonly boldLock: BoldLockService;
   readonly tapkey: TapkeyService;
+  readonly articleGroups: ArticleGroupsService;
 }
 
 export namespace JUHUU {
@@ -918,6 +921,8 @@ export namespace JUHUU {
       embeddingsGenerated: boolean; // whether or not embeddings are generated for this article
       autoTranslateEnabled: boolean; // whether or not auto translation to other languages is enabled for this article
       embeddingsGenerationEnabled: boolean; // whether or not embeddings should be generated for this article
+      order: number; // order of the article in the list of articles
+      articleGroupIdArray: string[];
     };
 
     export namespace Create {
@@ -951,6 +956,7 @@ export namespace JUHUU {
       export type Params = {
         propertyId?: string;
         statusArray?: JUHUU.Article.Object["status"][];
+        articleGroupId?: string | null;
       };
 
       export type Options = {
@@ -990,7 +996,9 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Article.Object;
+      export type Response = {
+        article: JUHUU.Article.Object;
+      };
     }
 
     export namespace Search {
@@ -1019,6 +1027,89 @@ export namespace JUHUU {
 
       export type Response = {
         article: JUHUU.Article.Object;
+      };
+    }
+  }
+
+  export namespace ArticleGroup {
+    export type Object = {
+      id: string;
+      readonly object: "articleGroup";
+      title: LocaleString; // title of the articleGroup
+      articleIdArray: string[]; // articleIdArray of the articles in this group
+      articleGroupIdArray: string[]; // articleGroupIdArray of the articleGroups in this group
+      createdAt: Date;
+      propertyId: string | null; // propertyId of the articleGroup, if null, the article group will be shown in the general list, not the property specific list
+      order: number; // order of the articleGroup in the list of articleGroups
+    };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        articleGroup: JUHUU.ArticleGroup.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        articleGroupId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        articleGroup: JUHUU.ArticleGroup.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+        articleGroupId?: string | null;
+      };
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        articleGroupArray: JUHUU.ArticleGroup.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        articleId: string;
+        title?: LocaleString; // title of the article
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        articleGroup: JUHUU.ArticleGroup.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        articleGroupId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        articleGroup: JUHUU.ArticleGroup.Object;
       };
     }
   }
@@ -1504,7 +1595,15 @@ export namespace JUHUU {
 
       capabilityArray: Capability[];
 
-      agreement: string | null;
+      agreement: {
+        isAccepted: boolean;
+        currentAgreement: string | null;
+        previousAgreements: string[];
+        acceptedAt: Date | null;
+        acceptedByUserId: string | null;
+        acceptedByUserEmail: string | null;
+        acceptedByUserName: string | null;
+      };
     }
 
     export interface External extends Base {
@@ -2363,6 +2462,7 @@ export namespace JUHUU {
         statusArray?: DeviceStatus[];
         propertyId?: string;
         deviceTemplateId?: string;
+        acceptTerms?: boolean;
       };
 
       export type Options = {
