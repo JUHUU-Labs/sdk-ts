@@ -18,6 +18,7 @@ export default class DevicesService extends Service {
           propertyId: DeviceCreateParams.propertyId,
           deviceTemplateId: DeviceCreateParams.deviceTemplateId,
           name: DeviceCreateParams.name,
+          acceptTerms: DeviceCreateParams.acceptTerms,
         },
         authenticationNotOptional: true,
       },

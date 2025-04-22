@@ -358,7 +358,8 @@ export type PaymentStatus =
   | "inTransitToProvider" // we got the confirmation from the PSP that the funds are on their way to us
   | "captured" // the funds arrived at the payment service provider
   | "inTransitToProperty" // the funds are on their way to the property
-  | "payedOut"; // the funds arrived at the property
+  | "payedOut" // the funds arrived at the property
+  | "cancelled"; // the payment was cancelled
 
 export type PaymentRefundStatus =
   | "waitingForArrivalAtUser"

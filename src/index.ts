@@ -1881,7 +1881,6 @@ export namespace JUHUU {
       amountFinal: number | null; // amount that was withdrawn from the user
       amountCaptured: number; // amount that was captured from the user
       amountToPayout: number | null;
-      amountRefunded: number; // sum of all refunds for this payment
       createdAt: Date;
       billingAddress: DeepNullable<Address>;
       invoicePdfId: string | null;
@@ -1907,6 +1906,11 @@ export namespace JUHUU {
       reasonDescription: string | null; // text displayed on the users invoice
       amountCapturedNet: number | null; // amount that was captured from the user in the currency of the property
       taxAmount: number | null; // portion of the amountCaptured that is tax
+      stripeBalanceTransactionId: string | null; // stripe balance transaction id (used to check if the payment was captured)
+      capturedAt: Date | null; // date at which the payment was captured
+      capturedBy: "system" | "propertyAdmin" | null; // who captured the payment
+      capturedByUserId: string | null; // user who captured the payment
+      isPartiallyOrFullyRefunded: boolean; // true if this payment was partially or fully refunded
     };
 
     export namespace Retrieve {
@@ -2428,6 +2432,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
+        acceptTerms: boolean;
         name?: string;
         deviceTemplateId: string;
       };
@@ -2462,7 +2467,6 @@ export namespace JUHUU {
         statusArray?: DeviceStatus[];
         propertyId?: string;
         deviceTemplateId?: string;
-        acceptTerms?: boolean;
       };
 
       export type Options = {
