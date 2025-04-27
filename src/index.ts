@@ -70,6 +70,7 @@ import BoldLockService from "./boldLock/boldLock.service";
 import TapkeyService from "./tapkey/tapkey.service";
 import PaymentRefundsService from "./paymentRefunds/paymentRefunds.service";
 import ArticleGroupsService from "./articleGroups/articleGroups.service";
+import DeviceParameterHistoriesService from "./deviceParameterHistories/deviceParameterHistories.service";
 
 export * from "./types/types";
 
@@ -102,6 +103,7 @@ export class Juhuu {
     this.boldLock = new BoldLockService(config);
     this.tapkey = new TapkeyService(config);
     this.articleGroups = new ArticleGroupsService(config);
+    this.deviceParameterHistories = new DeviceParameterHistoriesService(config);
   }
 
   /**
@@ -134,6 +136,7 @@ export class Juhuu {
   readonly boldLock: BoldLockService;
   readonly tapkey: TapkeyService;
   readonly articleGroups: ArticleGroupsService;
+  readonly deviceParameterHistories: DeviceParameterHistoriesService;
 }
 
 export namespace JUHUU {
@@ -2729,6 +2732,202 @@ export namespace JUHUU {
 
       export type Response = {
         eventArray: JUHUU.Event.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+  }
+
+  export namespace DeviceParameterAnomalyGroup {
+    export type Object = {
+      id: string;
+      readonly object: "deviceParameterAnomalyGroup";
+      deviceParameterAnomalyGroupTrackerId: string | null;
+      propertyId: string;
+    };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        deviceParameterAnomalyGroupTrackerId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterAnomalyGroup: JUHUU.DeviceParameterAnomalyGroup.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        deviceParameterAnomalyGroupId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterAnomalyGroup: JUHUU.DeviceParameterAnomalyGroup.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = {
+        skip?: number;
+        limit?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterAnomalyGroupArray: JUHUU.DeviceParameterAnomalyGroup.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        deviceParameterAnomalyGroupId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterAnomalyGroup: JUHUU.DeviceParameterAnomalyGroup.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        deviceParameterAnomalyGroupId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterAnomalyGroup: JUHUU.DeviceParameterAnomalyGroup.Object;
+      };
+    }
+  }
+
+  export namespace DeviceParameterAnomalyGroupTracker {
+    export type Object = {
+      id: string;
+      readonly object: "deviceParameterAnomalyGroupTracker";
+      nextRunAt: Date | null;
+      title: string;
+      propertyId: string;
+    };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterAnomalyGroupTracker: JUHUU.DeviceParameterAnomalyGroupTracker.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        deviceParameterAnomalyGroupTrackerId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterAnomalyGroupTracker: JUHUU.DeviceParameterAnomalyGroupTracker.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = {
+        skip?: number;
+        limit?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterAnomalyGroupTrackerArray: JUHUU.DeviceParameterAnomalyGroupTracker.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        deviceParameterAnomalyGroupTrackerId: string;
+        title: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterAnomalyGroupTracker: JUHUU.DeviceParameterAnomalyGroupTracker.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        deviceParameterAnomalyGroupTrackerId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterAnomalyGroupTracker: JUHUU.DeviceParameterAnomalyGroupTracker.Object;
+      };
+    }
+  }
+
+  export namespace DeviceParameterHistory {
+    export type Object = {
+      id: string;
+      readonly object: "deviceParameterHistory";
+      parameter: Parameter; // parameter of the article
+      deviceId: string; // deviceId of the article
+      propertyId: string; // id of the property who owns the article. If null, the article does not belong to any property
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        deviceParameterHistoryId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterHistory: JUHUU.DeviceParameterHistory.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = {
+        skip?: number;
+        limit?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        deviceParameterHistoryArray: JUHUU.DeviceParameterHistory.Object[];
         count: number;
         hasMore: boolean;
       };
