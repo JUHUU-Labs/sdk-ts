@@ -4,14 +4,18 @@ import io, { Socket } from "socket.io-client";
 
 export default class Service {
   constructor(config: JUHUU.SetupConfig) {
-    this.environment = config.environment;
-    this.getAccessToken = config.getAccessToken;
-    this.onException = config.onException;
-    this.setAccessToken = config.setAccessToken;
-    this.getAccessToken = config.getAccessToken;
-    this.setRefreshToken = config.setRefreshToken;
-    this.getRefreshToken = config.getRefreshToken;
+    this.environment = config.environment ?? "production";
+    this.getAccessToken = config.getAccessToken ?? (() => null);
+    this.onException = config.onException ?? (() => Promise.resolve("abort"));
+    this.setAccessToken = config.setAccessToken ?? (() => Promise.resolve());
+    this.getAccessToken = config.getAccessToken ?? (() => null);
+    this.setRefreshToken = config.setRefreshToken ?? (() => Promise.resolve());
+    this.getRefreshToken =
+      config.getRefreshToken ?? (() => Promise.resolve(null));
     this.clientVersion = config.clientVersion;
+    this.apiKey = config.apiKey ?? null;
+    this.defaultRequestOptions = config.defaultRequestOptions ?? {};
+    this.authenticationMode = config.authenticationMode ?? "jwt";
 
     switch (config.environment) {
       case "development":
@@ -29,6 +33,9 @@ export default class Service {
   readonly httpBaseUrl: string;
   readonly wssBaseUrl: string;
   readonly clientVersion: string;
+  readonly apiKey: string | null;
+  readonly defaultRequestOptions: JUHUU.RequestOptions;
+  readonly authenticationMode: "jwt" | "apiKey";
 
   onException: <T>(
     response: JUHUU.HttpResponse<T>
@@ -72,37 +79,95 @@ export default class Service {
     options: JUHUU.RequestOptions = {}
   ): Promise<JUHUU.HttpResponse<T>> {
     // set defaults only for options that are not set
-    if (options.triggerOnException === undefined) {
-      options.triggerOnException = true;
+    const currentOptions = {
+      ...this.defaultRequestOptions,
+      ...options,
+    };
+    if (currentOptions.triggerOnException === undefined) {
+      switch (this.authenticationMode) {
+        case "jwt": {
+          currentOptions.triggerOnException = true;
+          break;
+        }
+
+        case "apiKey": {
+          currentOptions.triggerOnException = false;
+          break;
+        }
+      }
     }
 
-    if (options.refreshTokensIfNecessary === undefined) {
-      options.refreshTokensIfNecessary = true;
+    if (currentOptions.refreshTokensIfNecessary === undefined) {
+      switch (this.authenticationMode) {
+        case "jwt": {
+          currentOptions.refreshTokensIfNecessary = true;
+          break;
+        }
+
+        case "apiKey": {
+          currentOptions.refreshTokensIfNecessary = false;
+          break;
+        }
+      }
     }
 
     let token: string | null | undefined = null;
+    let apiKey: string | null = null;
 
-    if (options.accessToken === undefined || options.accessToken === null) {
-      token = await this.getAccessToken();
-    } else {
-      token = options.accessToken;
-    }
+    switch (this.authenticationMode) {
+      case "jwt": {
+        if (
+          currentOptions.accessToken === undefined ||
+          currentOptions.accessToken === null
+        ) {
+          token = await this.getAccessToken();
+        } else {
+          token = currentOptions.accessToken;
+        }
 
-    console.log("accessToken:", token);
+        console.log("accessToken:", token);
 
-    if (
-      (token === null || token === undefined) &&
-      authenticationNotOptional === true
-    ) {
-      console.error(
-        "endpoint",
-        url,
-        "should use authentication but no token was found"
-      );
-      return {
-        ok: false,
-        data: null,
-      } as JUHUU.HttpResponse<T>;
+        if (
+          (token === null || token === undefined) &&
+          authenticationNotOptional === true
+        ) {
+          console.error(
+            "endpoint",
+            url,
+            "should use authentication but no token was found"
+          );
+          return {
+            ok: false,
+            data: {},
+          } as JUHUU.HttpResponse<T>;
+        }
+        break;
+      }
+
+      case "apiKey": {
+        if (
+          currentOptions.apiKey === undefined ||
+          currentOptions.apiKey === null
+        ) {
+          apiKey = this.apiKey;
+        } else {
+          apiKey = currentOptions.apiKey;
+        }
+
+        if (apiKey === null) {
+          console.error(
+            "endpoint",
+            url,
+            "should use authentication but no apiKey was found"
+          );
+          return {
+            ok: false,
+            data: {},
+          } as JUHUU.HttpResponse<T>;
+        }
+
+        break;
+      }
     }
 
     const uri = this.httpBaseUrl + url;
@@ -113,22 +178,22 @@ export default class Service {
     try {
       switch (method) {
         case "GET": {
-          response = await this.sendGetRequest(token, uri);
+          response = await this.sendGetRequest({ token, uri, apiKey });
           break;
         }
 
         case "POST": {
-          response = await this.sendPostRequest(token, uri, body);
+          response = await this.sendPostRequest({ token, uri, body, apiKey });
           break;
         }
 
         case "PATCH": {
-          response = await this.sendPatchRequest(token, uri, body);
+          response = await this.sendPatchRequest({ token, uri, body, apiKey });
           break;
         }
 
         case "DELETE": {
-          response = await this.sendDeleteRequest(token, uri);
+          response = await this.sendDeleteRequest({ token, uri, apiKey });
           break;
         }
       }
@@ -191,6 +256,11 @@ export default class Service {
           return responseObject;
         }
 
+        if (query.data === null) {
+          console.log("no data in query");
+          return responseObject;
+        }
+
         const accessToken = query.data.accessToken;
         const refreshToken = query.data.refreshToken;
 
@@ -241,10 +311,15 @@ export default class Service {
     return responseObject;
   }
 
-  private async sendGetRequest(
-    token: string | undefined | null,
-    uri: string
-  ): Promise<Response> {
+  private async sendGetRequest({
+    token,
+    apiKey,
+    uri,
+  }: {
+    token: string | undefined | null;
+    apiKey: string | null;
+    uri: string;
+  }): Promise<Response> {
     const headers: any = {
       "Content-Type": "application/json",
       "Client-Version": this.clientVersion,
@@ -254,17 +329,27 @@ export default class Service {
       headers.Authorization = `Bearer ${token}`;
     }
 
+    if (apiKey !== null) {
+      headers["X-API-KEY"] = apiKey;
+    }
+
     return await fetch(uri, {
       method: "GET",
       headers,
     });
   }
 
-  private async sendPostRequest(
-    token: string | undefined | null,
-    uri: string,
-    body: any
-  ): Promise<Response> {
+  private async sendPostRequest({
+    token,
+    uri,
+    apiKey,
+    body,
+  }: {
+    token: string | undefined | null;
+    uri: string;
+    apiKey: string | null;
+    body: any;
+  }): Promise<Response> {
     const headers: any = {
       "Content-Type": "application/json",
       "Client-Version": this.clientVersion,
@@ -272,6 +357,10 @@ export default class Service {
 
     if (token !== undefined && token !== null) {
       headers.Authorization = `Bearer ${token}`;
+    }
+
+    if (apiKey !== null) {
+      headers["X-API-KEY"] = apiKey;
     }
 
     return await fetch(uri, {
@@ -281,11 +370,17 @@ export default class Service {
     });
   }
 
-  private async sendPatchRequest(
-    token: string | undefined | null,
-    uri: string,
-    body: any
-  ): Promise<Response> {
+  private async sendPatchRequest({
+    token,
+    uri,
+    apiKey,
+    body,
+  }: {
+    token: string | undefined | null;
+    uri: string;
+    apiKey: string | null;
+    body: any;
+  }): Promise<Response> {
     const headers: any = {
       "Content-Type": "application/json",
       "Client-Version": this.clientVersion,
@@ -293,6 +388,10 @@ export default class Service {
 
     if (token !== undefined && token !== null) {
       headers.Authorization = `Bearer ${token}`;
+    }
+
+    if (apiKey !== null) {
+      headers["X-API-KEY"] = apiKey;
     }
 
     return await fetch(uri, {
@@ -302,10 +401,15 @@ export default class Service {
     });
   }
 
-  private async sendDeleteRequest(
-    token: string | undefined | null,
-    uri: string
-  ): Promise<Response> {
+  private async sendDeleteRequest({
+    token,
+    uri,
+    apiKey,
+  }: {
+    token: string | undefined | null;
+    uri: string;
+    apiKey: string | null;
+  }): Promise<Response> {
     const headers: any = {
       "Content-Type": "application/json",
       "Client-Version": this.clientVersion,
@@ -314,6 +418,11 @@ export default class Service {
     if (token !== undefined && token !== null) {
       headers.Authorization = `Bearer ${token}`;
     }
+
+    if (apiKey !== null) {
+      headers["X-API-KEY"] = apiKey;
+    }
+
     return await fetch(uri, {
       method: "DELETE",
       headers,

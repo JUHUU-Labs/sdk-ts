@@ -13,6 +13,8 @@ import ProductService from "./products/products.service";
 import {
   AccessControlListElement,
   Address,
+  ApiKeyScope,
+  ApiKeyStatus,
   AutoRenewMode,
   Capability,
   Category,
@@ -71,6 +73,7 @@ import TapkeyService from "./tapkey/tapkey.service";
 import PaymentRefundsService from "./paymentRefunds/paymentRefunds.service";
 import ArticleGroupsService from "./articleGroups/articleGroups.service";
 import DeviceParameterHistoriesService from "./deviceParameterHistories/deviceParameterHistories.service";
+import ApiKeysService from "./apiKeys/apiKeys.service";
 
 export * from "./types/types";
 
@@ -104,6 +107,7 @@ export class Juhuu {
     this.tapkey = new TapkeyService(config);
     this.articleGroups = new ArticleGroupsService(config);
     this.deviceParameterHistories = new DeviceParameterHistoriesService(config);
+    this.apiKeys = new ApiKeysService(config);
   }
 
   /**
@@ -137,24 +141,34 @@ export class Juhuu {
   readonly tapkey: TapkeyService;
   readonly articleGroups: ArticleGroupsService;
   readonly deviceParameterHistories: DeviceParameterHistoriesService;
+  readonly apiKeys: ApiKeysService;
 }
 
 export namespace JUHUU {
   export interface SetupConfig {
-    environment: Environment;
-    getAccessToken: () => Promise<string | null>;
-    onException: <T>(response: JUHUU.HttpResponse<T>) => Promise<"abort">;
-    setAccessToken: (accessToken: string) => Promise<void>;
-    getRefreshToken: () => Promise<string | null>;
-    setRefreshToken: (refreshToken: string) => Promise<void>;
+    environment?: Environment;
+    getAccessToken?: () => Promise<string | null>;
+    onException?: <T>(response: JUHUU.HttpResponse<T>) => Promise<"abort">;
+    setAccessToken?: (accessToken: string) => Promise<void>;
+    getRefreshToken?: () => Promise<string | null>;
+    setRefreshToken?: (refreshToken: string) => Promise<void>;
     clientVersion: string;
+    apiKey?: string;
+    defaultRequestOptions?: JUHUU.RequestOptions;
+    authenticationMode?: "jwt" | "apiKey";
   }
 
   export interface HttpResponse<T> {
     ok: boolean;
-    data: T;
-    statusText: string;
-    status: number;
+    data:
+      | T & {
+          /**
+           * Might be defined if the request failed
+           */
+          message?: string | LocaleString;
+        };
+    statusText?: string;
+    status?: number;
   }
 
   export type RequestOptions = {
@@ -172,6 +186,11 @@ export namespace JUHUU {
      * If this is true, a new accessToken will be requested if the current one is expired.
      */
     refreshTokensIfNecessary?: boolean;
+
+    /**
+     * If this API key is provided, the request will be sent with this API key instead of the one passed to config.
+     */
+    apiKey?: string | null;
   };
   export interface LocaleString {
     de?: string;
@@ -863,6 +882,80 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.AccountingArea.Object;
+    }
+  }
+
+  export namespace ApiKey {
+    export type Object = {
+      id: string;
+      readonly object: "apiKey";
+      name: string;
+      status: ApiKeyStatus;
+      scopeArray: ApiKeyScope[]; // if the array is empty, it means all scopes are allowed
+      propertyId: string;
+      expiresAt: Date | null;
+      createdAt: Date;
+      hash: string;
+    };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        apiKey: JUHUU.ApiKey.Object;
+        clearText: string;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        apiKeyId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        apiKey: JUHUU.ApiKey.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+        statusArray?: JUHUU.Article.Object["status"][];
+      };
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        apiKeyArray: JUHUU.ApiKey.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        apiKeyId: string;
+        status?: ApiKeyStatus;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        apiKey: JUHUU.ApiKey.Object;
+      };
     }
   }
 

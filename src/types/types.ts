@@ -10,6 +10,10 @@ export type ExtractType<T> = T extends { type: infer U } ? U : never;
 export type UserGroup = "retailer" | "engineer" | "operator" | "user";
 export type Frontend = "dashboard" | "app";
 
+export type ApiKeyStatus = "enabled" | "disabled";
+
+export type ApiKeyScope = "device:parameter:update";
+
 export type Capability =
   | {
       type: "predictiveMaintenance";
@@ -858,7 +862,7 @@ export type Parameter =
       lastChangeAt: Date | null; // null, if the parameter has never been updated before
       current: number; // current value
       unit: Unit | null;
-      deviceParameterAnomalyGroupId: string | null; // null, if the parameter is not part of an anomaly group
+      deviceParameterAnomalyGroupIdArray: string[];
     }
   | {
       name: string;
@@ -866,21 +870,21 @@ export type Parameter =
       lastChangeAt: Date;
       enumArray: string[];
       current: string;
-      deviceParameterAnomalyGroupId: string | null; // null, if the parameter is not part of an anomaly group
+      deviceParameterAnomalyGroupIdArray: string[];
     }
   | {
       name: string;
       type: "string";
       lastChangeAt: Date;
       current: string;
-      deviceParameterAnomalyGroupId: string | null; // null, if the parameter is not part of an anomaly group
+      deviceParameterAnomalyGroupIdArray: string[];
     }
   | {
       name: string;
       type: "boolean";
       lastChangeAt: Date;
       current: boolean;
-      deviceParameterAnomalyGroupId: string | null; // null, if the parameter is not part of an anomaly group
+      deviceParameterAnomalyGroupIdArray: string[];
     };
 
 export namespace Layout {
