@@ -196,6 +196,25 @@ export default class DevicesService extends Service {
     );
   }
 
+  async nodeExecute(
+    DeviceNodeExecuteParams: JUHUU.Device.NodeExecute.Params,
+    DeviceNodeExecuteOptions?: JUHUU.Device.NodeExecute.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Device.NodeExecute.Response>> {
+    return await super.sendRequest<JUHUU.Device.NodeExecute.Response>(
+      {
+        method: "POST",
+        url:
+          "devices/" +
+          DeviceNodeExecuteParams.deviceId +
+          "/node/" +
+          DeviceNodeExecuteParams.nodeId,
+        body: {},
+        authenticationNotOptional: true,
+      },
+      DeviceNodeExecuteOptions
+    );
+  }
+
   async delete(
     DeviceDeleteParams: JUHUU.Device.Delete.Params,
     DeviceDeleteOptions?: JUHUU.Device.Delete.Options

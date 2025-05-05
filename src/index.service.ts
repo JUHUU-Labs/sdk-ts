@@ -76,53 +76,57 @@ export default class Service {
           body: undefined;
           authenticationNotOptional: boolean;
         },
-    options: JUHUU.RequestOptions = {}
+    requestOptions: JUHUU.RequestOptions = {}
   ): Promise<JUHUU.HttpResponse<T>> {
     // set defaults only for options that are not set
-    const currentOptions = {
+    const currentRequestOptions = {
       ...this.defaultRequestOptions,
-      ...options,
+      ...requestOptions,
     };
-    if (currentOptions.triggerOnException === undefined) {
+
+    if (currentRequestOptions.triggerOnException === undefined) {
       switch (this.authenticationMode) {
         case "jwt": {
-          currentOptions.triggerOnException = true;
+          currentRequestOptions.triggerOnException = true;
           break;
         }
 
         case "apiKey": {
-          currentOptions.triggerOnException = false;
+          currentRequestOptions.triggerOnException = false;
           break;
         }
       }
     }
 
-    if (currentOptions.refreshTokensIfNecessary === undefined) {
+    console.log("authenticationMode", this.authenticationMode);
+
+    if (currentRequestOptions.refreshTokensIfNecessary === undefined) {
       switch (this.authenticationMode) {
         case "jwt": {
-          currentOptions.refreshTokensIfNecessary = true;
+          currentRequestOptions.refreshTokensIfNecessary = true;
           break;
         }
 
         case "apiKey": {
-          currentOptions.refreshTokensIfNecessary = false;
+          currentRequestOptions.refreshTokensIfNecessary = false;
           break;
         }
       }
     }
 
+    console.log("currentOptions", currentRequestOptions);
     let token: string | null | undefined = null;
     let apiKey: string | null = null;
 
     switch (this.authenticationMode) {
       case "jwt": {
         if (
-          currentOptions.accessToken === undefined ||
-          currentOptions.accessToken === null
+          currentRequestOptions.accessToken === undefined ||
+          currentRequestOptions.accessToken === null
         ) {
           token = await this.getAccessToken();
         } else {
-          token = currentOptions.accessToken;
+          token = currentRequestOptions.accessToken;
         }
 
         console.log("accessToken:", token);
@@ -146,12 +150,12 @@ export default class Service {
 
       case "apiKey": {
         if (
-          currentOptions.apiKey === undefined ||
-          currentOptions.apiKey === null
+          currentRequestOptions.apiKey === undefined ||
+          currentRequestOptions.apiKey === null
         ) {
           apiKey = this.apiKey;
         } else {
-          apiKey = currentOptions.apiKey;
+          apiKey = currentRequestOptions.apiKey;
         }
 
         if (apiKey === null) {
@@ -174,6 +178,15 @@ export default class Service {
 
     let response: Response | null = null;
     let responseObject: JUHUU.HttpResponse<T> | null = null;
+
+    console.log(
+      "sending request to",
+      uri,
+      "with apiKey",
+      apiKey,
+      "and token",
+      token
+    );
 
     try {
       switch (method) {
@@ -214,13 +227,19 @@ export default class Service {
       responseObject = {
         ok: false,
         data: await response?.json(),
-        statusText: response?.statusText ?? "no statusText",
+        statusText: response?.statusText ?? "",
         status: response?.status ?? 0,
       };
 
+      console.log(
+        "refreshTokensIfNecessary",
+        currentRequestOptions.refreshTokensIfNecessary
+      );
+      console.log("responseObject.status", responseObject.status);
+
       if (
         responseObject.status === 403 &&
-        options.refreshTokensIfNecessary === true
+        currentRequestOptions.refreshTokensIfNecessary === true
       ) {
         console.log("refreshing tokens...");
         // get new access and refresh token with old refresh token
@@ -293,7 +312,7 @@ export default class Service {
         }
       }
 
-      if (options.triggerOnException === true) {
+      if (currentRequestOptions.triggerOnException === true) {
         await this.onException<T>(responseObject);
       }
     } finally {

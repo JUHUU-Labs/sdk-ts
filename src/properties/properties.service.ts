@@ -108,6 +108,8 @@ export default class PropertiesService extends Service {
           backgroundColor: PropertyOnboardingParams.backgroundColor,
           logo: PropertyOnboardingParams.logo,
           name: PropertyOnboardingParams.name,
+          eligibleToCreateOnBehalfOfBusiness:
+            PropertyOnboardingParams.eligibleToCreateOnBehalfOfBusiness,
         },
         authenticationNotOptional: true,
       },

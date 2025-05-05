@@ -2232,6 +2232,7 @@ export namespace JUHUU {
       surveyEnabled: boolean;
       accountingAreaId: string;
       deviceIdArray: string[];
+      locationAssignmentStrategy: "kochUndPartnerBikeTower" | "none";
     }
 
     export interface RentableDevice extends Base {
@@ -2647,6 +2648,19 @@ export namespace JUHUU {
       export type Params = {
         deviceId: string;
         commandName: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        device: JUHUU.Device.Object;
+      };
+    }
+
+    export namespace NodeExecute {
+      export type Params = {
+        deviceId: string;
+        nodeId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
