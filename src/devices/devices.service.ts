@@ -156,46 +156,6 @@ export default class DevicesService extends Service {
     );
   }
 
-  async parameterUpdate(
-    DeviceParameterParams: JUHUU.Device.ParameterUpdate.Params,
-    DeviceParameterOptions?: JUHUU.Device.ParameterUpdate.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.Device.ParameterUpdate.Response>> {
-    return await super.sendRequest<JUHUU.Device.ParameterUpdate.Response>(
-      {
-        method: "PATCH",
-        url:
-          "devices/" +
-          DeviceParameterParams.deviceId +
-          "/parameter/" +
-          DeviceParameterParams.parameterName,
-        body: {
-          value: DeviceParameterParams.value,
-        },
-        authenticationNotOptional: true,
-      },
-      DeviceParameterOptions
-    );
-  }
-
-  async commandExecute(
-    DeviceCommandExecuteParams: JUHUU.Device.CommandExecute.Params,
-    DeviceCommandExecuteOptions?: JUHUU.Device.CommandExecute.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.Device.CommandExecute.Response>> {
-    return await super.sendRequest<JUHUU.Device.CommandExecute.Response>(
-      {
-        method: "POST",
-        url:
-          "devices/" +
-          DeviceCommandExecuteParams.deviceId +
-          "/command/" +
-          DeviceCommandExecuteParams.commandName,
-        body: {},
-        authenticationNotOptional: true,
-      },
-      DeviceCommandExecuteOptions
-    );
-  }
-
   async nodeExecute(
     DeviceNodeExecuteParams: JUHUU.Device.NodeExecute.Params,
     DeviceNodeExecuteOptions?: JUHUU.Device.NodeExecute.Options

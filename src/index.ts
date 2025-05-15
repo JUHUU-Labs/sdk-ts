@@ -28,15 +28,13 @@ import {
   DeviceStatus,
   Environment,
   Frontend,
-  FuelType,
   GeoPoint,
   GraphNode,
   LanguageCode,
   Layout,
   LayoutBlock,
-  Modality,
+  License,
   Offer,
-  Parameter,
   Party,
   PaymentMethod,
   PaymentReason,
@@ -72,8 +70,10 @@ import BoldLockService from "./boldLock/boldLock.service";
 import TapkeyService from "./tapkey/tapkey.service";
 import PaymentRefundsService from "./paymentRefunds/paymentRefunds.service";
 import ArticleGroupsService from "./articleGroups/articleGroups.service";
-import DeviceParameterHistoriesService from "./deviceParameterHistories/deviceParameterHistories.service";
+import ParameterHistoriesService from "./parameterHistories/parameterHistories.service";
 import ApiKeysService from "./apiKeys/apiKeys.service";
+import ParametersService from "./parameters/parameters.service";
+import IncidentTemplatesService from "./incidentTemplates/incidentTemplates.service";
 
 export * from "./types/types";
 
@@ -106,8 +106,10 @@ export class Juhuu {
     this.boldLock = new BoldLockService(config);
     this.tapkey = new TapkeyService(config);
     this.articleGroups = new ArticleGroupsService(config);
-    this.deviceParameterHistories = new DeviceParameterHistoriesService(config);
+    this.parameterHistories = new ParameterHistoriesService(config);
     this.apiKeys = new ApiKeysService(config);
+    this.parameters = new ParametersService(config);
+    this.incidentTemplates = new IncidentTemplatesService(config);
   }
 
   /**
@@ -140,8 +142,10 @@ export class Juhuu {
   readonly boldLock: BoldLockService;
   readonly tapkey: TapkeyService;
   readonly articleGroups: ArticleGroupsService;
-  readonly deviceParameterHistories: DeviceParameterHistoriesService;
+  readonly parameterHistories: ParameterHistoriesService;
   readonly apiKeys: ApiKeysService;
+  readonly parameters: ParametersService;
+  readonly incidentTemplates: IncidentTemplatesService;
 }
 
 export namespace JUHUU {
@@ -466,13 +470,8 @@ export namespace JUHUU {
       termsVersion: number;
       name: string | null;
       stripeCustomerId: string;
-      defaultPaymentMethodId: string | null;
-      defaultPaymentMethodProvider: "stripe" | "not_set"; // "stripe" | "paypal"
       acceptedTermIdArray: string[];
-      licenseArray: {
-        validUntil: Date | null; // if null, the license is valid forever
-        licenseTemplateId: string;
-      }[];
+      licenseArray: License[];
       languageCode: LanguageCode | null;
       billingAddress: DeepNullable<Address>;
       billingEmail: string | null; // primary email that must never be empty
@@ -493,6 +492,7 @@ export namespace JUHUU {
         };
       };
       group: UserGroup;
+      createdByPropertyId: string | null;
     };
 
     export interface Standard extends Base {
@@ -519,15 +519,41 @@ export namespace JUHUU {
       };
     }
 
-    export namespace List {
+    export namespace Create {
       export type Params = {
-        managementUserId?: string;
-        propertyId?: string;
+        type: JUHUU.User.Object["type"];
+        name?: string;
+        createdByPropertyId?: JUHUU.User.Object["createdByPropertyId"];
+        licenseArray?: License[];
       };
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.User.Object[];
+      export type Response = {
+        user: JUHUU.User.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        managementUserId?: string;
+        createdByPropertyId?: string;
+        customerOfPropertyId?: string;
+        license?: {
+          cardId?: string;
+        };
+      };
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        userArray: JUHUU.User.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Exists {
@@ -2243,7 +2269,7 @@ export namespace JUHUU {
       surveyEnabled: boolean;
       accountingAreaId: string;
       rentableDeviceGroupLocationId: string | null;
-      deviceId: string;
+      deviceId: string | null;
     }
 
     export interface UseableDevice extends Base {
@@ -2514,7 +2540,7 @@ export namespace JUHUU {
       name: string;
       description: string | null;
       status: DeviceStatus;
-      parameterArray: Parameter[]; // values of the parameters are used as current values for the parameters of the device
+      parameterIdArray: string[];
       version: number;
       deviceTemplateId: string;
       source: "fluctuo" | null;
@@ -2628,33 +2654,6 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = void;
-    }
-
-    export namespace ParameterUpdate {
-      export type Params = {
-        deviceId: string;
-        parameterName: string;
-        value: string | number | boolean;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        device: JUHUU.Device.Object;
-      };
-    }
-
-    export namespace CommandExecute {
-      export type Params = {
-        deviceId: string;
-        commandName: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        device: JUHUU.Device.Object;
-      };
     }
 
     export namespace NodeExecute {
@@ -2845,30 +2844,144 @@ export namespace JUHUU {
     }
   }
 
-  export namespace DeviceParameterAnomalyGroup {
-    export type Object = {
+  export namespace Incident {
+    type Base = {
       id: string;
-      readonly object: "deviceParameterAnomalyGroup";
-      deviceParameterAnomalyGroupTrackerId: string | null;
-      propertyId: string;
+      readonly object: "incident";
+      severity: "low" | "medium" | "high";
+      issuedBy: "propertyAdmin" | "system" | "user" | "nodeArray";
+      propertyId: string; // id of the property who owns the article. If null, the article does not belong to any property
+      issuedByUserId: string | null;
+      status:
+        | "waitingForPropertyConfirmation"
+        | "waitingForResolvement"
+        | "rejected"
+        | "resolved";
+      title: Date;
+      createdAt: Date;
+      description: string;
+      imageUrlArray: string[];
+      incidentTemplateId: string | null;
     };
+
+    export interface Location extends Base {
+      type: "location";
+      locationId: string;
+    }
+
+    export interface Device extends Base {
+      type: "device";
+      deviceId: string;
+    }
+
+    export type Object = Location | Device;
 
     export namespace Create {
       export type Params = {
         propertyId: string;
-        deviceParameterAnomalyGroupTrackerId?: string;
+        description: JUHUU.Incident.Object["description"];
+        severity?: JUHUU.Incident.Object["severity"];
+        deviceId?: string;
+        locationId?: string;
+        incidentTepmlateId?: string;
+        title: JUHUU.Incident.Object["title"];
+        type: JUHUU.Incident.Object["type"];
       };
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterAnomalyGroup: JUHUU.DeviceParameterAnomalyGroup.Object;
+        connector: JUHUU.Connector.Object;
       };
     }
 
     export namespace Retrieve {
       export type Params = {
-        deviceParameterAnomalyGroupId: string;
+        incidentId: string;
+      };
+
+      export type Options = {
+        expand: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        Incident: JUHUU.Incident.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        incidentArray: JUHUU.Incident.Object[];
+        hasMore: boolean;
+        count: number;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        incidentId: string;
+        title?: JUHUU.Incident.Object["title"];
+        status?: JUHUU.Incident.Object["status"];
+        severity?: JUHUU.Incident.Object["severity"];
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        incident: JUHUU.Incident.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        incidentId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        incident: JUHUU.Connector.Object;
+      };
+    }
+  }
+
+  export namespace IncidentTemplate {
+    export type Object = {
+      id: string;
+      readonly object: "incidentTemplate";
+      name: string;
+      title: LocaleString;
+      subtitle: LocaleString;
+      description: LocaleString;
+      propertyId: string;
+      lastUpdatedAt: Date;
+      createdAt: Date;
+    };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        incidentTemplate: JUHUU.IncidentTemplate.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        incidentTemplateId: string;
       };
 
       export type Options = {
@@ -2876,7 +2989,147 @@ export namespace JUHUU {
       } & JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterAnomalyGroup: JUHUU.DeviceParameterAnomalyGroup.Object;
+        incidentTemplate: JUHUU.IncidentTemplate.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        incidentTemplateArray: JUHUU.IncidentTemplate.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        incidentTemplateId: string;
+        title?: LocaleString;
+        description?: LocaleString;
+        name?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        incidentTemplate: JUHUU.IncidentTemplate.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        incidentTemplateId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        incidentTemplate: JUHUU.IncidentTemplate.Object;
+      };
+    }
+  }
+
+  export namespace Parameter {
+    type Base = {
+      id: string;
+      readonly object: "parameter";
+      description: string | null;
+      name: string | null;
+      propertyId: string;
+      lastUpdatedAt: Date | null;
+      parameterAnomalyGroupIdArray: string[];
+      createdAt: Date | null;
+      reference: string | null;
+    };
+
+    export interface Text extends Base {
+      type: "text";
+      currentValue: string;
+    }
+
+    export interface Number extends Base {
+      type: "number";
+      currentValue: number;
+    }
+
+    export interface Enum extends Base {
+      type: "enum";
+      currentValue: string;
+      enumArray: string[];
+    }
+
+    export interface Boolean extends Base {
+      type: "boolean";
+      currentValue: boolean;
+    }
+
+    export type Object = Number | Boolean | Enum | Text;
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        type: JUHUU.Parameter.Object["type"];
+        name?: string;
+        description?: string;
+        currentValue?: boolean | string | number;
+        enumArray?: string[];
+        reference?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        parameter: JUHUU.Parameter.Object;
+      };
+    }
+
+    export namespace Realtime {
+      export type Params = {
+        parameterId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        onUpdated: (
+          callback: (message: {
+            payload: {
+              after: JUHUU.Parameter.Object;
+              before: JUHUU.Parameter.Object;
+              changedFields: string[];
+            };
+          }) => void
+        ) => void;
+        close: () => void;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        parameterId: string;
+
+        /**
+         * Supply a device ID if your parameterId starts with 'device.'
+         */
+        deviceId?: string;
+      };
+
+      export type Options = {
+        expand: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        parameter: JUHUU.Parameter.Object;
       };
     }
 
@@ -2891,7 +3144,7 @@ export namespace JUHUU {
       } & JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterAnomalyGroupArray: JUHUU.DeviceParameterAnomalyGroup.Object[];
+        parameterArray: JUHUU.Parameter.Object[];
         count: number;
         hasMore: boolean;
       };
@@ -2899,33 +3152,118 @@ export namespace JUHUU {
 
     export namespace Update {
       export type Params = {
-        deviceParameterAnomalyGroupId: string;
+        parameterId: string;
+
+        /**
+         * Supply a device ID if your parameterId starts with 'device.'
+         */
+        deviceId?: string;
+
+        name?: string;
+        currentValue?: string | boolean | number;
       };
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterAnomalyGroup: JUHUU.DeviceParameterAnomalyGroup.Object;
+        parameter: JUHUU.Parameter.Object;
       };
     }
 
     export namespace Delete {
       export type Params = {
-        deviceParameterAnomalyGroupId?: string;
+        parameterId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterAnomalyGroup: JUHUU.DeviceParameterAnomalyGroup.Object;
+        parameter: JUHUU.Parameter.Object;
       };
     }
   }
 
-  export namespace DeviceParameterAnomalyGroupTracker {
+  export namespace ParameterAnomalyGroup {
     export type Object = {
       id: string;
-      readonly object: "deviceParameterAnomalyGroupTracker";
+      readonly object: "parameterAnomalyGroup";
+      parameterAnomalyGroupTrackerId: string | null;
+      propertyId: string;
+    };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        parameterAnomalyGroupTrackerId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        parameterAnomalyGroup: JUHUU.ParameterAnomalyGroup.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        parameterAnomalyGroupId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        parameterAnomalyGroup: JUHUU.ParameterAnomalyGroup.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = {
+        skip?: number;
+        limit?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        parameterAnomalyGroupArray: JUHUU.ParameterAnomalyGroup.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        parameterAnomalyGroupId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        parameterAnomalyGroup: JUHUU.ParameterAnomalyGroup.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        parameterAnomalyGroupId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        parameterAnomalyGroup: JUHUU.ParameterAnomalyGroup.Object;
+      };
+    }
+  }
+
+  export namespace ParameterAnomalyGroupTracker {
+    export type Object = {
+      id: string;
+      readonly object: "parameterAnomalyGroupTracker";
       nextRunAt: Date | null;
       title: string;
       propertyId: string;
@@ -2939,13 +3277,13 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterAnomalyGroupTracker: JUHUU.DeviceParameterAnomalyGroupTracker.Object;
+        parameterAnomalyGroupTracker: JUHUU.ParameterAnomalyGroupTracker.Object;
       };
     }
 
     export namespace Retrieve {
       export type Params = {
-        deviceParameterAnomalyGroupTrackerId: string;
+        parameterAnomalyGroupTrackerId: string;
       };
 
       export type Options = {
@@ -2953,7 +3291,7 @@ export namespace JUHUU {
       } & JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterAnomalyGroupTracker: JUHUU.DeviceParameterAnomalyGroupTracker.Object;
+        parameterAnomalyGroupTracker: JUHUU.ParameterAnomalyGroupTracker.Object;
       };
     }
 
@@ -2968,7 +3306,7 @@ export namespace JUHUU {
       } & JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterAnomalyGroupTrackerArray: JUHUU.DeviceParameterAnomalyGroupTracker.Object[];
+        parameterAnomalyGroupTrackerArray: JUHUU.ParameterAnomalyGroupTracker.Object[];
         count: number;
         hasMore: boolean;
       };
@@ -2976,42 +3314,42 @@ export namespace JUHUU {
 
     export namespace Update {
       export type Params = {
-        deviceParameterAnomalyGroupTrackerId: string;
+        parameterAnomalyGroupTrackerId: string;
         title: string;
       };
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterAnomalyGroupTracker: JUHUU.DeviceParameterAnomalyGroupTracker.Object;
+        parameterAnomalyGroupTracker: JUHUU.ParameterAnomalyGroupTracker.Object;
       };
     }
 
     export namespace Delete {
       export type Params = {
-        deviceParameterAnomalyGroupTrackerId?: string;
+        parameterAnomalyGroupTrackerId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterAnomalyGroupTracker: JUHUU.DeviceParameterAnomalyGroupTracker.Object;
+        parameterAnomalyGroupTracker: JUHUU.ParameterAnomalyGroupTracker.Object;
       };
     }
   }
 
-  export namespace DeviceParameterHistory {
+  export namespace ParameterHistory {
     export type Object = {
       id: string;
-      readonly object: "deviceParameterHistory";
-      parameter: Parameter; // parameter of the article
+      readonly object: "parameterHistory";
+      parameterId: string; // parameter of the article
       deviceId: string; // deviceId of the article
       propertyId: string; // id of the property who owns the article. If null, the article does not belong to any property
     };
 
     export namespace Retrieve {
       export type Params = {
-        deviceParameterHistoryId: string;
+        parameterHistoryId: string;
       };
 
       export type Options = {
@@ -3019,7 +3357,7 @@ export namespace JUHUU {
       } & JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterHistory: JUHUU.DeviceParameterHistory.Object;
+        parameterHistory: JUHUU.ParameterHistory.Object;
       };
     }
 
@@ -3034,7 +3372,7 @@ export namespace JUHUU {
       } & JUHUU.RequestOptions;
 
       export type Response = {
-        deviceParameterHistoryArray: JUHUU.DeviceParameterHistory.Object[];
+        parameterHistoryArray: JUHUU.ParameterHistory.Object[];
         count: number;
         hasMore: boolean;
       };
@@ -3048,7 +3386,6 @@ export namespace JUHUU {
       productId: string | null;
       name: string; // z.B. BikeLoop V1
       propertyId: string;
-      parameterArray: Parameter[]; // "values" of the parameters are used as default values for the parameters of the device
       nodeArray: GraphNode[]; // nodes that are being executed when an event occurs
       userLayoutBlockArray: LayoutBlock[];
       userLayoutBlockActionButton: Layout.Button.General | null;

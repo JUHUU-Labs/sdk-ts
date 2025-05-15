@@ -6,6 +6,26 @@ export default class UsersService extends Service {
     super(config);
   }
 
+  async create(
+    UserCreateParams: JUHUU.User.Create.Params,
+    UserCreateOptions?: JUHUU.User.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.User.Create.Response>> {
+    return await super.sendRequest<JUHUU.User.Create.Response>(
+      {
+        method: "POST",
+        url: "users",
+        body: {
+          name: UserCreateParams.name,
+          type: UserCreateParams.type,
+          createdByPropertyId: UserCreateParams.createdByPropertyId,
+          licenseArray: UserCreateParams.licenseArray,
+        },
+        authenticationNotOptional: true,
+      },
+      UserCreateOptions
+    );
+  }
+
   async retrieve(
     UserRetrieveParams: JUHUU.User.Retrieve.Params,
     UserRetrieveOptions?: JUHUU.User.Retrieve.Options
@@ -26,21 +46,6 @@ export default class UsersService extends Service {
         authenticationNotOptional: true,
       },
       UserRetrieveOptions
-    );
-  }
-
-  async exists(
-    UserExistsParams: JUHUU.User.Exists.Params,
-    UserExistsOptions?: JUHUU.User.Exists.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.User.Exists.Response>> {
-    return await super.sendRequest<JUHUU.User.Exists.Response>(
-      {
-        method: "GET",
-        url: "users/exists?email=" + UserExistsParams.email,
-        body: undefined,
-        authenticationNotOptional: false,
-      },
-      UserExistsOptions
     );
   }
 
@@ -126,8 +131,28 @@ export default class UsersService extends Service {
       queryArray.push("managementUserId=" + UserListParams.managementUserId);
     }
 
-    if (UserListParams.propertyId !== undefined) {
-      queryArray.push("propertyId=" + UserListParams.propertyId);
+    if (UserListParams.createdByPropertyId !== undefined) {
+      queryArray.push(
+        "createdByPropertyId=" + UserListParams.createdByPropertyId
+      );
+    }
+
+    if (UserListParams.customerOfPropertyId !== undefined) {
+      queryArray.push(
+        "customerOfPropertyId=" + UserListParams.customerOfPropertyId
+      );
+    }
+
+    if (UserListParams?.license?.cardId !== undefined) {
+      queryArray.push("license[cardId]=" + UserListParams?.license?.cardId);
+    }
+
+    if (UserListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + UserListOptions.skip);
+    }
+
+    if (UserListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + UserListOptions.limit);
     }
 
     return await super.sendRequest<JUHUU.User.List.Response>(

@@ -12,6 +12,29 @@ export type Frontend = "dashboard" | "app";
 
 export type ApiKeyStatus = "enabled" | "disabled";
 
+export type License =
+  | {
+      type: "url";
+      validUntil: Date | null; // if null, the license is valid forever
+      licenseTemplateId: string;
+    }
+  | {
+      type: "regex";
+      validUntil: Date | null; // if null, the license is valid forever
+      licenseTemplateId: string;
+    }
+  | {
+      type: "card";
+      validUntil: Date | null; // if null, the license is valid forever
+      licenseTemplateId: string;
+      cardId: string;
+    }
+  | {
+      type: "automatic";
+      validUntil: Date | null; // if null, the license is valid forever
+      licenseTemplateId: string;
+    };
+
 export type ApiKeyScope = "device:parameter:update";
 
 export type Capability =
@@ -78,12 +101,6 @@ export type OfferTime = {
   }[];
 };
 
-export type FuelType =
-  | "battery"
-  | "diesel"
-  | "gasoline"
-  | "hydrogen"
-  | "fossil";
 export type Viewport = {
   longitudeTopLeft: number;
   latitudeTopLeft: number;
@@ -203,7 +220,6 @@ export interface Color {
 }
 
 export interface GeneralSettings {
-  frontendVersion: number;
   termsVersion: number;
   globalKill: boolean;
   maintenance: boolean;
@@ -854,38 +870,6 @@ export type AccessControlListElement = {
 };
 
 export type SimStatus = "online" | "offline" | "attached";
-
-export type Parameter =
-  | {
-      name: string; // name of the paramter
-      type: "number";
-      lastChangeAt: Date | null; // null, if the parameter has never been updated before
-      current: number; // current value
-      unit: Unit | null;
-      deviceParameterAnomalyGroupIdArray: string[];
-    }
-  | {
-      name: string;
-      type: "enum";
-      lastChangeAt: Date;
-      enumArray: string[];
-      current: string;
-      deviceParameterAnomalyGroupIdArray: string[];
-    }
-  | {
-      name: string;
-      type: "string";
-      lastChangeAt: Date;
-      current: string;
-      deviceParameterAnomalyGroupIdArray: string[];
-    }
-  | {
-      name: string;
-      type: "boolean";
-      lastChangeAt: Date;
-      current: boolean;
-      deviceParameterAnomalyGroupIdArray: string[];
-    };
 
 export namespace Layout {
   type Block = {
