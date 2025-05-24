@@ -17,7 +17,7 @@ export default class IncidentTemplatesService extends Service {
         body: {
           propertyId: IncidentTemplateCreateParams.propertyId,
         },
-        authenticationNotOptional: true,
+        authenticationNotOptional: false,
       },
       IncidentTemplateCreateOptions
     );

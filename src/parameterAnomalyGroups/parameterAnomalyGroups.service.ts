@@ -31,6 +31,16 @@ export default class ParameterAnomalyGroupsService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.ParameterAnomalyGroup.List.Response>> {
     const queryArray: string[] = [];
 
+    if (
+      ParameterAnomalyGroupListParams?.parameterAnomalyGroupTrackerId !==
+      undefined
+    ) {
+      queryArray.push(
+        "parameterAnomalyGroupTrackerId=" +
+          ParameterAnomalyGroupListParams.parameterAnomalyGroupTrackerId
+      );
+    }
+
     if (ParameterAnomalyGroupListOptions?.limit !== undefined) {
       queryArray.push("limit=" + ParameterAnomalyGroupListOptions.limit);
     }
@@ -48,7 +58,7 @@ export default class ParameterAnomalyGroupsService extends Service {
     return await super.sendRequest<JUHUU.ParameterAnomalyGroup.List.Response>(
       {
         method: "GET",
-        url: "articles?" + queryArray.join("&"),
+        url: "parameterAnomalyGroups?" + queryArray.join("&"),
         body: undefined,
         authenticationNotOptional: false,
       },
@@ -74,7 +84,7 @@ export default class ParameterAnomalyGroupsService extends Service {
       {
         method: "GET",
         url:
-          "articles/" +
+          "parameterAnomalyGroups/" +
           ParameterAnomalyGroupRetrieveParams.parameterAnomalyGroupId +
           "?" +
           queryArray.join("&"),

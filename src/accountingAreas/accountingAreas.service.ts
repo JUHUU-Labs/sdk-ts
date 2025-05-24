@@ -82,8 +82,8 @@ export default class AccountingAreasService extends Service {
         url: "accountingAreas/" + AccountingAreaUpdateParams.accountingAreaId,
         body: {
           name: AccountingAreaUpdateParams.name,
-          creditPostingRowDescription:
-            AccountingAreaUpdateParams.creditPostingRowDescription,
+          paymentPostingRowDescription:
+            AccountingAreaUpdateParams.paymentPostingRowDescription,
           orderNumber: AccountingAreaUpdateParams.orderNumber,
         },
         authenticationNotOptional: true,

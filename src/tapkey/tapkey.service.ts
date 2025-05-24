@@ -19,6 +19,7 @@ export default class TapkeyService extends Service {
         body: {
           userId: TapkeyCredentialsParams.userId,
           deviceId: TapkeyCredentialsParams.deviceId,
+          implementationVersion: TapkeyCredentialsParams.implementationVersion,
         },
         authenticationNotOptional: true,
       },
@@ -39,6 +40,7 @@ export default class TapkeyService extends Service {
         body: {
           userId: TapkeyGrantAccessParams.userId,
           deviceId: TapkeyGrantAccessParams.deviceId,
+          implementationVersion: TapkeyGrantAccessParams.implementationVersion,
         },
         authenticationNotOptional: true,
       },

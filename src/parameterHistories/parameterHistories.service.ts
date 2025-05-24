@@ -12,12 +12,16 @@ export default class ParameterHistoriesService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.ParameterHistory.List.Response>> {
     const queryArray: string[] = [];
 
-    if (ParameterHistoryListOptions?.limit !== undefined) {
-      queryArray.push("limit=" + ParameterHistoryListOptions.limit);
-    }
-
     if (ParameterHistoryListParams?.propertyId !== undefined) {
       queryArray.push("propertyId=" + ParameterHistoryListParams.propertyId);
+    }
+
+    if (ParameterHistoryListParams?.parameterId !== undefined) {
+      queryArray.push("parameterId=" + ParameterHistoryListParams.parameterId);
+    }
+
+    if (ParameterHistoryListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + ParameterHistoryListOptions.limit);
     }
 
     if (ParameterHistoryListOptions?.skip !== undefined) {
@@ -27,7 +31,7 @@ export default class ParameterHistoriesService extends Service {
     return await super.sendRequest<JUHUU.ParameterHistory.List.Response>(
       {
         method: "GET",
-        url: "articles?" + queryArray.join("&"),
+        url: "parameterHistories?" + queryArray.join("&"),
         body: undefined,
         authenticationNotOptional: false,
       },
@@ -51,7 +55,7 @@ export default class ParameterHistoriesService extends Service {
       {
         method: "GET",
         url:
-          "articles/" +
+          "parameterHistories/" +
           ParameterHistoryRetrieveParams.parameterHistoryId +
           "?" +
           queryArray.join("&"),

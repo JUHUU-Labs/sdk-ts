@@ -29,6 +29,12 @@ export default class ParametersService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.Parameter.List.Response>> {
     const queryArray: string[] = [];
 
+    if (ParameterListParams?.parameterAnomalyGroupId !== undefined) {
+      queryArray.push(
+        "parameterAnomalyGroupId=" + ParameterListParams.parameterAnomalyGroupId
+      );
+    }
+
     if (ParameterListParams?.propertyId !== undefined) {
       queryArray.push("propertyId=" + ParameterListParams.propertyId);
     }
@@ -92,6 +98,7 @@ export default class ParametersService extends Service {
         body: {
           name: ParameterUpdateParams.name,
           currentValue: ParameterUpdateParams.currentValue,
+          deviceId: ParameterUpdateParams.deviceId,
         },
         authenticationNotOptional: true,
       },

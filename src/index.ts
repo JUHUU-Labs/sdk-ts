@@ -74,6 +74,9 @@ import ParameterHistoriesService from "./parameterHistories/parameterHistories.s
 import ApiKeysService from "./apiKeys/apiKeys.service";
 import ParametersService from "./parameters/parameters.service";
 import IncidentTemplatesService from "./incidentTemplates/incidentTemplates.service";
+import IncidentsService from "./incidents/incidents.service";
+import ParameterAnomalyGroupsService from "./parameterAnomalyGroups/parameterAnomalyGroups.service";
+import ParameterAnomalyGroupTrackersService from "./parameterAnomalyGroupTrackers/parameterAnomalyGroupTrackers";
 
 export * from "./types/types";
 
@@ -109,7 +112,12 @@ export class Juhuu {
     this.parameterHistories = new ParameterHistoriesService(config);
     this.apiKeys = new ApiKeysService(config);
     this.parameters = new ParametersService(config);
+    this.parameters = new ParametersService(config);
     this.incidentTemplates = new IncidentTemplatesService(config);
+    this.incidents = new IncidentsService(config);
+    this.parameterAnomalyGroups = new ParameterAnomalyGroupsService(config);
+    this.parameterAnomalyGroupTrackers =
+      new ParameterAnomalyGroupTrackersService(config);
   }
 
   /**
@@ -146,6 +154,9 @@ export class Juhuu {
   readonly apiKeys: ApiKeysService;
   readonly parameters: ParametersService;
   readonly incidentTemplates: IncidentTemplatesService;
+  readonly incidents: IncidentsService;
+  readonly parameterAnomalyGroups: ParameterAnomalyGroupsService;
+  readonly parameterAnomalyGroupTrackers: ParameterAnomalyGroupTrackersService;
 }
 
 export namespace JUHUU {
@@ -726,6 +737,7 @@ export namespace JUHUU {
       export type Params = {
         userId: string;
         deviceId: string;
+        implementationVersion: number;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -739,6 +751,7 @@ export namespace JUHUU {
       export type Params = {
         userId: string;
         deviceId: string;
+        implementationVersion: number;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -840,7 +853,8 @@ export namespace JUHUU {
       id: string;
       name: string;
       propertyId: string;
-      creditPostingRowDescription: string;
+      paymentPostingRowDescription: string;
+      paymentRefundPostingRowDescription: string;
       orderNumber: string; // mandatory field. Value is being used in posting row of credit note
       BKTXT: string | null;
       SGTXT: string | null;
@@ -889,7 +903,7 @@ export namespace JUHUU {
       export type Params = {
         accountingAreaId: string;
         name?: string; // title of the article
-        creditPostingRowDescription?: string; // subtitle of the article
+        paymentPostingRowDescription?: string; // subtitle of the article
         orderNumber?: string; // id of the higher order article in the tree of articles
       };
 
@@ -2249,6 +2263,7 @@ export namespace JUHUU {
       disabled: boolean; // if disabled is true, no new sessions can be created
       disabledBy: "propertyAdmin" | "deviceNodeArray" | null;
       visible: boolean; // if false, the location is accessible but is not shown in the UI of the app
+      incidentTemplateIdArray: string[]; // array of incident template ids that are assigned to this location
     };
 
     export interface RentableDeviceGroup extends Base {
@@ -2550,6 +2565,7 @@ export namespace JUHUU {
       connectorParameter: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
       disabled: boolean; // if disabled is true, the device cannot be used by users which are not property admins
       disabledBy: "propertyAdmin" | "nodeArray" | null;
+      incidentTemplateIdArray: string[]; // array of incident template ids that are assigned to this device
     };
 
     export namespace Create {
@@ -2849,15 +2865,15 @@ export namespace JUHUU {
       id: string;
       readonly object: "incident";
       severity: "low" | "medium" | "high";
-      issuedBy: "propertyAdmin" | "system" | "user" | "nodeArray";
+      createdBy: "propertyAdmin" | "system" | "user" | "nodeArray";
       propertyId: string; // id of the property who owns the article. If null, the article does not belong to any property
-      issuedByUserId: string | null;
+      createdByUserId: string | null;
       status:
         | "waitingForPropertyConfirmation"
         | "waitingForResolvement"
         | "rejected"
         | "resolved";
-      title: Date;
+      title: string;
       createdAt: Date;
       description: string;
       imageUrlArray: string[];
@@ -2879,12 +2895,12 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        description: JUHUU.Incident.Object["description"];
+        description?: JUHUU.Incident.Object["description"];
         severity?: JUHUU.Incident.Object["severity"];
         deviceId?: string;
         locationId?: string;
-        incidentTepmlateId?: string;
-        title: JUHUU.Incident.Object["title"];
+        incidentTemplateId?: string;
+        title?: JUHUU.Incident.Object["title"];
         type: JUHUU.Incident.Object["type"];
       };
 
@@ -2960,7 +2976,7 @@ export namespace JUHUU {
       readonly object: "incidentTemplate";
       name: string;
       title: LocaleString;
-      subtitle: LocaleString;
+      severity: "low" | "medium" | "high";
       description: LocaleString;
       propertyId: string;
       lastUpdatedAt: Date;
@@ -3136,6 +3152,7 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
+        parameterAnomalyGroupId?: string;
       };
 
       export type Options = {
@@ -3189,6 +3206,7 @@ export namespace JUHUU {
       readonly object: "parameterAnomalyGroup";
       parameterAnomalyGroupTrackerId: string | null;
       propertyId: string;
+      name: string;
     };
 
     export namespace Create {
@@ -3221,6 +3239,7 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
+        parameterAnomalyGroupTrackerId?: string;
       };
 
       export type Options = {
@@ -3265,7 +3284,7 @@ export namespace JUHUU {
       id: string;
       readonly object: "parameterAnomalyGroupTracker";
       nextRunAt: Date | null;
-      title: string;
+      name: string;
       propertyId: string;
     };
 
@@ -3339,13 +3358,38 @@ export namespace JUHUU {
   }
 
   export namespace ParameterHistory {
-    export type Object = {
+    type Base = {
       id: string;
-      readonly object: "parameterHistory";
-      parameterId: string; // parameter of the article
-      deviceId: string; // deviceId of the article
-      propertyId: string; // id of the property who owns the article. If null, the article does not belong to any property
+      readonly object: "parameter";
+      description: string | null;
+      name: string | null;
+      propertyId: string;
+      createdAt: Date;
+      reference: string | null;
     };
+
+    export interface Text extends Base {
+      type: "text";
+      currentValue: string;
+    }
+
+    export interface Number extends Base {
+      type: "number";
+      currentValue: number;
+    }
+
+    export interface Enum extends Base {
+      type: "enum";
+      currentValue: string;
+      enumArray: string[];
+    }
+
+    export interface Boolean extends Base {
+      type: "boolean";
+      currentValue: boolean;
+    }
+
+    export type Object = Number | Boolean | Enum | Text;
 
     export namespace Retrieve {
       export type Params = {
@@ -3364,6 +3408,7 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
+        parameterId?: string;
       };
 
       export type Options = {

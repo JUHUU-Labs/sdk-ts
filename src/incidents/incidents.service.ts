@@ -17,14 +17,14 @@ export default class IncidentsService extends Service {
         body: {
           propertyId: IncidentCreateParams.propertyId,
           title: IncidentCreateParams.title,
-          subtitle: IncidentCreateParams.description,
+          description: IncidentCreateParams.description,
           type: IncidentCreateParams.type,
           deviceId: IncidentCreateParams.deviceId,
           locationId: IncidentCreateParams.locationId,
-          incidentTepmlateId: IncidentCreateParams.incidentTepmlateId,
+          incidentTemplateId: IncidentCreateParams.incidentTemplateId,
           severity: IncidentCreateParams.severity,
         },
-        authenticationNotOptional: true,
+        authenticationNotOptional: false,
       },
       IncidentCreateOptions
     );
