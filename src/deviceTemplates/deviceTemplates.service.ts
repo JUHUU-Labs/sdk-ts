@@ -16,7 +16,6 @@ export default class DeviceTemplatesService extends Service {
         url: "deviceTemplates",
         body: {
           propertyId: DeviceTemplateCreateParams.propertyId,
-          productId: DeviceTemplateCreateParams.productId,
           name: DeviceTemplateCreateParams.name,
         },
         authenticationNotOptional: true,

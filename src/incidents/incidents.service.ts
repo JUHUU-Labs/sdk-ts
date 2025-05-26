@@ -102,19 +102,4 @@ export default class IncidentsService extends Service {
       IncidentUpdateOptions
     );
   }
-
-  async delete(
-    IncidentDeleteParams: JUHUU.Incident.Delete.Params,
-    IncidentDeleteOptions?: JUHUU.Incident.Delete.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.Incident.Delete.Response>> {
-    return await super.sendRequest<JUHUU.Incident.Delete.Response>(
-      {
-        method: "DELETE",
-        url: "incidents/" + IncidentDeleteParams.incidentId,
-        authenticationNotOptional: true,
-        body: undefined,
-      },
-      IncidentDeleteOptions
-    );
-  }
 }

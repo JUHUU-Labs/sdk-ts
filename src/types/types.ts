@@ -264,9 +264,9 @@ export type RefundStatus = "inTransitToUser" | "succeeded";
 
 export type SessionTerminatedByType =
   | "user"
-  | "cloudTask"
-  | "cloudFunction"
-  | "mqttCommand";
+  | "system"
+  | "propertyAdmin"
+  | "nodeArray";
 
 // export type ServiceMonth =
 //   | "jan"
@@ -994,13 +994,6 @@ export type GraphNode =
   | {
       id: string;
       type: "flow.start";
-      trigger: "command.executed";
-      commandName: string;
-      nodeIdArray: string[];
-    }
-  | {
-      id: string;
-      type: "flow.start";
       trigger: "button.pressed";
       buttonName: string;
       nodeIdArray: string[];
@@ -1034,12 +1027,6 @@ export type GraphNode =
       type: "open.phone";
       nodeIdArray: string[];
       phone: string;
-    }
-  | {
-      id: string;
-      type: "device.message"; // device cannot have multiple connectors
-      nodeIdArray: string[];
-      message: string;
     }
   | {
       id: string;
@@ -1091,16 +1078,23 @@ export type GraphNode =
     }
   | {
       id: string;
+      nodeIdArray: string[];
+      type: "app.alert.show";
+      title: LocaleString;
+      description: LocaleString;
+    }
+  | {
+      id: string;
+      nodeIdArray: string[];
+      type: "app.navigation.navigate";
+      screenName: string; // the name of the screen to navigate to
+    }
+  | {
+      id: string;
       type: "parameter.set";
       nodeIdArray: string[];
       parameterName: string;
       value: number | string | boolean;
-    }
-  | {
-      id: string;
-      type: "command.execute";
-      nodeIdArray: string[];
-      commandName: string;
     }
   | {
       id: string;

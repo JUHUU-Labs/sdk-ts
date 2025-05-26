@@ -76,7 +76,7 @@ import ParametersService from "./parameters/parameters.service";
 import IncidentTemplatesService from "./incidentTemplates/incidentTemplates.service";
 import IncidentsService from "./incidents/incidents.service";
 import ParameterAnomalyGroupsService from "./parameterAnomalyGroups/parameterAnomalyGroups.service";
-import ParameterAnomalyGroupTrackersService from "./parameterAnomalyGroupTrackers/parameterAnomalyGroupTrackers";
+import ParameterAnomalyGroupTrackersService from "./parameterAnomalyGroupTrackers/parameterAnomalyGroupTrackers.service";
 
 export * from "./types/types";
 
@@ -461,12 +461,33 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        sessionId?: string;
+        sessionId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.Session.Object;
+    }
+
+    export namespace Realtime {
+      export type Params = {
+        sessionId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        onUpdated: (
+          callback: (message: {
+            payload: {
+              after: JUHUU.Session.Object;
+              before: JUHUU.Session.Object;
+              changedFields: string[];
+            };
+          }) => void
+        ) => void;
+        close: () => void;
+      };
     }
   }
 
@@ -692,7 +713,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        userId?: string;
+        userId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -774,7 +795,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        name: string;
+        name?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -839,7 +860,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        termId?: string;
+        termId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -864,7 +885,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
-        name: string;
+        name?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -916,7 +937,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        accountingAreaId?: string;
+        accountingAreaId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1127,7 +1148,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        articleId?: string;
+        articleId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1239,7 +1260,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        articleGroupId?: string;
+        articleGroupId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1535,7 +1556,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        tariffId?: string;
+        tariffId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1654,7 +1675,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        licenseTemplateId?: string;
+        licenseTemplateId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2365,7 +2386,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        locationId?: string;
+        locationId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2455,7 +2476,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        productId?: string;
+        productId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2538,7 +2559,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        linkId?: string;
+        linkId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2681,13 +2702,13 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        device: JUHUU.Device.Object;
+        nextNodeIdArray: string[];
       };
     }
 
     export namespace Delete {
       export type Params = {
-        deviceId?: string;
+        deviceId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2807,7 +2828,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        connectorId?: string;
+        connectorId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2921,7 +2942,7 @@ export namespace JUHUU {
       } & JUHUU.RequestOptions;
 
       export type Response = {
-        Incident: JUHUU.Incident.Object;
+        incident: JUHUU.Incident.Object;
       };
     }
 
@@ -2954,18 +2975,6 @@ export namespace JUHUU {
 
       export type Response = {
         incident: JUHUU.Incident.Object;
-      };
-    }
-
-    export namespace Delete {
-      export type Params = {
-        incidentId?: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        incident: JUHUU.Connector.Object;
       };
     }
   }
@@ -3189,7 +3198,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        parameterId?: string;
+        parameterId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3268,7 +3277,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        parameterAnomalyGroupId?: string;
+        parameterAnomalyGroupId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3334,7 +3343,7 @@ export namespace JUHUU {
     export namespace Update {
       export type Params = {
         parameterAnomalyGroupTrackerId: string;
-        title: string;
+        name: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3346,7 +3355,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        parameterAnomalyGroupTrackerId?: string;
+        parameterAnomalyGroupTrackerId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3428,7 +3437,6 @@ export namespace JUHUU {
     export type Object = {
       id: string;
       readonly object: "deviceTemplate";
-      productId: string | null;
       name: string; // z.B. BikeLoop V1
       propertyId: string;
       nodeArray: GraphNode[]; // nodes that are being executed when an event occurs
@@ -3450,7 +3458,6 @@ export namespace JUHUU {
       export type Params = {
         propertyId: string;
         name?: string;
-        productId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3485,7 +3492,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        deviceTemplateId?: string;
+        deviceTemplateId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3563,7 +3570,7 @@ export namespace JUHUU {
 
     export namespace Delete {
       export type Params = {
-        simId?: string;
+        simId: string;
       };
 
       export type Options = JUHUU.RequestOptions;

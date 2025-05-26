@@ -139,23 +139,6 @@ export default class DevicesService extends Service {
     };
   }
 
-  async message(
-    DeviceMessageParams: JUHUU.Device.Message.Params,
-    DeviceMessageOptions?: JUHUU.Device.Message.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.Device.Message.Response>> {
-    return await super.sendRequest<JUHUU.Device.Message.Response>(
-      {
-        method: "POST",
-        url: "devices/" + DeviceMessageParams.deviceId + "/message",
-        body: {
-          message: DeviceMessageParams.message,
-        },
-        authenticationNotOptional: true,
-      },
-      DeviceMessageOptions
-    );
-  }
-
   async nodeExecute(
     DeviceNodeExecuteParams: JUHUU.Device.NodeExecute.Params,
     DeviceNodeExecuteOptions?: JUHUU.Device.NodeExecute.Options

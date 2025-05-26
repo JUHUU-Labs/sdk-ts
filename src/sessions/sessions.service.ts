@@ -235,4 +235,27 @@ export default class SessionService extends Service {
       SessionDeleteUserOptions
     );
   }
+
+  listen(
+    SessionRealtimeParams: JUHUU.Session.Realtime.Params,
+    SessionRealtimeOptions?: JUHUU.Session.Realtime.Options
+  ): JUHUU.Session.Realtime.Response {
+    const socket = super.connectToWebsocket<JUHUU.Session.Realtime.Response>({
+      url: "sessions/" + SessionRealtimeParams.sessionId + "/websocket",
+    });
+
+    const onUpdated = (onUpdatedCallback: (message: any) => void) => {
+      socket.on("updated", (message: any) => {
+        onUpdatedCallback(message);
+      });
+    };
+
+    return {
+      onUpdated: onUpdated,
+      close: () => {
+        console.log("closing websocket connection");
+        socket.close();
+      },
+    };
+  }
 }
