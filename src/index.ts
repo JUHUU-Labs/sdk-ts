@@ -50,6 +50,7 @@ import {
   PushToken,
   SimStatus,
   StarRating,
+  TaxCode,
   TimeZone,
   UserGroup,
   Utilization,
@@ -508,7 +509,7 @@ export namespace JUHUU {
       billingAddress: DeepNullable<Address>;
       billingEmail: string | null; // primary email that must never be empty
       billingEmailVerified: boolean;
-      vat: string | null;
+      taxCodeArray: TaxCode[];
       notifications: {
         email: {
           enabled: boolean;
@@ -608,7 +609,7 @@ export namespace JUHUU {
         languageCode?: LanguageCode;
         appVersion?: string;
         billingAddress?: DeepNullable<Address>;
-        vat?: string | null;
+        taxCodeArray?: TaxCode[];
         acceptedTermIdArray?: string[];
         group?: UserGroup;
       };
@@ -1708,7 +1709,7 @@ export namespace JUHUU {
       legalName: string | null;
       emailSignature: string | null;
       billingAddress: Address | null;
-      vat: string;
+      taxCodeArray: TaxCode[];
       invoiceImage: string;
       invoiceNumberPrefix: string;
       stripeConnectedAccountId: string | null;
@@ -1885,7 +1886,7 @@ export namespace JUHUU {
         timeZone?: TimeZone;
         languageCode?: LanguageCode;
         emailSignature?: string;
-        vat?: string;
+        taxCodeArray?: TaxCode[];
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2049,7 +2050,7 @@ export namespace JUHUU {
       estimatedReadyForPayoutAt: Date | null;
       propertyId: string;
       payoutId: string | null;
-      vat: string | null;
+      taxCodeArray: TaxCode[];
       accountingAreaId: string;
       currencyCode: CurrencyCode;
       serviceFee: number | null; // difference between the amountCaptured and the amountToPayout. This should always be higher than the transactionFees in order for us to make revenue
@@ -2187,7 +2188,7 @@ export namespace JUHUU {
       transactionFee: number; // fees that the merchant took to process the refund
       serviceFee: number; // service fee that JUHUU adds to the property's payout (either 0 or =transactionFee; if 0, JUHUU covers the costs for the refund; if =transactionFee, the property covers the costs)
       billingAddress: DeepNullable<Address>;
-      vat: string | null;
+      taxCodeArray: TaxCode[];
       accountingAreaId: string;
       estimatedArrivalAt: Date;
       postingRowArray: PostingRow[]; // text displayed on the users invoice

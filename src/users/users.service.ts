@@ -180,7 +180,7 @@ export default class UsersService extends Service {
           languageCode: UserUpdateParams?.languageCode,
           appVersion: UserUpdateParams?.appVersion,
           billingAddress: UserUpdateParams?.billingAddress,
-          vat: UserUpdateParams?.vat,
+          taxCodeArray: UserUpdateParams?.taxCodeArray,
           acceptedTermIdArray: UserUpdateParams?.acceptedTermIdArray,
           group: UserUpdateParams?.group,
         },

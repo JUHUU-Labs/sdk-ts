@@ -337,11 +337,17 @@ export interface Person {
 }
 
 export interface Party extends Person {
-  vat: string;
+  taxCodeArray: TaxCode[];
   address: Address;
   iban?: string;
   bic?: string;
 }
+
+export type TaxCode = {
+  code: string; // e.g. "DE123456789",
+  type: "VAT" | "GST" | "CNPJ" | "ABN" | "TIN";
+  countryCode: CountryCode;
+};
 
 export type VeloBrushDeviceDocumentUserManualStep =
   | "prepareBike1"
