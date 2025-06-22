@@ -40,6 +40,12 @@ export default class IncidentsService extends Service {
       queryArray.push("propertyId=" + IncidentListParams.propertyId);
     }
 
+    if (IncidentListParams.statusArray !== undefined) {
+      queryArray.push(
+        "statusArray=" + IncidentListParams.statusArray.join(",")
+      );
+    }
+
     if (IncidentListOptions?.skip !== undefined) {
       queryArray.push("skip=" + IncidentListOptions.skip);
     }

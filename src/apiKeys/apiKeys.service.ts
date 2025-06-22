@@ -91,6 +91,7 @@ export default class ApiKeysService extends Service {
         url: "apiKeys/" + ApiKeyUpdateParams.apiKeyId,
         body: {
           status: ApiKeyUpdateParams.status,
+          name: ApiKeyUpdateParams.name,
         },
         authenticationNotOptional: true,
       },

@@ -345,6 +345,7 @@ export interface Party extends Person {
 
 export type TaxCode = {
   code: string; // e.g. "DE123456789",
+  verified: boolean;
   type: "VAT" | "GST" | "CNPJ" | "ABN" | "TIN";
   countryCode: CountryCode;
 };

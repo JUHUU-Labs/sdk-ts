@@ -31,11 +31,6 @@ export default class ChatMessagesService extends Service {
     ChatMessageListOptions?: JUHUU.ChatMessage.List.Options
   ): Promise<JUHUU.HttpResponse<JUHUU.ChatMessage.List.Response>> {
     const queryArray: string[] = [];
-
-    if (ChatMessageListParams.userId !== undefined) {
-      queryArray.push("userId=" + ChatMessageListParams.userId);
-    }
-
     if (ChatMessageListParams.chatId !== undefined) {
       queryArray.push("chatId=" + ChatMessageListParams.chatId);
     }
@@ -65,16 +60,19 @@ export default class ChatMessagesService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.ChatMessage.Retrieve.Response>> {
     const queryArray: string[] = [];
 
-    return await super.sendRequest<JUHUU.ChatMessage.Retrieve.Response>({
-      method: "GET",
-      url:
-        "chatMessages/" +
-        ChatMessageRetrieveParams.chatMessageId +
-        "?" +
-        queryArray.join("&"),
-      body: undefined,
-      authenticationNotOptional: true,
-    });
+    return await super.sendRequest<JUHUU.ChatMessage.Retrieve.Response>(
+      {
+        method: "GET",
+        url:
+          "chatMessages/" +
+          ChatMessageRetrieveParams.chatMessageId +
+          "?" +
+          queryArray.join("&"),
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      ChatMessageRetrieveOptions
+    );
   }
 
   async update(

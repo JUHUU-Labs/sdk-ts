@@ -285,6 +285,7 @@ export namespace JUHUU {
       createdAt: Date; // date at which session was created
       terminatedAt: Date | null; // date at which session was terminated
       terminatedBy: string | null;
+      terminatedByUserId: string | null; // userId of the user who terminated the session
       scheduledTerminationAt: Date; // date at which session will be terminated automatically
       scheduledTerminationHandler: "cloudFunction" | "cloudTask"; // handler which will terminate the session
       reminderEnabled: boolean | null; // null, if session reminder was not yet evaluated;
@@ -1011,6 +1012,7 @@ export namespace JUHUU {
       export type Params = {
         apiKeyId: string;
         status?: ApiKeyStatus;
+        name?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1376,24 +1378,25 @@ export namespace JUHUU {
       id: string;
       readonly object: "chatMessage";
       createdAt: Date; // date of the last message in the chat
+      message: string; // message of the chatMessage in the original language
+      imageArray: string; // translated message of the chatMessage
       chatId: string; // id of the chat where the message was sent
-      originalMessage: string; // originalMessage of the chatMessage in the original language
-      translatedMessage: string; // translated originalMessage of the chatMessage
-      languageCode: LanguageCode; // language code of the original or translated message
       context: {
-        imageArray?: string[]; // array of string that are image URLs
         articleIdArray?: string[]; // array of string that are article IDs
         ownerPropertyId?: string; // id of the property the user has selected in the dashboard
         userName?: string; // name of the user
         userGroup?: UserGroup; // group of the user
         platform?: Platform; // platform of the user
-        frontend?: Frontend; // frontend the user uses to chat with juhuu buddy
+        frontend?: Frontend; // frontend the user uses to chat
       } | null; // context of the message
+      deleted: boolean; // true if the message was deleted
+      edited: boolean; // true if the message was edited
+      senderName: string;
     };
 
     export interface UserChatMessage extends Base {
       type: "user";
-      userId: string; // id of the user who owns the chat
+      userId: string;
     }
 
     export interface AiChatMessage extends Base {
@@ -2950,6 +2953,7 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
+        statusArray?: JUHUU.Incident.Object["status"][];
       };
 
       export type Options = {
