@@ -1379,7 +1379,7 @@ export namespace JUHUU {
       readonly object: "chatMessage";
       createdAt: Date; // date of the last message in the chat
       message: string; // message of the chatMessage in the original language
-      imageArray: string; // translated message of the chatMessage
+      imageArray: string[]; // translated message of the chatMessage
       chatId: string; // id of the chat where the message was sent
       context: {
         articleIdArray?: string[]; // array of string that are article IDs
