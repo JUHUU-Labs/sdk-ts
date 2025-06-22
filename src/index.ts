@@ -1463,6 +1463,16 @@ export namespace JUHUU {
         chatMessage: JUHUU.ChatMessage.Object;
       };
     }
+
+    export namespace Delete {
+      export type Params = {
+        chatMessageId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.ChatMessage.Object;
+    }
   }
 
   export namespace Tariff {
