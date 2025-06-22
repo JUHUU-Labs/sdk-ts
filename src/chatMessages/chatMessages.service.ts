@@ -93,4 +93,19 @@ export default class ChatMessagesService extends Service {
       ChatMessageUpdateOptions
     );
   }
+
+  async delete(
+    ChatMessageDeleteParams: JUHUU.ChatMessage.Delete.Params,
+    ChatMessageDeleteOptions?: JUHUU.ChatMessage.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.ChatMessage.Delete.Response>> {
+    return await super.sendRequest<JUHUU.ChatMessage.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "chatMessages/" + ChatMessageDeleteParams.chatMessageId,
+        authenticationNotOptional: true,
+        body: undefined,
+      },
+      ChatMessageDeleteOptions
+    );
+  }
 }
