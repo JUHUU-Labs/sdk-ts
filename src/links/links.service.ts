@@ -88,6 +88,23 @@ export default class LinkService extends Service {
     );
   }
 
+  async update(
+    LinkUpdateParams: JUHUU.Link.Update.Params,
+    LinkUpdateOptions?: JUHUU.Link.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Link.Update.Response>> {
+    return await super.sendRequest<JUHUU.Link.Update.Response>(
+      {
+        method: "PATCH",
+        url: "links/" + LinkUpdateParams.linkId,
+        body: {
+          name: LinkUpdateParams.name,
+        },
+        authenticationNotOptional: true,
+      },
+      LinkUpdateOptions
+    );
+  }
+
   async delete(
     LinkDeleteParams: JUHUU.Link.Delete.Params,
     LinkDeleteOptions?: JUHUU.Link.Delete.Options

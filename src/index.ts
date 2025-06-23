@@ -2571,6 +2571,19 @@ export namespace JUHUU {
       export type Response = JUHUU.Link.Object[];
     }
 
+    export namespace Update {
+      export type Params = {
+        linkId: string;
+        name?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        link: JUHUU.Link.Object;
+      };
+    }
+
     export namespace Delete {
       export type Params = {
         linkId: string;
