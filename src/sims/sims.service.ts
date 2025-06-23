@@ -61,6 +61,26 @@ export default class SimsService extends Service {
     );
   }
 
+  async update(
+    SimUpdateParams: JUHUU.Sim.Update.Params,
+    SimUpdateOptions?: JUHUU.Sim.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Sim.Update.Response>> {
+    return await super.sendRequest<JUHUU.Sim.Update.Response>(
+      {
+        method: "PATCH",
+        url: "sims/" + SimUpdateParams.simId,
+        body: {
+          name: SimUpdateParams.name,
+          description: SimUpdateParams.description,
+          dataQuotaThresholdPercentage:
+            SimUpdateParams.dataQuotaThresholdPercentage,
+        },
+        authenticationNotOptional: true,
+      },
+      SimUpdateOptions
+    );
+  }
+
   async updateFromProvider(
     SimUpdateFromProviderParams: JUHUU.Sim.UpdateFromProvider.Params,
     SimUpdateFromProviderOptions?: JUHUU.Sim.UpdateFromProvider.Options

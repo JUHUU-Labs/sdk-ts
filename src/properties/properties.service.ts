@@ -218,4 +218,19 @@ export default class PropertiesService extends Service {
       PropertyAcceptLatestAgreementOptions
     );
   }
+
+  async delete(
+    PropertyDeleteParams: JUHUU.Property.Delete.Params,
+    PropertyDeleteOptions?: JUHUU.Property.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Property.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Property.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "properties/" + PropertyDeleteParams.propertyId,
+        authenticationNotOptional: true,
+        body: undefined,
+      },
+      PropertyDeleteOptions
+    );
+  }
 }
