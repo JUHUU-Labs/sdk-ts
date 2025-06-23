@@ -1924,6 +1924,16 @@ export namespace JUHUU {
         property: JUHUU.Property.Object;
       };
     }
+
+    export namespace Delete {
+      export type Params = {
+        propertyId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Property.Object;
+    }
   }
 
   export namespace Point {
@@ -2014,6 +2024,21 @@ export namespace JUHUU {
       creditNotePdfId: string;
       stripeConnectedAccountId: string;
     };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        fromDate: number;
+        toDate: number;
+        statementDescription: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        payout: JUHUU.Payout.Object;
+      };
+    }
 
     export namespace Retrieve {
       export type Params = {
@@ -3582,6 +3607,21 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.Sim.Object[];
+    }
+
+    export namespace Update {
+      export type Params = {
+        simId: string;
+        name?: string;
+        description?: string | null;
+        dataQuotaThresholdPercentage?: number | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        sim: JUHUU.Sim.Object;
+      };
     }
 
     export namespace UpdateFromProvider {
