@@ -3328,6 +3328,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
+        name?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3581,7 +3582,11 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Sim.Object[];
+      export type Response = {
+        simArray: JUHUU.Sim.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace UpdateFromProvider {
