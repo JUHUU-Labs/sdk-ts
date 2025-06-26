@@ -1188,16 +1188,3 @@ export interface LocaleString {
   cs?: string;
   et?: string;
 }
-
-export type FlowBlock = {
-  id: string;
-  type: string;
-  in: { [key: string]: string };
-  out: { [key: string]: string };
-};
-
-export type FlowEdge = {
-  id: string;
-  from: { blockId: string; output: string };
-  to: { blockId: string; input: string };
-};
