@@ -1071,6 +1071,15 @@ export type GraphNode =
     }
   | {
       id: string;
+
+      /**
+       * uses the deviceId of the current device to unlock the EMZ lock via bluetooth
+       */
+      type: "emz.unlock";
+      nodeIdArray: string[];
+    }
+  | {
+      id: string;
       type: "property.notify";
       nodeIdArray: string[];
       subject: LocaleString;

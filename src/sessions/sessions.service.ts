@@ -98,6 +98,10 @@ export default class SessionService extends Service {
       queryArray.push("locationId=" + SessionListParams.locationId);
     }
 
+    if (SessionListParams.paymentId !== undefined) {
+      queryArray.push("paymentId=" + SessionListParams.paymentId);
+    }
+
     if (SessionListOptions?.limit !== undefined) {
       queryArray.push("limit=" + SessionListOptions.limit);
     }

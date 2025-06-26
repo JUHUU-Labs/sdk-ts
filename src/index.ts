@@ -17,7 +17,6 @@ import {
   ApiKeyStatus,
   AutoRenewMode,
   Capability,
-  Category,
   Circumstance,
   ColorScheme,
   Command,
@@ -58,7 +57,6 @@ import {
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
-import ConnectorsService from "./connectors/connectors.service";
 import PayoutsService from "./payouts/payouts.service";
 import ConnectorMessagesService from "./connectorMessages/connectorMessages.service";
 import SimsService from "./sims/sims.service";
@@ -67,7 +65,6 @@ import ArticlesService from "./articles/articles.service";
 import ChatsService from "./chats/chats.service";
 import ChatMessagesService from "./chatMessages/chatMessages.service";
 import ArticleEmbeddingsService from "./articleEmbeddings/articleEmbeddings.service";
-import BoldLockService from "./boldLock/boldLock.service";
 import TapkeyService from "./tapkey/tapkey.service";
 import PaymentRefundsService from "./paymentRefunds/paymentRefunds.service";
 import ArticleGroupsService from "./articleGroups/articleGroups.service";
@@ -78,6 +75,7 @@ import IncidentTemplatesService from "./incidentTemplates/incidentTemplates.serv
 import IncidentsService from "./incidents/incidents.service";
 import ParameterAnomalyGroupsService from "./parameterAnomalyGroups/parameterAnomalyGroups.service";
 import ParameterAnomalyGroupTrackersService from "./parameterAnomalyGroupTrackers/parameterAnomalyGroupTrackers.service";
+import EmzService from "./emz/emz.service";
 
 export * from "./types/types";
 
@@ -98,7 +96,6 @@ export class Juhuu {
     this.products = new ProductService(config);
     this.settings = new SettingsService(config);
     this.accountingAreas = new AccountingAreasService(config);
-    this.connectors = new ConnectorsService(config);
     this.payouts = new PayoutsService(config);
     this.connectorMessages = new ConnectorMessagesService(config);
     this.sims = new SimsService(config);
@@ -107,7 +104,6 @@ export class Juhuu {
     this.chats = new ChatsService(config);
     this.chatMessages = new ChatMessagesService(config);
     this.articleEmbeddings = new ArticleEmbeddingsService(config);
-    this.boldLock = new BoldLockService(config);
     this.tapkey = new TapkeyService(config);
     this.articleGroups = new ArticleGroupsService(config);
     this.parameterHistories = new ParameterHistoriesService(config);
@@ -119,6 +115,7 @@ export class Juhuu {
     this.parameterAnomalyGroups = new ParameterAnomalyGroupsService(config);
     this.parameterAnomalyGroupTrackers =
       new ParameterAnomalyGroupTrackersService(config);
+    this.emz = new EmzService(config);
   }
 
   /**
@@ -139,7 +136,6 @@ export class Juhuu {
   readonly products: ProductService;
   readonly settings: SettingsService;
   readonly accountingAreas: AccountingAreasService;
-  readonly connectors: ConnectorsService;
   readonly payouts: PayoutsService;
   readonly connectorMessages: ConnectorMessagesService;
   readonly sims: SimsService;
@@ -148,7 +144,6 @@ export class Juhuu {
   readonly chats: ChatsService;
   readonly chatMessages: ChatMessagesService;
   readonly articleEmbeddings: ArticleEmbeddingsService;
-  readonly boldLock: BoldLockService;
   readonly tapkey: TapkeyService;
   readonly articleGroups: ArticleGroupsService;
   readonly parameterHistories: ParameterHistoriesService;
@@ -158,6 +153,7 @@ export class Juhuu {
   readonly incidents: IncidentsService;
   readonly parameterAnomalyGroups: ParameterAnomalyGroupsService;
   readonly parameterAnomalyGroupTrackers: ParameterAnomalyGroupTrackersService;
+  readonly emz: EmzService;
 }
 
 export namespace JUHUU {
@@ -387,6 +383,7 @@ export namespace JUHUU {
         statusArray?: JUHUU.Session.Object["status"][];
         locationId?: string;
         locationGroupId?: string;
+        paymentId?: string;
       };
 
       export type Options = {
@@ -724,33 +721,19 @@ export namespace JUHUU {
     }
   }
 
-  export namespace BoldLock {
+  export namespace Emz {
     export namespace Credentials {
       export type Params = {
-        userId: string;
         deviceId: string;
       };
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        boldClientId: string;
-        boldClientSecret: string;
-        boldAuthorizationCode: string;
-        boldRedirectUri: string;
-      };
-    }
-
-    export namespace GrantAccess {
-      export type Params = {
-        userId: string;
-        deviceId: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        device: JUHUU.Device.Object;
+        emzTargetHardwareId: string;
+        emzContractId: string;
+        emzUserId: string;
+        emzToken: string;
       };
     }
   }
@@ -2670,7 +2653,6 @@ export namespace JUHUU {
         device: JUHUU.Device.Object;
         deviceTemplate?: JUHUU.DeviceTemplate.Object;
         property?: JUHUU.Property.Object;
-        connector?: JUHUU.Connector.Object;
       };
     }
 
@@ -2769,126 +2751,6 @@ export namespace JUHUU {
     }
   }
 
-  export namespace Connector {
-    type Base = {
-      id: string;
-      readonly object: "connector";
-      status: "online" | "offline";
-      description: string | null;
-      name: string;
-      propertyId: string;
-      lastOutboundAt: Date | null;
-      lastInboundAt: Date | null;
-      connectionMode: "alwaysOnline" | "temporaryOnline";
-      version: number;
-      simId: string | null; // null, if no sim card is installed or the sim card should not be tracked by us
-    };
-
-    export interface Mqtt extends Base {
-      type: "mqtt";
-      username: string;
-      password: string;
-      clientId: string;
-      host: string;
-      port: number;
-      mqttRetain: boolean;
-      mqttQos: "0" | "1" | "2";
-      acls: AccessControlListElement[];
-    }
-
-    export interface BoldLock extends Base {
-      type: "boldLock";
-      boldClientId: string;
-      boldClientSecret: string;
-      boldOrganizationId: number;
-      boldDeviceId: number; // this is the "deviceId" in the bold documentation
-    }
-
-    export interface Tapkey extends Base {
-      type: "tapkey";
-      tapkeyBase64PysicalLockId: string; // https://developers.tapkey.io/mobile/concepts/lock_ids/#tlcp-lock-id
-      tapkeyOwnerAccountId: string;
-      tapkeyIpId: string;
-      tapkeyBoundLockId: string;
-    }
-
-    export type Object = Mqtt | BoldLock | Tapkey;
-
-    export namespace Create {
-      export type Params = {
-        propertyId: string;
-        name?: string;
-        username?: string;
-        password?: string;
-        clientId?: string;
-        host?: string;
-        port?: number;
-        mqttRetain?: boolean;
-        mqttQos?: "0" | "1" | "2";
-        description?: string;
-        simId?: string;
-        connectionMode?: "alwaysOnline" | "temporaryOnline";
-        type: JUHUU.Connector.Object["type"];
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        connector: JUHUU.Connector.Object;
-      };
-    }
-
-    export namespace Retrieve {
-      export type Params = {
-        connectorId: string;
-      };
-
-      export type Options = {
-        expand: Array<"property">;
-      } & JUHUU.RequestOptions;
-
-      export type Response = {
-        connector: JUHUU.Connector.Object;
-      };
-    }
-
-    export namespace List {
-      export type Params = {
-        propertyId?: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = JUHUU.Connector.Object[];
-    }
-
-    export namespace Update {
-      export type Params = {
-        connectorId: string;
-        name?: string;
-        description?: string | null;
-        connectionMode?: "alwaysOnline" | "temporaryOnline";
-        simId?: string | null; // null, if no sim card is installed or the sim card should not be tracked by us
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        connector: JUHUU.Connector.Object;
-      };
-    }
-
-    export namespace Delete {
-      export type Params = {
-        connectorId: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = JUHUU.Connector.Object;
-    }
-  }
-
   export namespace Event {
     type Base = {
       id: string;
@@ -2980,7 +2842,7 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        connector: JUHUU.Connector.Object;
+        connector: JUHUU.Incident.Object;
       };
     }
 
