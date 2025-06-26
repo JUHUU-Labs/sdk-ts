@@ -55,6 +55,8 @@ import {
   UserGroup,
   Utilization,
   VisualPriority,
+  FlowBlock,
+  FlowEdge,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -78,6 +80,7 @@ import IncidentTemplatesService from "./incidentTemplates/incidentTemplates.serv
 import IncidentsService from "./incidents/incidents.service";
 import ParameterAnomalyGroupsService from "./parameterAnomalyGroups/parameterAnomalyGroups.service";
 import ParameterAnomalyGroupTrackersService from "./parameterAnomalyGroupTrackers/parameterAnomalyGroupTrackers.service";
+import FlowsService from "./flows/flows.service";
 
 export * from "./types/types";
 
@@ -119,6 +122,7 @@ export class Juhuu {
     this.parameterAnomalyGroups = new ParameterAnomalyGroupsService(config);
     this.parameterAnomalyGroupTrackers =
       new ParameterAnomalyGroupTrackersService(config);
+    this.flows = new FlowsService(config);
   }
 
   /**
@@ -158,6 +162,7 @@ export class Juhuu {
   readonly incidents: IncidentsService;
   readonly parameterAnomalyGroups: ParameterAnomalyGroupsService;
   readonly parameterAnomalyGroupTrackers: ParameterAnomalyGroupTrackersService;
+  readonly flows: FlowsService;
 }
 
 export namespace JUHUU {
@@ -3483,6 +3488,87 @@ export namespace JUHUU {
         parameterHistoryArray: JUHUU.ParameterHistory.Object[];
         count: number;
         hasMore: boolean;
+      };
+    }
+  }
+
+  export namespace Flow {
+    export type Object = {
+      id: string;
+      readonly object: "flow";
+      name: string;
+      startBlock: FlowBlock;
+      blocks: FlowBlock[];
+      edges: FlowEdge[];
+    };
+
+    export namespace Create {
+      export type Params = {
+        name: string;
+        startBlock: FlowBlock;
+        blocks: FlowBlock[];
+        edges: FlowEdge[];
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        flow: JUHUU.Flow.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        flowId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        flow: JUHUU.Flow.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {};
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        flowArray: JUHUU.Flow.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        flowId: string;
+        name?: string;
+        startBlock?: FlowBlock;
+        blocks?: FlowBlock[];
+        edges?: FlowEdge[];
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        flow: JUHUU.Flow.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        flowId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        flow: JUHUU.Flow.Object;
       };
     }
   }
