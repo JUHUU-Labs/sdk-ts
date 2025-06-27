@@ -1988,18 +1988,21 @@ export namespace JUHUU {
       toDate: Date;
       amountCapturedTotal: number; // amount that was captured during the month (transferPaymentIdArray only)
       amountToPayoutTotal: number; // amount that was or will be payed out to the property (transferPaymentIdArray only)
+      amountRefundedTotal: number; // amount that was refunded during the month (transferPaymentRefundIdArray only)
       serviceFeeTotal: number; // sum of all serviceFee of all payments of that payout (transferPaymentIdArray only)
       transactionFeeTotal: number; // amount that was payed to stripe as fees. (transferPaymentIdArray only). Sum of all fees of all paymentIntents that were used to capture the amountCapturedTotal
       transferPaymentIdArray: string[]; // array of paymentIds that will be transfered to the property
+      transferPaymentRefundIdArray: string[]; // array of paymentIds that will be transfered to the property
       periodPaymentIdArray: string[]; // array of paymentIds that whos invoice was created during the period of the payout
+      periodPaymentRefundIdArray: string[]; // array of paymentIds that whos invoice was created during the period of the payout
       stripePayoutFee: number | null; // will be set after the payout was received by the property
       stripeTransferId: string | null; // will be set when the amountToPayoutTotal is transfered from the stripe platform account to a connected account
       stripeTransferFee: number | null; // fee that stripe charged us for transfering the funds to the connected account
       stripeTransferBalanceTransactionId: string | null; // will be set when the amountToPayoutTotal is transfered from the stripe platform account to a connected account
       stripePayoutId: string | null; // will be set when the amountToPayoutTotal is payed out to the property
       stripePayoutBalanceTransactionId: string | null; // will be set when the amountToPayoutTotal is payed out to the property
-      lowestTransferPaymentNumber: number;
-      highestTransferPaymentNumber: number;
+      lowestTransferInvoiceNumber: number;
+      highestTransferInvoiceNumber: number;
       approvedByUserId: string | null;
       createdBy: "propertyAdmin" | "system";
       createdByUserId: string | null;
@@ -2008,7 +2011,6 @@ export namespace JUHUU {
       receiver: Party;
       number: number; // number of the payout; this number does not start new with every property
       currencyCode: CurrencyCode;
-      version: number;
       creditNotePdfId: string;
       stripeConnectedAccountId: string;
     };
@@ -2094,7 +2096,7 @@ export namespace JUHUU {
       capturedAt: Date | null; // date at which the payment was captured
       capturedBy: "system" | "propertyAdmin" | null; // who captured the payment
       capturedByUserId: string | null; // user who captured the payment
-      isPartiallyOrFullyRefunded: boolean; // true if this payment was partially or fully refunded
+      refundLevel: boolean; // true if this payment was partially or fully refunded
     };
 
     export namespace Retrieve {
@@ -3359,17 +3361,17 @@ export namespace JUHUU {
       id: string;
       readonly object: "flow";
       name: string;
-      startBlock: FlowBlock;
-      blocks: FlowBlock[];
-      edges: FlowEdge[];
+      startNode: FlowBlock;
+      nodeArray: FlowBlock[];
+      edgeArray: FlowEdge[];
     };
 
     export namespace Create {
       export type Params = {
         name: string;
-        startBlock: FlowBlock;
-        blocks: FlowBlock[];
-        edges: FlowEdge[];
+        startNode: FlowBlock;
+        nodeArray: FlowBlock[];
+        edgeArray: FlowEdge[];
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3410,9 +3412,9 @@ export namespace JUHUU {
       export type Params = {
         flowId: string;
         name?: string;
-        startBlock?: FlowBlock;
-        blocks?: FlowBlock[];
-        edges?: FlowEdge[];
+        startNode?: FlowBlock;
+        nodeArray?: FlowBlock[];
+        edgeArray?: FlowEdge[];
       };
 
       export type Options = JUHUU.RequestOptions;
