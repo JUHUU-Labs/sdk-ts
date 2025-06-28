@@ -100,4 +100,19 @@ export default class FlowsService extends Service {
       FlowDeleteOptions
     );
   }
+
+  async execute(
+    FlowExecuteParams: JUHUU.Flow.Execute.Params,
+    FlowExecuteOptions?: JUHUU.Flow.Execute.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Flow.Execute.Response>> {
+    return await super.sendRequest<JUHUU.Flow.Execute.Response>(
+      {
+        method: "POST",
+        url: "flows/" + FlowExecuteParams.flowId,
+        body: {},
+        authenticationNotOptional: true,
+      },
+      FlowExecuteOptions
+    );
+  }
 }

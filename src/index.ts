@@ -56,6 +56,8 @@ import {
   VisualPriority,
   FlowBlock,
   FlowEdge,
+  QuickAction,
+  FlowStatus,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -2314,6 +2316,8 @@ export namespace JUHUU {
       disabledBy: "propertyAdmin" | "deviceNodeArray" | null;
       visible: boolean; // if false, the location is accessible but is not shown in the UI of the app
       incidentTemplateIdArray: string[]; // array of incident template ids that are assigned to this location
+      adminQuickActionArray: QuickAction[]; // quick actions that are available for admins in the app
+      userQuickActionArray: QuickAction[]; // quick actions that are available for users in
     };
 
     export interface RentableDeviceGroup extends Base {
@@ -3364,6 +3368,8 @@ export namespace JUHUU {
       startNode: FlowBlock;
       nodeArray: FlowBlock[];
       edgeArray: FlowEdge[];
+      status: FlowStatus;
+      errorMessage: string | null;
     };
 
     export namespace Create {
@@ -3435,6 +3441,22 @@ export namespace JUHUU {
         flow: JUHUU.Flow.Object;
       };
     }
+
+    export namespace Execute {
+      export type Params = {
+        flowId: string;
+
+        // add context
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        flow: JUHUU.Flow.Object;
+
+        // todo: add result
+      };
+    }
   }
 
   export namespace DeviceTemplate {
@@ -3451,7 +3473,6 @@ export namespace JUHUU {
       source: "fluctuo" | null;
       invalidAt: Date | null;
       commandArray: Command[]; // commands that can be sent to the device and make it do something
-      useQuickActionArray: Layout.PreviewButton[]; // quick actions that are shown before accessing the device in before the device was rented
       deviceImageDark: string;
       deviceImageLight: string;
       callToAction: LocaleString;

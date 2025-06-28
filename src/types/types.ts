@@ -12,6 +12,14 @@ export type Frontend = "dashboard" | "app";
 
 export type ApiKeyStatus = "enabled" | "disabled";
 
+export type FlowStatus = "error" | "ready";
+
+export type QuickAction = {
+  icon: string | null;
+  name: LocaleString;
+  flowId: string;
+};
+
 export type License =
   | {
       type: "url";
