@@ -32,6 +32,10 @@ export default class FlowsService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.Flow.List.Response>> {
     const queryArray: string[] = [];
 
+    if (FlowListParams?.propertyId !== undefined) {
+      queryArray.push("propertyId=" + FlowListParams.propertyId);
+    }
+
     if (FlowListOptions?.limit !== undefined) {
       queryArray.push("limit=" + FlowListOptions.limit);
     }
@@ -108,7 +112,7 @@ export default class FlowsService extends Service {
     return await super.sendRequest<JUHUU.Flow.Execute.Response>(
       {
         method: "POST",
-        url: "flows/" + FlowExecuteParams.flowId,
+        url: "flows/" + FlowExecuteParams.flowId + "/execute",
         body: {},
         authenticationNotOptional: true,
       },

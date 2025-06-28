@@ -58,6 +58,7 @@ import {
   FlowEdge,
   QuickAction,
   FlowStatus,
+  FlowExecutionEnvironment,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -2098,7 +2099,7 @@ export namespace JUHUU {
       capturedAt: Date | null; // date at which the payment was captured
       capturedBy: "system" | "propertyAdmin" | null; // who captured the payment
       capturedByUserId: string | null; // user who captured the payment
-      refundLevel: boolean; // true if this payment was partially or fully refunded
+      refundLevel: "none" | "partial" | "full";
     };
 
     export namespace Retrieve {
@@ -3368,6 +3369,8 @@ export namespace JUHUU {
       startNode: FlowBlock;
       nodeArray: FlowBlock[];
       edgeArray: FlowEdge[];
+      propertyId: string;
+      exectionEnvironmentArray: FlowExecutionEnvironment[];
       status: FlowStatus;
       errorMessage: string | null;
     };
@@ -3400,7 +3403,9 @@ export namespace JUHUU {
     }
 
     export namespace List {
-      export type Params = {};
+      export type Params = {
+        propertyId?: string;
+      };
 
       export type Options = {
         limit?: number;

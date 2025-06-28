@@ -9,7 +9,7 @@ export type PushToken = {
 export type ExtractType<T> = T extends { type: infer U } ? U : never;
 export type UserGroup = "retailer" | "engineer" | "operator" | "user";
 export type Frontend = "dashboard" | "app";
-
+export type FlowExecutionEnvironment = "dashboard" | "app" | "backend";
 export type ApiKeyStatus = "enabled" | "disabled";
 
 export type FlowStatus = "error" | "ready";
