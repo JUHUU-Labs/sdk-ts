@@ -169,6 +169,7 @@ export default class SessionService extends Service {
         url: "sessions/" + SessionTerminateParams.sessionId + "/terminate",
         body: {
           isOffSession: SessionTerminateParams.isOffSession,
+          ignoreFlowErrors: SessionTerminateParams.ignoreFlowErrors,
         },
         authenticationNotOptional: true,
       },

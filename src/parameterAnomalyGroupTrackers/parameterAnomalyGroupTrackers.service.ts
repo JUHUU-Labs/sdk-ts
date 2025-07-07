@@ -50,7 +50,7 @@ export default class ParameterAnomalyGroupTrackersService extends Service {
     return await super.sendRequest<JUHUU.ParameterAnomalyGroupTracker.List.Response>(
       {
         method: "GET",
-        url: "articles?" + queryArray.join("&"),
+        url: "parameterAnomalyGroupTrackers?" + queryArray.join("&"),
         body: undefined,
         authenticationNotOptional: false,
       },
@@ -76,7 +76,7 @@ export default class ParameterAnomalyGroupTrackersService extends Service {
       {
         method: "GET",
         url:
-          "articles/" +
+          "parameterAnomalyGroupTrackers/" +
           ParameterAnomalyGroupTrackerRetrieveParams.parameterAnomalyGroupTrackerId +
           "?" +
           queryArray.join("&"),
@@ -124,6 +124,25 @@ export default class ParameterAnomalyGroupTrackersService extends Service {
         body: undefined,
       },
       ParameterAnomalyGroupTrackerDeleteOptions
+    );
+  }
+
+  async analyze(
+    ParameterAnomalyGroupTrackerAnalyzeParams: JUHUU.ParameterAnomalyGroupTracker.Analyze.Params,
+    ParameterAnomalyGroupTrackerAnalyzeOptions?: JUHUU.ParameterAnomalyGroupTracker.Analyze.Options
+  ): Promise<
+    JUHUU.HttpResponse<JUHUU.ParameterAnomalyGroupTracker.Analyze.Response>
+  > {
+    return await super.sendRequest<JUHUU.ParameterAnomalyGroupTracker.Analyze.Response>(
+      {
+        method: "POST",
+        url:
+          "parameterAnomalyGroupTrackers/" +
+          ParameterAnomalyGroupTrackerAnalyzeParams.parameterAnomalyGroupTrackerId,
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      ParameterAnomalyGroupTrackerAnalyzeOptions
     );
   }
 }

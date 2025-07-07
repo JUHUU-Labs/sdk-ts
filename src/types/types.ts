@@ -1206,15 +1206,161 @@ export interface LocaleString {
   et?: string;
 }
 
-export type FlowBlock = {
+// Base for every block
+export interface BaseBlock {
   id: string;
-  type: string;
-  in: { [key: string]: string };
-  out: { [key: string]: string };
-};
+}
 
-export type FlowEdge = {
+// trigger.manual: no inputs, no outputs
+export interface TriggerManualBlock extends BaseBlock {
+  type: "trigger.manual";
+  in: Record<string, never>;
+  out: Record<string, never>;
+}
+
+export interface TriggerCustomBlock extends BaseBlock {
+  type: "trigger.custom";
+  // it doesn’t take any upstream edges
+  in: Record<string, never>;
+  // one output edge per parameter name
+  out: Record<string, string>;
+  // runtime metadata for each parameter
+  inputParamDefinitionArray: ParamDefinition[];
+}
+
+export interface TriggerQuickActionLocationBlock extends BaseBlock {
+  type: "trigger.quickAction.location";
+  in: Record<string, never>;
+  out: {
+    locationId: string;
+    propertyId: string;
+  };
+}
+
+// constant blocks
+export interface ConstNumberBlock extends BaseBlock {
+  type: "const.number";
+  in: Record<string, never>;
+  out: { value: string };
+  data: { value: number };
+}
+
+export interface ConstStringBlock extends BaseBlock {
+  type: "const.string";
+  in: Record<string, never>;
+  out: { value: string };
+  data: { value: string };
+}
+
+export interface ConstBooleanBlock extends BaseBlock {
+  type: "const.boolean";
+  in: Record<string, never>;
+  out: { value: string };
+  data: { value: boolean };
+}
+
+// arithmetic
+export interface MathAddBlock extends BaseBlock {
+  type: "math.add";
+  in: { a: string; b: string };
+  out: { result: string };
+}
+
+export interface MathAddBlockInputs {
+  a: number;
+  b: number;
+}
+
+// conditional
+export interface FlowIfBlock extends BaseBlock {
+  type: "flow.if";
+  in: { condition: string };
+  out: { true: string; false: string };
+}
+export interface FlowSwitchBlock extends BaseBlock {
+  type: "flow.switch";
+  in: { key: string };
+  out: Record<string, string>; // arbitrary branch names → edge IDs
+}
+
+// utilities
+export interface UtilLogBlock extends BaseBlock {
+  type: "util.log";
+  in: Record<string, string>;
+  out: Record<string, never>;
+}
+export interface UtilEchoBlock extends BaseBlock {
+  type: "util.echo";
+  in: Record<string, string>;
+  out: Record<string, string>;
+}
+
+export interface HttpsPatchBlock extends BaseBlock {
+  type: "https.patch";
+  in: { url: string; body?: string; headers?: string };
+  out: { status: string; data: string };
+}
+
+export interface EndBlock extends BaseBlock {
+  type: "end";
+  // maps each output‐param name to its edge ID
+  in: Record<string, string>;
+
+  // terminal blocks don’t feed any further blocks
+  out: Record<string, never>;
+
+  // describe each param (name & type) that this block will return
+  outputParamDefintionArray: ParamDefinition[];
+}
+
+// The union of all block types:
+export type FlowBlock =
+  | TriggerManualBlock
+  | TriggerCustomBlock
+  | TriggerQuickActionLocationBlock
+  | ConstNumberBlock
+  | ConstStringBlock
+  | ConstBooleanBlock
+  | MathAddBlock
+  | FlowIfBlock
+  | FlowSwitchBlock
+  | UtilLogBlock
+  | UtilEchoBlock
+  | HttpsPatchBlock
+  | EndBlock;
+
+export type FlowBlockInput = MathAddBlockInputs | Record<string, unknown>;
+
+export interface FlowDataEdge {
   id: string;
+  type: "data";
   from: { blockId: string; output: string };
   to: { blockId: string; input: string };
-};
+}
+
+export interface FlowControlEdge {
+  id: string;
+  type: "control";
+  from: {
+    blockId: string;
+    output: string | null; // e.g. "true" or "false" for an if‑block
+  };
+  to: { blockId: string };
+}
+
+export type FlowEdge = FlowDataEdge | FlowControlEdge;
+
+export type ParamType =
+  | "string"
+  | "number"
+  | "boolean"
+  | "null"
+  | "session"
+  | "sessionArray";
+
+export interface ParamDefinition {
+  name: string; // no spaces, no special characters, no dots, no slashes, no colons, no commas, no semicolons, no question marks, no exclamation marks, no parentheses, no brackets, no braces, no quotes, no backticks
+  type: ParamType[]; // array of types, because a parameter can have multiple types, e.g. "string" and "null"
+  required: boolean;
+  description: string | null;
+}

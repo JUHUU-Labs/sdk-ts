@@ -419,6 +419,7 @@ export namespace JUHUU {
       export type Params = {
         sessionId: string;
         isOffSession: boolean;
+        ignoreFlowErrors?: boolean; // if true, the session will be terminated even if there are errors in any flows which are triggered due to the session being terminated
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1550,6 +1551,9 @@ export namespace JUHUU {
         roundToMidnight?: boolean;
         autoRenewManualEnabled?: boolean;
         manualTerminationEnabled?: boolean;
+        salesTaxPercentage?: number;
+        shortDescription?: LocaleString | null;
+        longDescription?: LocaleString | null;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2999,7 +3003,6 @@ export namespace JUHUU {
       name: string | null;
       propertyId: string;
       lastUpdatedAt: Date | null;
-      parameterAnomalyGroupIdArray: string[];
       createdAt: Date | null;
       reference: string | null;
     };
@@ -3143,6 +3146,12 @@ export namespace JUHUU {
       parameterAnomalyGroupTrackerId: string | null;
       propertyId: string;
       name: string;
+      anomalyScore: number | null;
+      isOutlier: boolean;
+      featureReferenceParameterIdArray: Array<{
+        parameterId: string;
+        featureReference: string;
+      }>;
     };
 
     export namespace Create {
@@ -3222,6 +3231,7 @@ export namespace JUHUU {
       nextRunAt: Date | null;
       name: string;
       propertyId: string;
+      featureReferenceArray: string[];
     };
 
     export namespace Create {
@@ -3292,6 +3302,18 @@ export namespace JUHUU {
         parameterAnomalyGroupTracker: JUHUU.ParameterAnomalyGroupTracker.Object;
       };
     }
+
+    export namespace Analyze {
+      export type Params = {
+        parameterAnomalyGroupTrackerId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        parameterAnomalyGroupTracker: JUHUU.ParameterAnomalyGroupTracker.Object;
+      };
+    }
   }
 
   export namespace ParameterHistory {
@@ -3303,6 +3325,11 @@ export namespace JUHUU {
       propertyId: string;
       createdAt: Date;
       reference: string | null;
+      parameterId: string;
+      shapAnomalyArray: Array<{
+        parameterAnomalyGroupId: string;
+        shapScore: number | null;
+      }>;
     };
 
     export interface Text extends Base {
