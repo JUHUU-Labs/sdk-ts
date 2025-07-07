@@ -2104,6 +2104,16 @@ export namespace JUHUU {
       capturedBy: "system" | "propertyAdmin" | null; // who captured the payment
       capturedByUserId: string | null; // user who captured the payment
       refundLevel: "none" | "partial" | "full";
+      cancelledAt: Date | null; // date at which the payment was cancelled
+      cancelledByUserId: string | null; // user who cancelled the payment
+      cancelledBy: "system" | "propertyAdmin" | "user" | null; // who cancelled the payment
+      cancelledReason:
+        | "sessionTermination"
+        | "cleanUpCronJob"
+        | "cleanUpSchedulerJob"
+        | "userRequest"
+        | null;
+      postingRowArray: PostingRow[]; // text displayed on the users invoice
     };
 
     export namespace Retrieve {
@@ -2166,6 +2176,8 @@ export namespace JUHUU {
     export namespace Capture {
       export type Params = {
         paymentId: string;
+        customAmount?: number;
+        mode?: "captureAmountFinal" | "captureCustomAmount";
       };
 
       export type Options = JUHUU.RequestOptions;

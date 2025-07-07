@@ -139,7 +139,10 @@ export default class PaymentsService extends Service {
       {
         method: "PATCH",
         url: "payments/" + PaymentCaptureParams.paymentId + "/capture",
-        body: undefined,
+        body: {
+          customAmount: PaymentCaptureParams.customAmount,
+          mode: PaymentCaptureParams.mode,
+        },
         authenticationNotOptional: true,
       },
       PaymentCaptureOptions
