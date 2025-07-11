@@ -138,7 +138,8 @@ export default class ParameterAnomalyGroupTrackersService extends Service {
         method: "POST",
         url:
           "parameterAnomalyGroupTrackers/" +
-          ParameterAnomalyGroupTrackerAnalyzeParams.parameterAnomalyGroupTrackerId,
+          ParameterAnomalyGroupTrackerAnalyzeParams.parameterAnomalyGroupTrackerId +
+          "/analyze",
         body: undefined,
         authenticationNotOptional: true,
       },

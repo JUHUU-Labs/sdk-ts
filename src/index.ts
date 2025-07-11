@@ -3163,6 +3163,8 @@ export namespace JUHUU {
       featureReferenceParameterIdArray: Array<{
         parameterId: string;
         featureReference: string;
+        shapValues: [number, number, number] | null; // Optional, if not always present
+        isOutlier: boolean; // Optional, if not always present
       }>;
     };
 
