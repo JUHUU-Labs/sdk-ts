@@ -82,6 +82,7 @@ import ParameterAnomalyGroupsService from "./parameterAnomalyGroups/parameterAno
 import ParameterAnomalyGroupTrackersService from "./parameterAnomalyGroupTrackers/parameterAnomalyGroupTrackers.service";
 import EmzService from "./emz/emz.service";
 import FlowsService from "./flows/flows.service";
+import MqttTopicsService from "./mqttTopics/mqttTopics.service";
 
 export * from "./types/types";
 
@@ -123,6 +124,7 @@ export class Juhuu {
       new ParameterAnomalyGroupTrackersService(config);
     this.emz = new EmzService(config);
     this.flows = new FlowsService(config);
+    this.mqttTopics = new MqttTopicsService(config);
   }
 
   /**
@@ -162,6 +164,7 @@ export class Juhuu {
   readonly parameterAnomalyGroupTrackers: ParameterAnomalyGroupTrackersService;
   readonly emz: EmzService;
   readonly flows: FlowsService;
+  readonly mqttTopics: MqttTopicsService;
 }
 
 export namespace JUHUU {
@@ -3664,6 +3667,84 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.Sim.Object;
+    }
+  }
+
+  export namespace MqttTopic {
+    export type Object = {
+      id: string;
+      readonly object: "mqttTopic";
+      name: string;
+      propertyId: string;
+      chatId: string | null;
+    };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name?: string;
+        chatId?: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        mqttTopic: JUHUU.MqttTopic.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        mqttTopicId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        mqttTopic: JUHUU.MqttTopic.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+        chatId?: string;
+      };
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        mqttTopicArray: JUHUU.MqttTopic.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        mqttTopicId: string;
+        name?: string;
+        chatId?: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        mqttTopic: JUHUU.MqttTopic.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        mqttTopicId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.MqttTopic.Object;
     }
   }
 
