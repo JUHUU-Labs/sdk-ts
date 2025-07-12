@@ -3739,6 +3739,19 @@ export namespace JUHUU {
       };
     }
 
+    export namespace AttachChat {
+      export type Params = {
+        mqttTopicId: string;
+        chatId: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        mqttTopic: JUHUU.MqttTopic.Object;
+      };
+    }
+
     export namespace Delete {
       export type Params = {
         mqttTopicId: string;
