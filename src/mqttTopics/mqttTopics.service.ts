@@ -93,6 +93,23 @@ export default class MqttTopicsService extends Service {
     );
   }
 
+  async attachChat(
+    params: JUHUU.MqttTopic.AttachChat.Params,
+    options?: JUHUU.MqttTopic.AttachChat.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.MqttTopic.AttachChat.Response>> {
+    return await super.sendRequest<JUHUU.MqttTopic.AttachChat.Response>(
+      {
+        method: "PATCH",
+        url: "mqttTopics/" + params.mqttTopicId + "/chat",
+        body: {
+          chatId: params.chatId,
+        },
+        authenticationNotOptional: true,
+      },
+      options
+    );
+  }
+
   async delete(
     params: JUHUU.MqttTopic.Delete.Params,
     options?: JUHUU.MqttTopic.Delete.Options
