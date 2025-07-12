@@ -100,10 +100,8 @@ export default class MqttTopicsService extends Service {
     return await super.sendRequest<JUHUU.MqttTopic.AttachChat.Response>(
       {
         method: "PATCH",
-        url: "mqttTopics/" + params.mqttTopicId + "/chat",
-        body: {
-          chatId: params.chatId,
-        },
+        url: "mqttTopics/" + params.mqttTopicId + "/attachChat",
+        body: undefined,
         authenticationNotOptional: true,
       },
       options

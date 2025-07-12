@@ -3742,7 +3742,6 @@ export namespace JUHUU {
     export namespace AttachChat {
       export type Params = {
         mqttTopicId: string;
-        chatId: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;
