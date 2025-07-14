@@ -16,6 +16,12 @@ export default class ParametersService extends Service {
         url: "parameters",
         body: {
           propertyId: ParameterCreateParams.propertyId,
+          type: ParameterCreateParams.type,
+          name: ParameterCreateParams.name,
+          description: ParameterCreateParams.description,
+          currentValue: ParameterCreateParams.currentValue,
+          enumArray: ParameterCreateParams.enumArray,
+          reference: ParameterCreateParams.reference,
         },
         authenticationNotOptional: true,
       },
