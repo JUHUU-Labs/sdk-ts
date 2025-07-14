@@ -82,6 +82,7 @@ import ParameterAnomalyGroupsService from "./parameterAnomalyGroups/parameterAno
 import ParameterAnomalyGroupTrackersService from "./parameterAnomalyGroupTrackers/parameterAnomalyGroupTrackers.service";
 import EmzService from "./emz/emz.service";
 import FlowsService from "./flows/flows.service";
+import FlowTracesService from "./flowTraces/flowTraces.service";
 import MqttTopicsService from "./mqttTopics/mqttTopics.service";
 
 export * from "./types/types";
@@ -124,6 +125,7 @@ export class Juhuu {
       new ParameterAnomalyGroupTrackersService(config);
     this.emz = new EmzService(config);
     this.flows = new FlowsService(config);
+    this.flowTraces = new FlowTracesService(config);
     this.mqttTopics = new MqttTopicsService(config);
   }
 
@@ -164,6 +166,7 @@ export class Juhuu {
   readonly parameterAnomalyGroupTrackers: ParameterAnomalyGroupTrackersService;
   readonly emz: EmzService;
   readonly flows: FlowsService;
+  readonly flowTraces: FlowTracesService;
   readonly mqttTopics: MqttTopicsService;
 }
 
@@ -3504,6 +3507,52 @@ export namespace JUHUU {
         flow: JUHUU.Flow.Object;
 
         // todo: add result
+      };
+    }
+  }
+
+  export namespace FlowTrace {
+    export type Object = {
+      id: string;
+      readonly object: "flowTrace";
+      startAt: Date;
+      endAt: Date;
+      input: Record<string, any>;
+      output: Record<string, any>;
+      flowId: string;
+      propertyId: string;
+      logArray: string[];
+      error: string | null;
+      successful: boolean;
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        flowTraceId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        flowTrace: JUHUU.FlowTrace.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+        flowId?: string;
+      };
+
+      export type Options = {
+        skip?: number;
+        limit?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        flowTraceArray: JUHUU.FlowTrace.Object[];
+        count: number;
+        hasMore: boolean;
       };
     }
   }
