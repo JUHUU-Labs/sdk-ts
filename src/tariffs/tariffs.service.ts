@@ -146,10 +146,6 @@ export default class TariffsService extends Service {
       return 0;
     }
 
-    if (tariff.interval === 0) {
-      return tariff.amount[0];
-    }
-
     if (rentTimeSeconds > tariff.duration) {
       console.warn("rentTimeS is greater than duration");
       rentTimeSeconds = tariff.duration;
@@ -157,13 +153,17 @@ export default class TariffsService extends Service {
 
     let sum = 0;
 
-    const startedIntervals = Math.ceil(rentTimeSeconds / tariff.interval);
+    if (tariff.interval === 0) {
+      sum = tariff.amount[0];
+    } else {
+      const startedIntervals = Math.ceil(rentTimeSeconds / tariff.interval);
 
-    for (let i = 0; i < startedIntervals; i += 1) {
-      if (i < tariff.amount.length) {
-        sum += tariff.amount[i];
-      } else {
-        sum += tariff.continue;
+      for (let i = 0; i < startedIntervals; i += 1) {
+        if (i < tariff.amount.length) {
+          sum += tariff.amount[i];
+        } else {
+          sum += tariff.continue;
+        }
       }
     }
 

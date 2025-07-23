@@ -59,6 +59,7 @@ import {
   QuickAction,
   FlowStatus,
   FlowExecutionEnvironment,
+  FlowLog,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -737,6 +738,15 @@ export namespace JUHUU {
   }
 
   export namespace Emz {
+    export namespace Log {
+      export type Object = {
+        id: string;
+        userId: string;
+        logArray: string[];
+        createdAt: Date;
+      };
+    }
+
     export namespace Credentials {
       export type Params = {
         deviceId: string;
@@ -749,6 +759,19 @@ export namespace JUHUU {
         emzContractId: string;
         emzUserId: string;
         emzToken: string;
+      };
+    }
+
+    export namespace Logs {
+      export type Params = {
+        userId: string;
+        logArray: string[];
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        emzLog: JUHUU.Emz.Log.Object;
       };
     }
   }
@@ -1086,6 +1109,16 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
+        title?: LocaleString; // title of the article
+        subtitle?: LocaleString; // subtitle of the article
+        parentArticleId?: string | null; // id of the higher order article in the tree of articles
+        markdownContent?: LocaleString; // markdown content of the article
+        status?: "draft" | "published"; // status of the article
+        languageCodeArray?: LanguageCode[]; // language codes of the article that were written by the user
+        slug?: string; // part of the url that points to the article e.g. if the slug is "my-article", the url will be "/slug1/my-article/slug2"
+        autoTranslateEnabled?: boolean; // whether or not auto translation to other languages is enabled for this article
+        embeddingsGenerationEnabled?: boolean; // whether or not embeddings should be generated for this article
+        articleGroupIdArray?: string[]; // array of articleGroupIds
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1504,7 +1537,7 @@ export namespace JUHUU {
       export type Params = {
         propertyId: string;
         duration?: string;
-        name?: string;
+        name?: LocaleString;
         amount?: number[];
         continue?: number;
         currencyCode?: string;
@@ -2474,6 +2507,16 @@ export namespace JUHUU {
       export type Params = {
         propertyId: string;
         name?: string;
+        previewText?: LocaleString; // text that is displayed on the product overview page
+        description?: LocaleString; // text that is displayed once a user clicks on product
+        highlightArray?: LocaleString[];
+        purposeArray?: Purpose[];
+        technologyArray?: Technology[]; // in the future maybe "mechanical", "virtual", ...
+        articleId?: string | null; // id to an article with more information
+        bannerImageDark?: string[]; // array of urls to images for darkmode
+        bannerImageLight?: string[]; // array of urls to images for lightmode
+        model3d?: string | null; // url to a 3d model of product
+        datasheet?: DeepNullable<LocaleString>; // url to a datasheet of product
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2944,6 +2987,10 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
+        name?: string;
+        title?: LocaleString;
+        description?: LocaleString;
+        severity?: JUHUU.IncidentTemplate.Object["severity"];
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3135,6 +3182,9 @@ export namespace JUHUU {
 
         name?: string;
         currentValue?: string | boolean | number;
+        description?: string | null;
+        enumArray?: string[]; // only for enum parameters
+        reference?: string | null; // only for enum parameters
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3178,6 +3228,8 @@ export namespace JUHUU {
       export type Params = {
         propertyId: string;
         parameterAnomalyGroupTrackerId?: string;
+        name?: string;
+        featureReferenceParameterIdArray?: JUHUU.ParameterAnomalyGroup.Object["featureReferenceParameterIdArray"];
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3424,10 +3476,11 @@ export namespace JUHUU {
 
     export namespace Create {
       export type Params = {
-        name: string;
-        startNode: FlowBlock;
-        nodeArray: FlowBlock[];
-        edgeArray: FlowEdge[];
+        propertyId: string;
+        name?: string;
+        startNode?: FlowBlock;
+        nodeArray?: FlowBlock[];
+        edgeArray?: FlowEdge[];
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3521,7 +3574,7 @@ export namespace JUHUU {
       output: Record<string, any>;
       flowId: string;
       propertyId: string;
-      logArray: string[];
+      logArray: FlowLog[];
       error: string | null;
       successful: boolean;
     };

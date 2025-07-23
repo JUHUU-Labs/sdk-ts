@@ -24,4 +24,23 @@ export default class EmzService extends Service {
       EmzCredentialsOptions
     );
   }
+  async logs(
+    EmzLogsParams: JUHUU.Emz.Logs.Params,
+    EmzLogsOptions?: JUHUU.Emz.Logs.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Emz.Logs.Response>> {
+    const queryArray: string[] = [];
+
+    return await super.sendRequest<JUHUU.Emz.Logs.Response>(
+      {
+        method: "POST",
+        url: "emz/logs",
+        body: {
+          userId: EmzLogsParams.userId,
+          logArray: EmzLogsParams.logArray,
+        },
+        authenticationNotOptional: true,
+      },
+      EmzLogsOptions
+    );
+  }
 }

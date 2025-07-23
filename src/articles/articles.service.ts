@@ -16,6 +16,17 @@ export default class ArticlesService extends Service {
         url: "articles",
         body: {
           propertyId: ArticleCreateParams.propertyId,
+          title: ArticleCreateParams.title,
+          subtitle: ArticleCreateParams.subtitle,
+          parentArticleId: ArticleCreateParams.parentArticleId,
+          markdownContent: ArticleCreateParams.markdownContent,
+          status: ArticleCreateParams.status,
+          languageCodeArray: ArticleCreateParams.languageCodeArray,
+          slug: ArticleCreateParams.slug,
+          autoTranslateEnabled: ArticleCreateParams.autoTranslateEnabled,
+          embeddingsGenerationEnabled:
+            ArticleCreateParams.embeddingsGenerationEnabled,
+          articleGroupIdArray: ArticleCreateParams.articleGroupIdArray,
         },
         authenticationNotOptional: true,
       },

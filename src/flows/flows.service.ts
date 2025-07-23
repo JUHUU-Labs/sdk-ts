@@ -19,6 +19,7 @@ export default class FlowsService extends Service {
           startNode: FlowCreateParams.startNode,
           nodeArray: FlowCreateParams.nodeArray,
           edgeArray: FlowCreateParams.edgeArray,
+          propertyId: FlowCreateParams.propertyId,
         },
         authenticationNotOptional: true,
       },

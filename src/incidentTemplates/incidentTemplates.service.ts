@@ -16,6 +16,10 @@ export default class IncidentTemplatesService extends Service {
         url: "incidentTemplates",
         body: {
           propertyId: IncidentTemplateCreateParams.propertyId,
+          name: IncidentTemplateCreateParams.name,
+          title: IncidentTemplateCreateParams.title,
+          description: IncidentTemplateCreateParams.description,
+          severity: IncidentTemplateCreateParams.severity,
         },
         authenticationNotOptional: false,
       },

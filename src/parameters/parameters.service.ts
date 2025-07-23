@@ -104,6 +104,7 @@ export default class ParametersService extends Service {
         body: {
           name: ParameterUpdateParams.name,
           currentValue: ParameterUpdateParams.currentValue,
+          enumArray: ParameterUpdateParams.enumArray,
           deviceId: ParameterUpdateParams.deviceId,
         },
         authenticationNotOptional: true,

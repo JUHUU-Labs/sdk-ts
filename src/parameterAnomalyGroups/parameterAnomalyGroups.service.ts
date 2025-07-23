@@ -18,6 +18,9 @@ export default class ParameterAnomalyGroupsService extends Service {
           propertyId: ParameterAnomalyGroupCreateParams.propertyId,
           parameterAnomalyGroupTrackerId:
             ParameterAnomalyGroupCreateParams.parameterAnomalyGroupTrackerId,
+          name: ParameterAnomalyGroupCreateParams.name,
+          featureReferenceParameterIdArray:
+            ParameterAnomalyGroupCreateParams.featureReferenceParameterIdArray,
         },
         authenticationNotOptional: true,
       },

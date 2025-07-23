@@ -14,12 +14,6 @@ export type ApiKeyStatus = "enabled" | "disabled";
 
 export type FlowStatus = "error" | "ready";
 
-export type QuickAction = {
-  icon: string | null;
-  name: LocaleString;
-  flowId: string;
-};
-
 export type License =
   | {
       type: "url";
@@ -1211,59 +1205,131 @@ export interface BaseBlock {
   id: string;
 }
 
-// trigger.manual: no inputs, no outputs
-export interface TriggerManualBlock extends BaseBlock {
-  type: "trigger.manual";
-  in: Record<string, never>;
-  out: Record<string, never>;
-}
-
-export interface TriggerCustomBlock extends BaseBlock {
-  type: "trigger.custom";
+export interface StartCustomBlock extends BaseBlock {
+  type: "start.custom";
   // it doesn’t take any upstream edges
   in: Record<string, never>;
   // one output edge per parameter name
-  out: Record<string, string>;
-  // runtime metadata for each parameter
-  inputParamDefinitionArray: ParamDefinition[];
+  out: Record<string, DataEdgeConnection>;
+  data: {
+    // runtime metadata for each parameter
+    inputParamDefinitionArray: ParamDefinition[];
+  };
 }
 
-export interface TriggerQuickActionLocationBlock extends BaseBlock {
-  type: "trigger.quickAction.location";
+export interface StartQuickActionLocationBlock extends BaseBlock {
+  type: "start.quickAction.location";
   in: Record<string, never>;
   out: {
-    locationId: string;
-    propertyId: string;
+    locationId: DataEdgeConnection;
+    propertyId: DataEdgeConnection;
   };
+}
+
+export interface StartSessionUpdateBlock extends BaseBlock {
+  type: "start.session.update";
+  in: Record<string, never>;
+  out: {
+    beforeSession: DataEdgeConnection;
+    afterSession: DataEdgeConnection;
+  };
+}
+
+export interface StartParameterUpdateBlock extends BaseBlock {
+  type: "start.parameter.update";
+  in: Record<string, never>;
+  out: {
+    beforeParameter: DataEdgeConnection;
+    afterParameter: DataEdgeConnection;
+  };
+}
+
+// parameter blocks
+export interface ParameterRetrieveBlock extends BaseBlock {
+  type: "parameter.retrieve";
+  in: {
+    parameterId: DataEdgeConnection;
+    deviceId: DataEdgeConnection;
+  };
+  out: {
+    parameter: DataEdgeConnection;
+  };
+  data: {
+    parameterId: string | null; // the ID of the parameter to retrieve
+    deviceId: string | null; // if null, the current device is used
+  };
+}
+
+export interface ParameterRetrieveBlockInputs {
+  parameterId: string;
+  deviceId: string | null;
+}
+
+export interface ParameterUpdateBlock extends BaseBlock {
+  type: "parameter.update";
+  in: {
+    parameterId: DataEdgeConnection;
+    deviceId: DataEdgeConnection;
+    currentValue: DataEdgeConnection;
+  };
+  out: {
+    parameter: DataEdgeConnection;
+  };
+  data: {
+    parameterId: string | null;
+    deviceId: string | null;
+    currentValue: number | string | boolean | null;
+  };
+}
+
+export interface ParameterUpdateBlockInputs {
+  parameterId: string;
+  deviceId: string | null;
+  currentValue: number | string | boolean;
 }
 
 // constant blocks
 export interface ConstNumberBlock extends BaseBlock {
   type: "const.number";
   in: Record<string, never>;
-  out: { value: string };
+  out: {
+    value: DataEdgeConnection;
+  };
   data: { value: number };
 }
 
-export interface ConstStringBlock extends BaseBlock {
-  type: "const.string";
+export interface ConstTextBlock extends BaseBlock {
+  type: "const.text";
   in: Record<string, never>;
-  out: { value: string };
+  out: {
+    value: DataEdgeConnection;
+  };
   data: { value: string };
 }
 
 export interface ConstBooleanBlock extends BaseBlock {
   type: "const.boolean";
   in: Record<string, never>;
-  out: { value: string };
+  out: {
+    value: DataEdgeConnection;
+  };
   data: { value: boolean };
 }
 
 // arithmetic
 export interface MathAddBlock extends BaseBlock {
   type: "math.add";
-  in: { a: string; b: string };
-  out: { result: string };
+  in: {
+    a: DataEdgeConnection;
+    b: DataEdgeConnection;
+  };
+  out: {
+    result: DataEdgeConnection;
+  };
+  data: {
+    a: number | null; // if an input is connected, this is null. Otherwise this value will be used
+    b: number | null; // if an input is connected, this is null. Otherwise this value will be used
+  };
 }
 
 export interface MathAddBlockInputs {
@@ -1271,65 +1337,223 @@ export interface MathAddBlockInputs {
   b: number;
 }
 
-// conditional
-export interface FlowIfBlock extends BaseBlock {
-  type: "flow.if";
-  in: { condition: string };
-  out: { true: string; false: string };
-}
-export interface FlowSwitchBlock extends BaseBlock {
-  type: "flow.switch";
-  in: { key: string };
-  out: Record<string, string>; // arbitrary branch names → edge IDs
+export interface MapDestructureBlock extends BaseBlock {
+  type: "map.destructure";
+  // the list of keys you want to pull out
+  data: {
+    keys: string[];
+  };
+  // a single input: the map to destructure
+  in: { map: DataEdgeConnection };
+  // for each key in `keys`, you’ll configure an `out[key] = edgeId`
+  out: Record<string, DataEdgeConnection>;
 }
 
-// utilities
-export interface UtilLogBlock extends BaseBlock {
-  type: "util.log";
-  in: Record<string, string>;
+export interface MapDestructureBlockInputs {
+  map: Record<string, string | number | boolean>;
+  keys: string[];
+}
+
+// control blocks
+export interface IfBlock extends BaseBlock {
+  type: "control.if";
+  in: Record<string, never>;
+  out: Record<string, ControlEdgeConnection>;
+  data: {
+    condition: unknown; // JSON logic condition
+  };
+}
+
+export interface HttpPatchBlock extends BaseBlock {
+  type: "http.patch";
+  in: {
+    url: DataEdgeConnection;
+    body: DataEdgeConnection;
+    headers: DataEdgeConnection;
+  };
+  data: {
+    url: string | null; // if an input is connected, this is null. Otherwise this value will be used
+    body: Record<string, string | number | boolean> | null; // if an input is connected, this is null. Otherwise this value will be used
+    headers: Record<string, string> | null; // if an input is connected, this is null. Otherwise this value will be used
+  };
+  out: {
+    status: DataEdgeConnection;
+    data: DataEdgeConnection;
+  };
+}
+
+export interface HttpsPatchBlockInputs {
+  url: string;
+  body: Record<string, string | number | boolean>;
+  headers: Record<string, string>;
+}
+
+export interface HttpGetBlock extends BaseBlock {
+  type: "http.get";
+  in: {
+    url: DataEdgeConnection;
+    headers: DataEdgeConnection;
+  };
+  out: {
+    status: DataEdgeConnection;
+    data: DataEdgeConnection;
+  };
+  data: {
+    url: string | null;
+    headers: Record<string, string> | null;
+  };
+}
+
+export interface HttpGetBlockInputs {
+  url: string;
+  headers: Record<string, string>;
+}
+
+export interface HttpPostBlock extends BaseBlock {
+  type: "http.post";
+  in: {
+    url: DataEdgeConnection;
+    body: DataEdgeConnection;
+    headers: DataEdgeConnection;
+  };
+  out: {
+    status: DataEdgeConnection;
+    data: DataEdgeConnection;
+  };
+  data: {
+    url: string | null;
+    body: Record<string, string | number | boolean> | null;
+    headers: Record<string, string> | null;
+  };
+}
+
+export interface HttpPostBlockInputs {
+  url: string;
+  body: Record<string, string | number | boolean>;
+  headers: Record<string, string>;
+}
+
+export interface HttpDeleteBlock extends BaseBlock {
+  type: "http.delete";
+  in: {
+    url: DataEdgeConnection;
+    headers: DataEdgeConnection;
+  };
+  out: {
+    status: DataEdgeConnection;
+    data: DataEdgeConnection;
+  };
+  data: {
+    url: string | null;
+    headers: Record<string, string> | null;
+  };
+}
+
+export interface HttpDeleteBlockInputs {
+  url: string;
+  headers: Record<string, string>;
+}
+
+export interface HttpPutBlock extends BaseBlock {
+  type: "http.put";
+  in: {
+    url: DataEdgeConnection;
+    body: DataEdgeConnection;
+    headers: DataEdgeConnection;
+  };
+  out: {
+    status: DataEdgeConnection;
+    data: DataEdgeConnection;
+  };
+  data: {
+    url: string | null;
+    body: Record<string, string | number | boolean> | null;
+    headers: Record<string, string> | null;
+  };
+}
+
+export interface HttpPutBlockInputs {
+  url: string;
+  body: Record<string, string | number | boolean>;
+  headers: Record<string, string>;
+}
+
+export interface MqttSendBlock extends BaseBlock {
+  type: "mqtt.send";
+  in: {
+    message: DataEdgeConnection;
+    topic: DataEdgeConnection;
+    username: DataEdgeConnection;
+    password: DataEdgeConnection;
+    connectUrl: DataEdgeConnection;
+  };
   out: Record<string, never>;
-}
-export interface UtilEchoBlock extends BaseBlock {
-  type: "util.echo";
-  in: Record<string, string>;
-  out: Record<string, string>;
-}
-
-export interface HttpsPatchBlock extends BaseBlock {
-  type: "https.patch";
-  in: { url: string; body?: string; headers?: string };
-  out: { status: string; data: string };
+  data: {
+    message: string | null;
+    topic: string | null;
+    username: string | null;
+    password: string | null;
+    connectUrl: string | null;
+  };
 }
 
-export interface EndBlock extends BaseBlock {
-  type: "end";
+export interface MqttSendBlockInputs {
+  message: string;
+  topic: string;
+  username: string | null;
+  password: string | null;
+  connectUrl: string;
+}
+
+export interface EndCustomBlock extends BaseBlock {
+  type: "end.custom";
   // maps each output‐param name to its edge ID
-  in: Record<string, string>;
+  in: Record<string, DataEdgeConnection>;
 
   // terminal blocks don’t feed any further blocks
   out: Record<string, never>;
 
   // describe each param (name & type) that this block will return
-  outputParamDefintionArray: ParamDefinition[];
+  data: {
+    outputParamDefintionArray: ParamDefinition[];
+  };
 }
 
 // The union of all block types:
 export type FlowBlock =
-  | TriggerManualBlock
-  | TriggerCustomBlock
-  | TriggerQuickActionLocationBlock
+  | StartCustomBlock
+  | StartQuickActionLocationBlock
+  | StartSessionUpdateBlock
+  | StartParameterUpdateBlock
   | ConstNumberBlock
-  | ConstStringBlock
+  | ConstTextBlock
   | ConstBooleanBlock
   | MathAddBlock
-  | FlowIfBlock
-  | FlowSwitchBlock
-  | UtilLogBlock
-  | UtilEchoBlock
-  | HttpsPatchBlock
-  | EndBlock;
+  | MapDestructureBlock
+  | ParameterRetrieveBlock
+  | ParameterUpdateBlock
+  | IfBlock
+  | HttpPatchBlock
+  | HttpGetBlock
+  | HttpPostBlock
+  | HttpDeleteBlock
+  | HttpPutBlock
+  | MqttSendBlock
+  | HttpPatchBlock
+  | EndCustomBlock;
 
-export type FlowBlockInput = MathAddBlockInputs | Record<string, unknown>;
+export type FlowBlockInput =
+  | MathAddBlockInputs
+  | ParameterRetrieveBlockInputs
+  | ParameterUpdateBlockInputs
+  | HttpsPatchBlockInputs
+  | HttpGetBlockInputs
+  | HttpPostBlockInputs
+  | HttpDeleteBlockInputs
+  | HttpPutBlockInputs
+  | MqttSendBlockInputs
+  | MapDestructureBlockInputs
+  | Record<string, unknown>;
 
 export interface FlowDataEdge {
   id: string;
@@ -1364,3 +1588,18 @@ export interface ParamDefinition {
   required: boolean;
   description: string | null;
 }
+
+export type FlowLog = {
+  severity: "debug" | "info" | "warning" | "error";
+  message: string;
+  createdAt: Date; // ISO 8601 date string
+};
+
+export type DataEdgeConnection = string | null; // null if not connected
+export type ControlEdgeConnection = string | null; // null if not connected
+
+export type QuickAction = {
+  icon: string | null;
+  name: LocaleString;
+  flowId: string;
+};
