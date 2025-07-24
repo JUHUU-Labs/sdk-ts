@@ -3550,16 +3550,15 @@ export namespace JUHUU {
     export namespace Execute {
       export type Params = {
         flowId: string;
-
-        // add context
+        input?: Record<string, any>;
       };
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
         flow: JUHUU.Flow.Object;
-
-        // todo: add result
+        flowTrace: JUHUU.FlowTrace.Object;
+        output: Record<string, any>; // the output of the flow execution
       };
     }
   }

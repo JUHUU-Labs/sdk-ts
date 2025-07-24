@@ -114,7 +114,9 @@ export default class FlowsService extends Service {
       {
         method: "POST",
         url: "flows/" + FlowExecuteParams.flowId + "/execute",
-        body: {},
+        body: {
+          input: FlowExecuteParams.input,
+        },
         authenticationNotOptional: true,
       },
       FlowExecuteOptions
