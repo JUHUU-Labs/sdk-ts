@@ -1772,7 +1772,7 @@ export interface EndCustomBlock extends BaseBlock {
 
   // describe each param (name & type) that this block will return
   data: {
-    outputParamDefintionArray: ParamDefinition[];
+    outputParamDefinitionArray: ParamDefinition[];
   };
 }
 
