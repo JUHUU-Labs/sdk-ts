@@ -3145,7 +3145,7 @@ export namespace JUHUU {
       };
 
       export type Options = {
-        expand: Array<"property">;
+        expand?: Array<"property">;
       } & JUHUU.RequestOptions;
 
       export type Response = {

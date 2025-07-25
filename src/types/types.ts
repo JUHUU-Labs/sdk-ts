@@ -1200,6 +1200,8 @@ export interface LocaleString {
   et?: string;
 }
 
+export type JsonLogic = Record<string, unknown>;
+
 // Base for every block
 export interface BaseBlock {
   id: string;
@@ -1230,8 +1232,17 @@ export interface StartSessionUpdateBlock extends BaseBlock {
   type: "start.session.update";
   in: Record<string, never>;
   out: {
-    beforeSession: DataEdgeConnection;
-    afterSession: DataEdgeConnection;
+    before: DataEdgeConnection;
+    after: DataEdgeConnection;
+  };
+}
+
+export interface StartLocationUpdateBlock extends BaseBlock {
+  type: "start.location.update";
+  in: Record<string, never>;
+  out: {
+    before: DataEdgeConnection;
+    after: DataEdgeConnection;
   };
 }
 
@@ -1255,8 +1266,8 @@ export interface ParameterRetrieveBlock extends BaseBlock {
     parameter: DataEdgeConnection;
   };
   data: {
-    parameterId: string | null; // the ID of the parameter to retrieve
-    deviceId: string | null; // if null, the current device is used
+    parameterId?: string; // if omitted, the input parameterId will be used
+    deviceId?: string; // if omitted, the input deviceId will be used
   };
 }
 
@@ -1265,20 +1276,116 @@ export interface ParameterRetrieveBlockInputs {
   deviceId: string | null;
 }
 
+export interface PropertyRetrieveBlock extends BaseBlock {
+  type: "property.retrieve";
+  in: {
+    propertyId: DataEdgeConnection;
+  };
+  out: {
+    property: DataEdgeConnection;
+  };
+  data: {
+    propertyId?: string;
+  };
+}
+
+export interface PropertyRetrieveBlockInputs {
+  propertyId: string;
+}
+
+export interface LocationRetrieveBlock extends BaseBlock {
+  type: "location.retrieve";
+  in: {
+    locationId: DataEdgeConnection;
+  };
+  out: {
+    location: DataEdgeConnection;
+  };
+  data: {
+    locationId?: string;
+  };
+}
+
+export interface LocationRetrieveBlockInputs {
+  locationId: string;
+}
+
+export interface SessionRetrieveBlock extends BaseBlock {
+  type: "session.retrieve";
+  in: {
+    sessionId: DataEdgeConnection;
+  };
+  out: {
+    session: DataEdgeConnection;
+  };
+  data: {
+    sessionId?: string;
+  };
+}
+
+export interface SessionRetrieveBlockInputs {
+  sessionId: string;
+}
+
+export interface DeviceRetrieveBlock extends BaseBlock {
+  type: "device.retrieve";
+  in: {
+    deviceId: DataEdgeConnection;
+  };
+  out: {
+    device: DataEdgeConnection;
+  };
+  data: {
+    deviceId?: string;
+  };
+}
+
+export interface DeviceRetrieveBlockInputs {
+  deviceId: string;
+}
+
+export interface UserRetrieveBlock extends BaseBlock {
+  type: "user.retrieve";
+  in: {
+    userId: DataEdgeConnection;
+  };
+  out: {
+    user: DataEdgeConnection;
+  };
+  data: {
+    userId?: string;
+  };
+}
+
+export interface UserRetrieveBlockInputs {
+  userId: string;
+}
+
 export interface ParameterUpdateBlock extends BaseBlock {
   type: "parameter.update";
   in: {
     parameterId: DataEdgeConnection;
     deviceId: DataEdgeConnection;
     currentValue: DataEdgeConnection;
+    enumArray: DataEdgeConnection;
+    description: DataEdgeConnection;
+    name: DataEdgeConnection;
+    reference: DataEdgeConnection;
   };
   out: {
-    parameter: DataEdgeConnection;
+    beforeParameter: DataEdgeConnection;
+    afterParameter: DataEdgeConnection;
+    changedFields: DataEdgeConnection;
   };
   data: {
-    parameterId: string | null;
-    deviceId: string | null;
-    currentValue: number | string | boolean | null;
+    type: "boolean" | "number" | "text" | "enum";
+    parameterId?: string;
+    deviceId?: string;
+    currentValue?: number | string | boolean | null;
+    enumArray?: string[];
+    description?: string;
+    name?: string;
+    reference?: string;
   };
 }
 
@@ -1286,6 +1393,94 @@ export interface ParameterUpdateBlockInputs {
   parameterId: string;
   deviceId: string | null;
   currentValue: number | string | boolean;
+  enumArray: string[] | null;
+  description: string | null;
+  name: string | null;
+  reference: string | null;
+}
+
+export interface DeviceUpdateBlock extends BaseBlock {
+  type: "device.update";
+  in: {
+    deviceId: DataEdgeConnection;
+    data: DataEdgeConnection;
+  };
+  out: {
+    device: DataEdgeConnection;
+  };
+  data: {
+    deviceId?: string;
+    data?: Record<string, any>;
+  };
+}
+
+export interface DeviceUpdateBlockInputs {
+  deviceId: string;
+  data: Record<string, any>;
+}
+
+export interface LocationUpdateBlock extends BaseBlock {
+  type: "location.update";
+  in: {
+    locationId: DataEdgeConnection;
+    data: DataEdgeConnection;
+  };
+  out: {
+    location: DataEdgeConnection;
+  };
+  data: {
+    locationId?: string;
+    data?: Record<string, any>;
+  };
+}
+
+export interface LocationUpdateBlockInputs {
+  locationId: string;
+  data: Record<string, any>;
+}
+
+export interface PropertyUpdateBlock extends BaseBlock {
+  type: "property.update";
+  in: {
+    propertyId: DataEdgeConnection;
+    data: DataEdgeConnection;
+  };
+  out: {
+    property: DataEdgeConnection;
+  };
+  data: {
+    propertyId?: string;
+    data?: Record<string, any>;
+  };
+}
+
+export interface PropertyUpdateBlockInputs {
+  propertyId: string;
+  data: Record<string, any>;
+}
+
+export interface SessionTerminateBlock extends BaseBlock {
+  type: "session.terminate";
+  in: {
+    sessionId: DataEdgeConnection;
+    ignoreFlowErrors: DataEdgeConnection;
+    shouldRetry: DataEdgeConnection;
+    autoRenewIfAvailable: DataEdgeConnection;
+  };
+  out: Record<string, never>;
+  data: {
+    sessionId?: string;
+    ignoreFlowErrors?: boolean;
+    shouldRetry?: boolean;
+    autoRenewIfAvailable?: boolean;
+  };
+}
+
+export interface SessionTerminateBlockInputs {
+  sessionId: string;
+  ignoreFlowErrors: boolean;
+  shouldRetry: boolean;
+  autoRenewIfAvailable: boolean;
 }
 
 // constant blocks
@@ -1327,8 +1522,10 @@ export interface MathAddBlock extends BaseBlock {
     result: DataEdgeConnection;
   };
   data: {
-    a: number | null; // if an input is connected, this is null. Otherwise this value will be used
-    b: number | null; // if an input is connected, this is null. Otherwise this value will be used
+    // if an input is connected, this value is ignored. Otherwise this value will be used
+    a?: number;
+    // if an input is connected, this value is ignored. Otherwise this value will be used
+    b?: number;
   };
 }
 
@@ -1337,11 +1534,71 @@ export interface MathAddBlockInputs {
   b: number;
 }
 
+export interface MathSubtractBlock extends BaseBlock {
+  type: "math.subtract";
+  in: {
+    a: DataEdgeConnection;
+    b: DataEdgeConnection;
+  };
+  out: {
+    result: DataEdgeConnection;
+  };
+  data: {
+    a?: number;
+    b?: number;
+  };
+}
+
+export interface MathSubtractBlockInputs {
+  a: number;
+  b: number;
+}
+
+export interface MathMultiplyBlock extends BaseBlock {
+  type: "math.multiply";
+  in: {
+    a: DataEdgeConnection;
+    b: DataEdgeConnection;
+  };
+  out: {
+    result: DataEdgeConnection;
+  };
+  data: {
+    a?: number;
+    b?: number;
+  };
+}
+
+export interface MathMultiplyBlockInputs {
+  a: number;
+  b: number;
+}
+
+export interface MathDivideBlock extends BaseBlock {
+  type: "math.divide";
+  in: {
+    a: DataEdgeConnection;
+    b: DataEdgeConnection;
+  };
+  out: {
+    result: DataEdgeConnection;
+  };
+  data: {
+    a?: number;
+    b?: number;
+  };
+}
+
+export interface MathDivideBlockInputs {
+  a: number;
+  b: number;
+}
+
 export interface MapDestructureBlock extends BaseBlock {
   type: "map.destructure";
   // the list of keys you want to pull out
   data: {
-    keys: string[];
+    keys?: string[];
   };
   // a single input: the map to destructure
   in: { map: DataEdgeConnection };
@@ -1360,7 +1617,7 @@ export interface IfBlock extends BaseBlock {
   in: Record<string, never>;
   out: Record<string, ControlEdgeConnection>;
   data: {
-    condition: unknown; // JSON logic condition
+    condition: JsonLogic;
   };
 }
 
@@ -1372,9 +1629,9 @@ export interface HttpPatchBlock extends BaseBlock {
     headers: DataEdgeConnection;
   };
   data: {
-    url: string | null; // if an input is connected, this is null. Otherwise this value will be used
-    body: Record<string, string | number | boolean> | null; // if an input is connected, this is null. Otherwise this value will be used
-    headers: Record<string, string> | null; // if an input is connected, this is null. Otherwise this value will be used
+    url?: string; // if an input is connected, this is ignored. Otherwise this value will be used
+    body?: Record<string, string | number | boolean>; // if an input is connected, this is ignored. Otherwise this value will be used
+    headers?: Record<string, string>; // if an input is connected, this is ignored. Otherwise this value will be used
   };
   out: {
     status: DataEdgeConnection;
@@ -1399,8 +1656,8 @@ export interface HttpGetBlock extends BaseBlock {
     data: DataEdgeConnection;
   };
   data: {
-    url: string | null;
-    headers: Record<string, string> | null;
+    url?: string;
+    headers?: Record<string, string>;
   };
 }
 
@@ -1421,9 +1678,9 @@ export interface HttpPostBlock extends BaseBlock {
     data: DataEdgeConnection;
   };
   data: {
-    url: string | null;
-    body: Record<string, string | number | boolean> | null;
-    headers: Record<string, string> | null;
+    url?: string;
+    body?: Record<string, string | number | boolean>;
+    headers?: Record<string, string>;
   };
 }
 
@@ -1444,8 +1701,8 @@ export interface HttpDeleteBlock extends BaseBlock {
     data: DataEdgeConnection;
   };
   data: {
-    url: string | null;
-    headers: Record<string, string> | null;
+    url?: string;
+    headers?: Record<string, string>;
   };
 }
 
@@ -1466,9 +1723,9 @@ export interface HttpPutBlock extends BaseBlock {
     data: DataEdgeConnection;
   };
   data: {
-    url: string | null;
-    body: Record<string, string | number | boolean> | null;
-    headers: Record<string, string> | null;
+    url?: string;
+    body?: Record<string, string | number | boolean>;
+    headers?: Record<string, string>;
   };
 }
 
@@ -1489,11 +1746,11 @@ export interface MqttSendBlock extends BaseBlock {
   };
   out: Record<string, never>;
   data: {
-    message: string | null;
-    topic: string | null;
-    username: string | null;
-    password: string | null;
-    connectUrl: string | null;
+    message?: string;
+    topic?: string;
+    username?: string;
+    password?: string;
+    connectUrl?: string;
   };
 }
 
@@ -1524,14 +1781,27 @@ export type FlowBlock =
   | StartCustomBlock
   | StartQuickActionLocationBlock
   | StartSessionUpdateBlock
+  | StartLocationUpdateBlock
   | StartParameterUpdateBlock
   | ConstNumberBlock
   | ConstTextBlock
   | ConstBooleanBlock
   | MathAddBlock
+  | MathSubtractBlock
+  | MathMultiplyBlock
+  | MathDivideBlock
   | MapDestructureBlock
   | ParameterRetrieveBlock
+  | PropertyRetrieveBlock
+  | LocationRetrieveBlock
+  | SessionRetrieveBlock
+  | DeviceRetrieveBlock
+  | UserRetrieveBlock
   | ParameterUpdateBlock
+  | DeviceUpdateBlock
+  | LocationUpdateBlock
+  | PropertyUpdateBlock
+  | SessionTerminateBlock
   | IfBlock
   | HttpPatchBlock
   | HttpGetBlock
@@ -1544,8 +1814,20 @@ export type FlowBlock =
 
 export type FlowBlockInput =
   | MathAddBlockInputs
+  | MathSubtractBlockInputs
+  | MathMultiplyBlockInputs
+  | MathDivideBlockInputs
   | ParameterRetrieveBlockInputs
+  | PropertyRetrieveBlockInputs
+  | LocationRetrieveBlockInputs
+  | SessionRetrieveBlockInputs
+  | DeviceRetrieveBlockInputs
+  | UserRetrieveBlockInputs
   | ParameterUpdateBlockInputs
+  | DeviceUpdateBlockInputs
+  | LocationUpdateBlockInputs
+  | PropertyUpdateBlockInputs
+  | SessionTerminateBlockInputs
   | HttpsPatchBlockInputs
   | HttpGetBlockInputs
   | HttpPostBlockInputs
