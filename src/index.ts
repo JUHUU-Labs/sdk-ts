@@ -10,6 +10,7 @@ import LocationsService from "./locations/locations.service";
 import TermsService from "./terms/terms.service";
 import TariffsService from "./tariffs/tariffs.service";
 import ProductService from "./products/products.service";
+import WebsocketsService from "./websockets/websockets.service";
 import {
   AccessControlListElement,
   Address,
@@ -103,6 +104,7 @@ export class Juhuu {
     this.terms = new TermsService(config);
     this.tariffs = new TariffsService(config);
     this.products = new ProductService(config);
+    this.websockets = new WebsocketsService(config);
     this.settings = new SettingsService(config);
     this.accountingAreas = new AccountingAreasService(config);
     this.payouts = new PayoutsService(config);
@@ -146,6 +148,7 @@ export class Juhuu {
   readonly terms: TermsService;
   readonly tariffs: TariffsService;
   readonly products: ProductService;
+  readonly websockets: WebsocketsService;
   readonly settings: SettingsService;
   readonly accountingAreas: AccountingAreasService;
   readonly payouts: PayoutsService;
@@ -3900,5 +3903,69 @@ export namespace JUHUU {
 
       export type Response = JUHUU.ConnectorMessage.Object[];
     }
+  }
+
+  export namespace Websocket {
+    export namespace Connect {
+      export type Params = {};
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        subscribe: (rooms: string[]) => void;
+        unsubscribe: (rooms: string[]) => void;
+        subscribeQuery: (
+          payload: JUHUU.Websocket.SubscribeQuery.Params
+        ) => void;
+        unsubscribeQuery: (
+          payload: JUHUU.Websocket.UnsubscribeQuery.Params
+        ) => void;
+        rpc: (
+          payload: JUHUU.Websocket.Rpc.Params
+        ) => Promise<JUHUU.Websocket.Rpc.Response>;
+        onQueryUpdate: (
+          callback: (message: JUHUU.Websocket.QueryUpdate) => void
+        ) => void;
+        close: () => void;
+      };
+    }
+
+    export namespace SubscribeQuery {
+      export type Params = {
+        subId: string;
+        method: "GET";
+        path: string;
+        query?: Record<string, unknown>;
+      };
+    }
+
+    export namespace UnsubscribeQuery {
+      export type Params = {
+        subId: string;
+      };
+    }
+
+    export namespace Rpc {
+      export type Params = {
+        id: string;
+        method: "GET" | "POST" | "PATCH" | "DELETE";
+        path: string;
+        query?: Record<string, unknown>;
+        body?: unknown;
+        headers?: Record<string, unknown>;
+      };
+
+      export type Response = {
+        id: string;
+        status: number;
+        data?: unknown;
+        error?: unknown;
+      };
+    }
+
+    export type QueryUpdate = {
+      subId: string;
+      data: unknown;
+    };
   }
 }
