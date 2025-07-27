@@ -2456,10 +2456,10 @@ export namespace JUHUU {
         name?: string;
         address?: Partial<Address>;
         deviceIdArray?: string[];
-        deviceId?: string;
+        deviceId?: string | null;
         maximumConcurrentSessions?: number;
         surveyEnabled?: boolean;
-        accountingAreaId?: string;
+        accountingAreaId?: string | null;
         latitude?: number;
         longitude?: number;
         purposeArray?: Purpose[];
@@ -2467,6 +2467,8 @@ export namespace JUHUU {
         rentOfferArray?: Offer[];
         reservationOfferArray?: Offer[];
         disabled?: boolean; // if disabled is true, no new sessions can be created
+        rentableDeviceGroupLocationId?: string | null;
+        termId?: string | null; // id of the term that is assigned to this location
       };
 
       export type Options = JUHUU.RequestOptions;
