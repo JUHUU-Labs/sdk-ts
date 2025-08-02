@@ -1,5 +1,19 @@
 export type Environment = "development" | "production";
 
+export type ProximityStrategy =
+  | {
+      type: "qr";
+      text: string | null;
+    }
+  | {
+      type: "link";
+      linkId: string | null;
+    }
+  | {
+      type: "location";
+      radius: number | null;
+    };
+
 export type Platform = "ios" | "android" | "windows" | "macos" | "web";
 export type DeviceStatus = "running" | "sleeping" | "shutdown"; // sleeping = running, but offline
 export type PushToken = {
@@ -1423,14 +1437,46 @@ export interface LocationUpdateBlock extends BaseBlock {
   type: "location.update";
   in: {
     locationId: DataEdgeConnection;
-    data: DataEdgeConnection;
+    latitude: DataEdgeConnection;
+    longitude: DataEdgeConnection;
+    purposeArray: DataEdgeConnection;
+    circumstanceArray: DataEdgeConnection;
+    rentOfferArray: DataEdgeConnection;
+    reservationOfferArray: DataEdgeConnection;
+    address: DataEdgeConnection;
+    name: DataEdgeConnection;
+    termId: DataEdgeConnection;
+    deviceId: DataEdgeConnection;
+    useableDeviceGroupLocationId: DataEdgeConnection;
+    maximumConcurrentSessions: DataEdgeConnection;
+    surveyEnabled: DataEdgeConnection;
+    disabled: DataEdgeConnection;
+    accountingAreaId: DataEdgeConnection;
+    deviceIdArray: DataEdgeConnection;
+    rentableDeviceGroupLocationId: DataEdgeConnection;
   };
   out: {
     location: DataEdgeConnection;
   };
   data: {
     locationId?: string;
-    data?: Record<string, any>;
+    latitude?: number | null;
+    longitude?: number | null;
+    purposeArray?: Purpose[] | null;
+    circumstanceArray?: Circumstance[] | null;
+    rentOfferArray?: Offer[] | null;
+    reservationOfferArray?: Offer[] | null;
+    address?: Address | null;
+    name?: string | null;
+    termId?: string | null;
+    deviceId?: string | null;
+    useableDeviceGroupLocationId?: string | null;
+    maximumConcurrentSessions?: number | null;
+    surveyEnabled?: boolean | null;
+    disabled?: boolean | null;
+    accountingAreaId?: string | null;
+    deviceIdArray?: string[] | null;
+    rentableDeviceGroupLocationId?: string | null;
   };
 }
 
@@ -1614,10 +1660,19 @@ export interface MapDestructureBlockInputs {
 // control blocks
 export interface IfBlock extends BaseBlock {
   type: "control.if";
-  in: Record<string, never>;
+  in: Record<string, DataEdgeConnection>;
   out: Record<string, ControlEdgeConnection>;
   data: {
     condition: JsonLogic;
+  };
+}
+
+export interface SwitchBlock extends BaseBlock {
+  type: "control.switch";
+  in: Record<string, DataEdgeConnection>;
+  out: Record<string, ControlEdgeConnection>;
+  data: {
+    expression: JsonLogic;
   };
 }
 
@@ -1762,6 +1817,22 @@ export interface MqttSendBlockInputs {
   connectUrl: string;
 }
 
+export interface FlowExecuteBlock extends BaseBlock {
+  type: "flow.execute";
+  in: {
+    flowId: DataEdgeConnection;
+  } & Record<string, DataEdgeConnection>;
+  out: Record<string, DataEdgeConnection>;
+  data: {
+    flowId?: string;
+  };
+}
+
+export interface FlowExecuteBlockInputs {
+  flowId: string;
+  [key: string]: any;
+}
+
 export interface EndCustomBlock extends BaseBlock {
   type: "end.custom";
   // maps each output‐param name to its edge ID
@@ -1803,12 +1874,14 @@ export type FlowBlock =
   | PropertyUpdateBlock
   | SessionTerminateBlock
   | IfBlock
+  | SwitchBlock
   | HttpPatchBlock
   | HttpGetBlock
   | HttpPostBlock
   | HttpDeleteBlock
   | HttpPutBlock
   | MqttSendBlock
+  | FlowExecuteBlock
   | HttpPatchBlock
   | EndCustomBlock;
 
@@ -1834,6 +1907,7 @@ export type FlowBlockInput =
   | HttpDeleteBlockInputs
   | HttpPutBlockInputs
   | MqttSendBlockInputs
+  | FlowExecuteBlockInputs
   | MapDestructureBlockInputs
   | Record<string, unknown>;
 
@@ -1884,4 +1958,12 @@ export type QuickAction = {
   icon: string | null;
   name: LocaleString;
   flowId: string;
+  visibleCondition: Condition | null; // if null the quick action is always visible
+};
+
+export type QuickView = {
+  name: LocaleString;
+  parameterId: string | null;
+  icon: string | null;
+  visibleCondition: Condition | null; // if null the quick view is always visible
 };

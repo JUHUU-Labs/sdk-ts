@@ -61,6 +61,8 @@ import {
   FlowStatus,
   FlowExecutionEnvironment,
   FlowLog,
+  ProximityStrategy,
+  QuickView,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -2377,6 +2379,8 @@ export namespace JUHUU {
       incidentTemplateIdArray: string[]; // array of incident template ids that are assigned to this location
       adminQuickActionArray: QuickAction[]; // quick actions that are available for admins in the app
       userQuickActionArray: QuickAction[]; // quick actions that are available for users in
+      deviceProximityStrategyArray: ProximityStrategy[]; // strategies that are used to determine the proximity of the location
+      adminQuickViewArray: QuickView[]; // quick views that are available for admins in the app
     };
 
     export interface RentableDeviceGroup extends Base {
@@ -2699,11 +2703,12 @@ export namespace JUHUU {
       source: "fluctuo" | null;
       location: GeoPoint | null;
       invalidAt: Date | null;
-      connectorId: string | null; // connector that is used to send messages to the device, null if the device has no connector
-      connectorParameter: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
       disabled: boolean; // if disabled is true, the device cannot be used by users which are not property admins
       disabledBy: "propertyAdmin" | "nodeArray" | null;
       incidentTemplateIdArray: string[]; // array of incident template ids that are assigned to this device
+      permissionArray: DevicePermission[];
+      proximityStrategyArray: ProximityStrategy[];
+      adminQuickViewArray: QuickView[]; // quick views that are available for admins in the app
     };
 
     export namespace Create {
