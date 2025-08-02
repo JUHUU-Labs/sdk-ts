@@ -63,7 +63,6 @@ import {
   FlowExecutionEnvironment,
   FlowLog,
   ProximityStrategy,
-  QuickView,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
