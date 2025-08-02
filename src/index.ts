@@ -58,6 +58,7 @@ import {
   FlowBlock,
   FlowEdge,
   QuickAction,
+  QuickView,
   FlowStatus,
   FlowExecutionEnvironment,
   FlowLog,
@@ -2377,9 +2378,9 @@ export namespace JUHUU {
       disabledBy: "propertyAdmin" | "deviceNodeArray" | null;
       visible: boolean; // if false, the location is accessible but is not shown in the UI of the app
       incidentTemplateIdArray: string[]; // array of incident template ids that are assigned to this location
-      adminQuickActionArray: QuickAction[]; // quick actions that are available for admins in the app
-      userQuickActionArray: QuickAction[]; // quick actions that are available for users in
       deviceProximityStrategyArray: ProximityStrategy[]; // strategies that are used to determine the proximity of the location
+      adminQuickActionArray: QuickAction[]; // quick actions that are available for admins in the app
+      userQuickActionArray: QuickAction[]; // quick actions that are available for users in the app
       adminQuickViewArray: QuickView[]; // quick views that are available for admins in the app
     };
 
@@ -2470,6 +2471,9 @@ export namespace JUHUU {
         circumstanceArray?: Circumstance[];
         rentOfferArray?: Offer[];
         reservationOfferArray?: Offer[];
+        adminQuickActionArray?: QuickAction[];
+        userQuickActionArray?: QuickAction[];
+        adminQuickViewArray?: QuickView[];
         disabled?: boolean; // if disabled is true, no new sessions can be created
         rentableDeviceGroupLocationId?: string | null;
         termId?: string | null; // id of the term that is assigned to this location
@@ -2772,6 +2776,7 @@ export namespace JUHUU {
         longitude?: number | null;
         connectorId?: string | null; // connector that is used to send messages to the device, null if the device has no connector
         connectorParameter?: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
+        adminQuickViewArray?: QuickView[];
         disabled?: boolean; // if disabled is true, the device cannot be used by users which are not property admins
       };
 

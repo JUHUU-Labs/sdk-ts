@@ -1967,3 +1967,9 @@ export type QuickView = {
   icon: string | null;
   visibleCondition: Condition | null; // if null the quick view is always visible
 };
+
+export type QuickView = {
+  icon: string | null;
+  name: LocaleString;
+  flowId: string;
+};
