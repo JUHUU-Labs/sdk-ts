@@ -108,6 +108,7 @@ export default class DevicesService extends Service {
           longitude: DeviceUpdateParams.longitude,
           connectorId: DeviceUpdateParams.connectorId,
           connectorParameter: DeviceUpdateParams.connectorParameter,
+          adminQuickViewArray: DeviceUpdateParams.adminQuickViewArray,
           disabled: DeviceUpdateParams.disabled,
         },
         authenticationNotOptional: true,

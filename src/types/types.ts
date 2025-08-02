@@ -1885,3 +1885,9 @@ export type QuickAction = {
   name: LocaleString;
   flowId: string;
 };
+
+export type QuickView = {
+  icon: string | null;
+  name: LocaleString;
+  flowId: string;
+};
