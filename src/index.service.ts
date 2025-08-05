@@ -18,14 +18,23 @@ export default class Service {
     this.authenticationMode = config.authenticationMode ?? "jwt";
 
     switch (config.environment) {
-      case "development":
+      case "development": {
         this.httpBaseUrl = "https://api.juhuu.dev/v1/";
         this.wssBaseUrl = "wss://api.juhuu.dev/v1/";
         break;
-      default:
+      }
+
+      case "staging": {
+        this.httpBaseUrl = "https://api.juhuu.review/v1/";
+        this.wssBaseUrl = "wss://api.juhuu.review/v1/";
+        break;
+      }
+
+      default: {
         this.httpBaseUrl = "https://api.juhuu.app/v1/";
         this.wssBaseUrl = "wss://api.juhuu.app/v1/";
         break;
+      }
     }
   }
 

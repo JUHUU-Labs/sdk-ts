@@ -1,9 +1,9 @@
-export type Environment = "development" | "production";
+export type Environment = "development" | "production" | "staging";
 
 export type ProximityStrategy =
   | {
       type: "qr";
-      text: string | null;
+      flowId: string | null;
     }
   | {
       type: "link";
@@ -251,9 +251,7 @@ export interface SessionSettings {
   autoRenewEnabled: boolean;
 }
 
-export interface EnvironmentSettings {
-  isDev: boolean;
-}
+export interface EnvironmentSettings {}
 
 export type PaymentMethod =
   | "card"

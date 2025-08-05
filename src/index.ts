@@ -2476,6 +2476,7 @@ export namespace JUHUU {
         disabled?: boolean; // if disabled is true, no new sessions can be created
         rentableDeviceGroupLocationId?: string | null;
         termId?: string | null; // id of the term that is assigned to this location
+        visible?: boolean; // if false, the location is accessible but is not shown in the UI of the app
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2777,6 +2778,10 @@ export namespace JUHUU {
         connectorParameter?: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
         adminQuickViewArray?: QuickView[];
         disabled?: boolean; // if disabled is true, the device cannot be used by users which are not property admins
+        proximityStrategyArray?: ProximityStrategy[]; // strategies that are used to determine the proximity of the device
+        simIdArray?: string[];
+        permissionArray?: DevicePermission[];
+        parameterIdArray?: string[]; // array of parameter ids that are assigned to this device
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3412,6 +3417,7 @@ export namespace JUHUU {
       createdAt: Date;
       reference: string | null;
       parameterId: string;
+      isOutlier: boolean;
       shapAnomalyArray: Array<{
         parameterAnomalyGroupId: string;
         shapScore: number | null;

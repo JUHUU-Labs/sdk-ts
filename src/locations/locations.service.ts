@@ -113,6 +113,7 @@ export default class LocationsService extends Service {
           latitude: LocationUpdateParams.latitude,
           longitude: LocationUpdateParams.longitude,
           disabled: LocationUpdateParams.disabled,
+          visible: LocationUpdateParams.visible,
         },
         authenticationNotOptional: true,
       },
