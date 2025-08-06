@@ -77,6 +77,10 @@ export default class LinkService extends Service {
       queryArray.push("fiveLetterQr=" + LinkListParams.fiveLetterQr);
     }
 
+    if (LinkListParams.referenceObjectId !== undefined) {
+      queryArray.push("referenceObjectId=" + LinkListParams.referenceObjectId);
+    }
+
     return await super.sendRequest<JUHUU.Link.List.Response>(
       {
         method: "GET",

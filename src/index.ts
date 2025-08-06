@@ -67,7 +67,6 @@ import {
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
 import PayoutsService from "./payouts/payouts.service";
-import ConnectorMessagesService from "./connectorMessages/connectorMessages.service";
 import SimsService from "./sims/sims.service";
 import LicenseTemplatesService from "./licenseTemplates/licenseTemplates.service";
 import ArticlesService from "./articles/articles.service";
@@ -110,7 +109,6 @@ export class Juhuu {
     this.settings = new SettingsService(config);
     this.accountingAreas = new AccountingAreasService(config);
     this.payouts = new PayoutsService(config);
-    this.connectorMessages = new ConnectorMessagesService(config);
     this.sims = new SimsService(config);
     this.licenseTemplates = new LicenseTemplatesService(config);
     this.articles = new ArticlesService(config);
@@ -154,7 +152,6 @@ export class Juhuu {
   readonly settings: SettingsService;
   readonly accountingAreas: AccountingAreasService;
   readonly payouts: PayoutsService;
-  readonly connectorMessages: ConnectorMessagesService;
   readonly sims: SimsService;
   readonly licenseTemplates: LicenseTemplatesService;
   readonly articles: ArticlesService;
@@ -2662,6 +2659,7 @@ export namespace JUHUU {
       export type Params = {
         fiveLetterQr?: string;
         propertyId?: string;
+        referenceObjectId?: string; // id of the object that the link is assigned to
       };
 
       export type Options = {};
@@ -2713,6 +2711,7 @@ export namespace JUHUU {
       permissionArray: DevicePermission[];
       proximityStrategyArray: ProximityStrategy[];
       adminQuickViewArray: QuickView[]; // quick views that are available for admins in the app
+      simIdArray: string[]; // array of sim ids that are assigned to this device
     };
 
     export namespace Create {
@@ -2737,7 +2736,7 @@ export namespace JUHUU {
       };
 
       export type Options = {
-        expand?: Array<"property" | "deviceTemplate" | "connector">;
+        expand?: Array<"property" | "deviceTemplate">;
       } & JUHUU.RequestOptions;
 
       export type Response = {
@@ -2774,8 +2773,6 @@ export namespace JUHUU {
         description?: string | null;
         latitude?: number | null;
         longitude?: number | null;
-        connectorId?: string | null; // connector that is used to send messages to the device, null if the device has no connector
-        connectorParameter?: string | null; // unique identifier that the connector uses to differentiate between the devices if a connector is used by multiple devices
         adminQuickViewArray?: QuickView[];
         disabled?: boolean; // if disabled is true, the device cannot be used by users which are not property admins
         proximityStrategyArray?: ProximityStrategy[]; // strategies that are used to determine the proximity of the device
@@ -2938,7 +2935,7 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        connector: JUHUU.Incident.Object;
+        incident: JUHUU.Incident.Object;
       };
     }
 
@@ -3880,45 +3877,6 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.MqttTopic.Object;
-    }
-  }
-
-  export namespace ConnectorMessage {
-    export type Object = {
-      id: string;
-      readonly object: "connectorMessage";
-      message: string;
-      connectorId: string;
-      direction: "inbound" | "outbound";
-      createdAt: Date;
-      deviceId: string | null;
-      propertyId: string;
-    };
-
-    export namespace Retrieve {
-      export type Params = {
-        connectorMessageId: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        connectorMessage: JUHUU.ConnectorMessage.Object;
-      };
-    }
-
-    export namespace List {
-      export type Params = {
-        propertyId?: string;
-        connectorId?: string;
-      };
-
-      export type Options = {
-        skip?: number;
-        limit?: number;
-      } & JUHUU.RequestOptions;
-
-      export type Response = JUHUU.ConnectorMessage.Object[];
     }
   }
 
