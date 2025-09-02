@@ -12,6 +12,7 @@ export default class Service {
     this.setRefreshToken = config.setRefreshToken ?? (() => Promise.resolve());
     this.getRefreshToken =
       config.getRefreshToken ?? (() => Promise.resolve(null));
+    this.logger = config.logger ?? (() => {});
     this.clientVersion = config.clientVersion;
     this.apiKey = config.apiKey ?? null;
     this.defaultRequestOptions = config.defaultRequestOptions ?? {};
@@ -53,6 +54,7 @@ export default class Service {
   setAccessToken: (accessToken: string) => Promise<void>;
   getRefreshToken: () => Promise<string | null>;
   setRefreshToken: (refreshToken: string) => Promise<void>;
+  logger: (message: string, ...args: any[]) => void;
 
   async sendRequest<T>(
     {
@@ -107,7 +109,7 @@ export default class Service {
       }
     }
 
-    console.log("authenticationMode", this.authenticationMode);
+    this.logger("authenticationMode", this.authenticationMode);
 
     if (currentRequestOptions.refreshTokensIfNecessary === undefined) {
       switch (this.authenticationMode) {
@@ -123,7 +125,7 @@ export default class Service {
       }
     }
 
-    console.log("currentOptions", currentRequestOptions);
+    this.logger("currentOptions", currentRequestOptions);
     let token: string | null | undefined = null;
     let apiKey: string | null = null;
 
@@ -138,7 +140,7 @@ export default class Service {
           token = currentRequestOptions.accessToken;
         }
 
-        console.log("accessToken:", token);
+        this.logger("accessToken:", token);
 
         if (
           (token === null || token === undefined) &&
@@ -188,7 +190,7 @@ export default class Service {
     let response: Response | null = null;
     let responseObject: JUHUU.HttpResponse<T> | null = null;
 
-    console.log(
+    this.logger(
       "sending request to",
       uri,
       "with apiKey",
@@ -240,27 +242,27 @@ export default class Service {
         status: response?.status ?? 0,
       };
 
-      console.log(
+      this.logger(
         "refreshTokensIfNecessary",
         currentRequestOptions.refreshTokensIfNecessary
       );
-      console.log("responseObject.status", responseObject.status);
+      this.logger("responseObject.status", responseObject.status);
 
       if (
         responseObject.status === 403 &&
         currentRequestOptions.refreshTokensIfNecessary === true
       ) {
-        console.log("refreshing tokens...");
+        this.logger("refreshing tokens...");
         // get new access and refresh token with old refresh token
         const oldRefreshToken = await this.getRefreshToken();
 
-        console.log("old refresh token", oldRefreshToken);
+        this.logger("old refresh token", oldRefreshToken);
         if (oldRefreshToken === null) {
-          console.log("no old refresh token found");
+          this.logger("no old refresh token found");
           return responseObject;
         }
 
-        console.log("sending request to refresh tokens...");
+        this.logger("sending request to refresh tokens...");
         const query = await this.sendRequest<{
           accessToken: string;
           refreshToken: string;
@@ -278,14 +280,14 @@ export default class Service {
           }
         );
 
-        console.log("query for new tokens", query);
+        this.logger("query for new tokens", query);
 
         if (query.ok === false) {
           return responseObject;
         }
 
         if (query.data === null) {
-          console.log("no data in query");
+          this.logger("no data in query");
           return responseObject;
         }
 
@@ -298,7 +300,7 @@ export default class Service {
         ]);
 
         // send original request again
-        console.log("retrying original request...");
+        this.logger("retrying original request...");
 
         const retryResponse = await this.sendRequest<T>(
           {
@@ -313,7 +315,7 @@ export default class Service {
           }
         );
 
-        console.log("retry response", retryResponse);
+        this.logger("retry response", retryResponse);
         if (retryResponse.ok === true) {
           return retryResponse;
         } else {
@@ -325,7 +327,7 @@ export default class Service {
         await this.onException<T>(responseObject);
       }
     } finally {
-      console.log(
+      this.logger(
         method +
           ": " +
           uri +
@@ -459,11 +461,11 @@ export default class Service {
 
   connectToWebsocket<T>({ url }: { url: string }): Socket {
     const uri = this.wssBaseUrl + url;
-    console.log("connecting to websocket", uri);
+    this.logger("connecting to websocket", uri);
     const socket = io(uri, { transports: ["websocket"] });
 
     socket.on("connect", () => {
-      console.log("connected to websocket", uri);
+      this.logger("connected to websocket", uri);
     });
 
     socket.on("connect_error", (error) => {

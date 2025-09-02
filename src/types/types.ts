@@ -901,6 +901,7 @@ export namespace Layout {
     icon: string;
     title: LocaleString;
     buttonName: string;
+    flowId: string | null | undefined;
   };
 
   export namespace Text {
@@ -932,6 +933,7 @@ export namespace Layout {
     export interface General extends Block {
       text: LocaleString;
       buttonName: string;
+      flowId: string | null | undefined;
     }
 
     export interface Small extends General {
@@ -978,6 +980,7 @@ export namespace Layout {
           type: "card";
           elementArray: Array<CardElement>;
           buttonName: string | null; // if null, card element is not clickable
+          flowId: string | null | undefined;
         }
 
         export type CardElement = {
@@ -987,9 +990,7 @@ export namespace Layout {
 
         export interface Toggle extends FormElementBlock {
           type: "toggle";
-          onButtonName: string;
-          offButtonName: string;
-          defaultValueParameterName: string;
+          parameterId: string | null; // A toggle has to be linked to a parameter of type boolean, so that the user can change the value of the parameter. A flow can listen to the parameter update
         }
       }
     }

@@ -1,3 +1,4 @@
+import AchievementsService from "./achievements/achievements.service";
 import SessionsService from "./sessions/sessions.service";
 import LinksService from "./links/links.service";
 import UsersService from "./users/users.service";
@@ -12,7 +13,6 @@ import TariffsService from "./tariffs/tariffs.service";
 import ProductService from "./products/products.service";
 import WebsocketsService from "./websockets/websockets.service";
 import {
-  AccessControlListElement,
   Address,
   ApiKeyScope,
   ApiKeyStatus,
@@ -87,11 +87,22 @@ import EmzService from "./emz/emz.service";
 import FlowsService from "./flows/flows.service";
 import FlowTracesService from "./flowTraces/flowTraces.service";
 import MqttTopicsService from "./mqttTopics/mqttTopics.service";
+import LicensePlatesService from "./licensePlates/licensePlates.service";
+import VehiclesService from "./vehicles/vehicles.service";
+import OrdersService from "./orders/orders.service";
+import BasketsService from "./baskets/baskets.service";
+import BenefitCardsService from "./benefitCards/benefitCards.service";
+import CatalogsService from "./catalogs/catalogs.service";
+import OffersService from "./offers/offers.service";
+import KitsService from "./kits/kits.service";
+import PanelsService from "./panels/panels.service";
+import PricesService from "./prices/prices.service";
 
 export * from "./types/types";
 
 export class Juhuu {
   constructor(config: JUHUU.SetupConfig) {
+    this.achievements = new AchievementsService(config);
     this.sessions = new SessionsService(config);
     this.links = new LinksService(config);
     this.users = new UsersService(config);
@@ -130,11 +141,22 @@ export class Juhuu {
     this.flows = new FlowsService(config);
     this.flowTraces = new FlowTracesService(config);
     this.mqttTopics = new MqttTopicsService(config);
+    this.licensePlates = new LicensePlatesService(config);
+    this.vehicles = new VehiclesService(config);
+    this.orders = new OrdersService(config);
+    this.baskets = new BasketsService(config);
+    this.benefitCards = new BenefitCardsService(config);
+    this.catalogs = new CatalogsService(config);
+    this.offers = new OffersService(config);
+    this.kits = new KitsService(config);
+    this.panels = new PanelsService(config);
+    this.prices = new PricesService(config);
   }
 
   /**
    * Top Level Resources
    */
+  readonly achievements: AchievementsService;
   readonly sessions: SessionsService;
   readonly links: LinksService;
   readonly users: UsersService;
@@ -171,9 +193,176 @@ export class Juhuu {
   readonly flows: FlowsService;
   readonly flowTraces: FlowTracesService;
   readonly mqttTopics: MqttTopicsService;
+  readonly licensePlates: LicensePlatesService;
+  readonly vehicles: VehiclesService;
+  readonly orders: OrdersService;
+  readonly baskets: BasketsService;
+  readonly benefitCards: BenefitCardsService;
+  readonly catalogs: CatalogsService;
+  readonly offers: OffersService;
+  readonly kits: KitsService;
+  readonly panels: PanelsService;
+  readonly prices: PricesService;
 }
 
 export namespace JUHUU {
+  export namespace Achievement {
+    export type AchievementType =
+      | "progress"
+      | "milestone"
+      | "badge"
+      | "trophy"
+      | "streak"
+      | "challenge";
+    export type AchievementStatus =
+      | "locked"
+      | "unlocked"
+      | "in_progress"
+      | "completed"
+      | "expired";
+    export type AchievementCategory =
+      | "gaming"
+      | "learning"
+      | "social"
+      | "productivity"
+      | "fitness"
+      | "general";
+    export type AchievementDifficulty = "easy" | "medium" | "hard" | "expert";
+    export type AchievementCriteria = {
+      type: string;
+      target: number;
+      current: number;
+      unit: string;
+      description: string;
+    };
+    export type AchievementReward = {
+      type: "points" | "badge" | "title" | "unlock" | "currency";
+      value: number | string;
+      description: string;
+    };
+    export type AchievementMetadata = {
+      icon: string | null;
+      color: string | null;
+      rarity: "common" | "rare" | "epic" | "legendary";
+      displayOrder: number;
+      tags: string[];
+      prerequisites: string[];
+    };
+    export type Object = {
+      id: string;
+      readonly object: "achievement";
+      userId: string;
+      name: string;
+      title: string | null;
+      description: string;
+      type: AchievementType;
+      status: AchievementStatus;
+      category: AchievementCategory;
+      difficulty: AchievementDifficulty;
+      criteria: AchievementCriteria[];
+      rewards: AchievementReward[];
+      metadata: AchievementMetadata;
+      progressPercentage: number;
+      pointsAwarded: number;
+      createdAt: string;
+      updatedAt: string;
+      unlockedAt: string | null;
+      completedAt: string | null;
+      expiresAt: string | null;
+      isHidden: boolean;
+      isRepeatable: boolean;
+      timesCompleted: number;
+      lastCompletedAt: string | null;
+    };
+    export namespace Create {
+      export type Params = {
+        userId: string;
+        name: string;
+        title?: string | null;
+        description: string;
+        type: AchievementType;
+        status: AchievementStatus;
+        category: AchievementCategory;
+        difficulty: AchievementDifficulty;
+        criteria: AchievementCriteria[];
+        rewards: AchievementReward[];
+        metadata: AchievementMetadata;
+        progressPercentage?: number;
+        pointsAwarded?: number;
+        isHidden?: boolean;
+        isRepeatable?: boolean;
+        timesCompleted?: number;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        achievement: JUHUU.Achievement.Object;
+      };
+    }
+    export namespace Retrieve {
+      export type Params = {
+        achievementId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        achievement: JUHUU.Achievement.Object;
+      };
+    }
+    export namespace List {
+      export type Params = {
+        userId?: string;
+        name?: string;
+        type?: AchievementType;
+        status?: AchievementStatus;
+        category?: AchievementCategory;
+        difficulty?: AchievementDifficulty;
+        isHidden?: boolean;
+        isRepeatable?: boolean;
+        rarity?: "common" | "rare" | "epic" | "legendary";
+      };
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+      export type Response = {
+        achievementArray: JUHUU.Achievement.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+    export namespace Update {
+      export type Params = {
+        achievementId: string;
+        userId?: string;
+        name?: string;
+        title?: string | null;
+        description?: string;
+        type?: AchievementType;
+        status?: AchievementStatus;
+        category?: AchievementCategory;
+        difficulty?: AchievementDifficulty;
+        criteria?: AchievementCriteria[];
+        rewards?: AchievementReward[];
+        metadata?: AchievementMetadata;
+        progressPercentage?: number;
+        pointsAwarded?: number;
+        isHidden?: boolean;
+        isRepeatable?: boolean;
+        timesCompleted?: number;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        achievement: JUHUU.Achievement.Object;
+      };
+    }
+    export namespace Delete {
+      export type Params = {
+        achievementId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = JUHUU.Achievement.Object;
+    }
+  }
+
   export interface SetupConfig {
     environment?: Environment;
     getAccessToken?: () => Promise<string | null>;
@@ -181,6 +370,7 @@ export namespace JUHUU {
     setAccessToken?: (accessToken: string) => Promise<void>;
     getRefreshToken?: () => Promise<string | null>;
     setRefreshToken?: (refreshToken: string) => Promise<void>;
+    logger?: (message: string, ...args: any[]) => void;
     clientVersion: string;
     apiKey?: string;
     defaultRequestOptions?: JUHUU.RequestOptions;
@@ -1991,6 +2181,8 @@ export namespace JUHUU {
       iconDark: string | null; // if null, category or modality icon is always shown
       utilization: Utilization | null;
       visualPriority: VisualPriority;
+      iconLight32: string | null; // image that is being displayed on the map
+      iconDark32: string | null; // if null, category or modality icon is always shown
     }
 
     export interface Aggregation extends Base {
@@ -2474,6 +2666,30 @@ export namespace JUHUU {
         rentableDeviceGroupLocationId?: string | null;
         termId?: string | null; // id of the term that is assigned to this location
         visible?: boolean; // if false, the location is accessible but is not shown in the UI of the app
+
+        /**
+         * Base64 encoded image
+         * Set to null to remove the image
+         */
+        logoLight?: string | null;
+
+        /**
+         * Base64 encoded image
+         * Set to null to remove the image
+         */
+        logoDark?: string | null;
+
+        /**
+         * Base64 encoded image
+         * Set to null to remove the image
+         */
+        iconLight?: string | null;
+
+        /**
+         * Base64 encoded image
+         * Set to null to remove the image
+         */
+        iconDark?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2495,38 +2711,58 @@ export namespace JUHUU {
   }
 
   export namespace Product {
-    export type Object = {
+    export type ProductType =
+      | "benefitCard"
+      | "session"
+      | "marketplace"
+      | "default";
+    export type BaseProduct = {
       id: string;
       readonly object: "product";
-      name: string; // name or title of product
-      propertyId: string; // id of property that offers this product
-      version: number; // version number of this typescript interface
-      previewText: LocaleString; // text that is displayed on product overview page
-      description: LocaleString; // text that is displayed if a user clicks on product
-      bannerImageDark: string[]; // array of urls to images for darkmode
-      bannerImageLight: string[]; // array of urls to images for lightmode
-      model3d: string | null; // url to a 3d model of product
-      datasheet: DeepNullable<LocaleString>; // url to a datasheet of product
+      name: string;
+      propertyId: string;
+      previewText: LocaleString;
+      description: LocaleString;
+      bannerImageDark: string[];
+      bannerImageLight: string[];
+      model3d: string | null;
+      datasheet: DeepNullable<LocaleString>;
       highlightArray: LocaleString[];
       purposeArray: Purpose[];
-      technologyArray: Technology[]; // in the future maybe "mechanical", "virtual", ...
-      articleId: string | null; // id to an article with more information on a product
+      technologyArray: Technology[];
+      articleId: string | null;
     };
+    export type BenefitCardProduct = BaseProduct & {
+      type: "benefitCard";
+      benefitCardConfig: string;
+    };
+    export type SessionProduct = BaseProduct & {
+      type: "session";
+      sessionConfig: string;
+    };
+    export type MarketplaceProduct = BaseProduct & {
+      type: "marketplace";
+      marketplaceConfig: string;
+    };
+    export type DefaultProduct = BaseProduct & {
+      type: "default";
+      defaultConfig: string;
+    };
+    export type Object =
+      | BenefitCardProduct
+      | SessionProduct
+      | MarketplaceProduct
+      | DefaultProduct;
 
     export namespace Create {
       export type Params = {
-        propertyId: string;
         name?: string;
-        previewText?: LocaleString; // text that is displayed on the product overview page
-        description?: LocaleString; // text that is displayed once a user clicks on product
-        highlightArray?: LocaleString[];
-        purposeArray?: Purpose[];
-        technologyArray?: Technology[]; // in the future maybe "mechanical", "virtual", ...
-        articleId?: string | null; // id to an article with more information
-        bannerImageDark?: string[]; // array of urls to images for darkmode
-        bannerImageLight?: string[]; // array of urls to images for lightmode
-        model3d?: string | null; // url to a 3d model of product
-        datasheet?: DeepNullable<LocaleString>; // url to a datasheet of product
+        propertyId: string;
+        template:
+          | { type: "benefitCard"; benefitCardConfig: string }
+          | { type: "session"; sessionConfig: string }
+          | { type: "marketplace"; marketplaceConfig: string }
+          | { type: "default"; defaultConfig: string };
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2542,7 +2778,7 @@ export namespace JUHUU {
       };
 
       export type Options = {
-        expand: Array<"property">;
+        expand?: Array<"property">;
       } & JUHUU.RequestOptions;
 
       export type Response = {
@@ -2553,6 +2789,7 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
+        type?: ProductType;
         categoryArray?: Category[];
         modalityArray?: Modality[];
         sectorArray?: Sector[];
@@ -2561,19 +2798,23 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = Product.Object[];
+      export type Response = {
+        productArray: Product.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Update {
       export type Params = {
         productId: string;
         name?: string;
-        previewText?: LocaleString; // text that is displayed on the product overview page
-        description?: LocaleString; // text that is displayed once a user clicks on product
+        previewText?: LocaleString;
+        description?: LocaleString;
         highlightArray?: LocaleString[];
         purposeArray?: Purpose[];
-        technologyArray?: Technology[]; // in the future maybe "mechanical", "virtual", ...
-        articleId?: string | null; // id to an article with more information
+        technologyArray?: Technology[];
+        articleId?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3877,6 +4118,1648 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.MqttTopic.Object;
+    }
+  }
+
+  export namespace LicensePlate {
+    export type Object = {
+      id: string;
+      readonly object: "licensePlate";
+      userId: string | null;
+      name: string;
+    };
+
+    export namespace Create {
+      export type Params = {
+        userId?: string | null;
+        name: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        licensePlate: JUHUU.LicensePlate.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        licensePlateId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        licensePlate: JUHUU.LicensePlate.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        userId?: string;
+      };
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        licensePlateArray: JUHUU.LicensePlate.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        licensePlateId: string;
+        userId?: string | null;
+        name?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        licensePlate: JUHUU.LicensePlate.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        licensePlateId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.LicensePlate.Object;
+    }
+  }
+
+  export namespace Vehicle {
+    export type BaseVehicle = {
+      id: string;
+      readonly object: "vehicle";
+      userId: string;
+      licensePlateNumber: string;
+      make: string;
+      model: string;
+      year: number;
+      color: string | null;
+      vin: string | null;
+    };
+
+    export type CarVehicle = BaseVehicle & {
+      type: "car";
+      doorCount: number;
+      engineSize: number | null;
+      fuelType: "gasoline" | "diesel" | "electric" | "hybrid" | "lpg";
+      transmission: "manual" | "automatic" | "cvt";
+      drivetrain: "fwd" | "rwd" | "awd" | "4wd";
+    };
+
+    export type BikeVehicle = BaseVehicle & {
+      type: "bike";
+      bikeType:
+        | "road"
+        | "mountain"
+        | "hybrid"
+        | "electric"
+        | "bmx"
+        | "cruiser"
+        | "folding";
+      wheelSize: number;
+      frameSize: string | null;
+      gearCount: number;
+      hasElectricMotor: boolean;
+      batteryCapacity: number | null;
+    };
+
+    export type ScooterVehicle = BaseVehicle & {
+      type: "scooter";
+      engineSize: number;
+      maxSpeed: number;
+      fuelType: "gasoline" | "electric";
+      batteryCapacity: number | null;
+      wheelSize: number;
+      hasStorage: boolean;
+      storageCapacity: number | null;
+    };
+
+    export type MopedVehicle = BaseVehicle & {
+      type: "moped";
+      engineSize: number;
+      maxSpeed: number;
+      fuelType: "gasoline" | "electric";
+      batteryCapacity: number | null;
+      hasPedals: boolean;
+      licensePlateRequired: boolean;
+      insuranceRequired: boolean;
+    };
+
+    export type Object =
+      | CarVehicle
+      | BikeVehicle
+      | ScooterVehicle
+      | MopedVehicle;
+
+    export type CarTemplate = {
+      type: "car";
+      doorCount: number;
+      engineSize: number | null;
+      fuelType: "gasoline" | "diesel" | "electric" | "hybrid" | "lpg";
+      transmission: "manual" | "automatic" | "cvt";
+      drivetrain: "fwd" | "rwd" | "awd" | "4wd";
+    };
+
+    export type BikeTemplate = {
+      type: "bike";
+      bikeType:
+        | "road"
+        | "mountain"
+        | "hybrid"
+        | "electric"
+        | "bmx"
+        | "cruiser"
+        | "folding";
+      wheelSize: number;
+      frameSize: string | null;
+      gearCount: number;
+      hasElectricMotor: boolean;
+      batteryCapacity: number | null;
+    };
+
+    export type ScooterTemplate = {
+      type: "scooter";
+      engineSize: number;
+      maxSpeed: number;
+      fuelType: "gasoline" | "electric";
+      batteryCapacity: number | null;
+      wheelSize: number;
+      hasStorage: boolean;
+      storageCapacity: number | null;
+    };
+
+    export type MopedTemplate = {
+      type: "moped";
+      engineSize: number;
+      maxSpeed: number;
+      fuelType: "gasoline" | "electric";
+      batteryCapacity: number | null;
+      hasPedals: boolean;
+      licensePlateRequired: boolean;
+      insuranceRequired: boolean;
+    };
+
+    export type VehicleTemplate =
+      | CarTemplate
+      | BikeTemplate
+      | ScooterTemplate
+      | MopedTemplate;
+
+    export namespace Create {
+      export type Params = {
+        userId: string;
+        licensePlateNumber: string;
+        make: string;
+        model: string;
+        year: number;
+        color?: string | null;
+        vin?: string | null;
+        template: VehicleTemplate;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        vehicle: JUHUU.Vehicle.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        vehicleId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        vehicle: JUHUU.Vehicle.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        userId?: string;
+        licensePlateNumber?: string;
+        make?: string;
+        model?: string;
+      };
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        vehicleArray: JUHUU.Vehicle.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        vehicleId: string;
+        userId?: string;
+        licensePlateNumber?: string;
+        make?: string;
+        model?: string;
+        year?: number;
+        color?: string | null;
+        vin?: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        vehicle: JUHUU.Vehicle.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        vehicleId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Vehicle.Object;
+    }
+  }
+
+  export namespace Order {
+    export type OrderStatus =
+      | "pending"
+      | "confirmed"
+      | "processing"
+      | "shipped"
+      | "delivered"
+      | "cancelled"
+      | "refunded";
+    export type PaymentStatus = "pending" | "paid" | "failed" | "refunded";
+
+    export type OrderItem = {
+      productId: string;
+      productName: string;
+      quantity: number;
+      unitPrice: number;
+      totalPrice: number;
+    };
+
+    export type OrderAddress = {
+      street: string;
+      city: string;
+      state: string;
+      postalCode: string;
+      country: string;
+    };
+
+    export type Object = {
+      id: string;
+      readonly object: "order";
+      userId: string;
+      orderNumber: string;
+      status: OrderStatus;
+      paymentStatus: PaymentStatus;
+      items: OrderItem[];
+      subtotal: number;
+      tax: number;
+      shipping: number;
+      total: number;
+      currency: string;
+      shippingAddress: OrderAddress;
+      billingAddress: OrderAddress;
+      orderDate: string;
+      estimatedDeliveryDate: string | null;
+      actualDeliveryDate: string | null;
+      notes: string | null;
+    };
+
+    export namespace Create {
+      export type Params = {
+        userId: string;
+        orderNumber: string;
+        status: OrderStatus;
+        paymentStatus: PaymentStatus;
+        items: OrderItem[];
+        subtotal: number;
+        tax: number;
+        shipping: number;
+        total: number;
+        currency: string;
+        shippingAddress: OrderAddress;
+        billingAddress: OrderAddress;
+        orderDate: string;
+        estimatedDeliveryDate?: string | null;
+        actualDeliveryDate?: string | null;
+        notes?: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        order: JUHUU.Order.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        orderId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        order: JUHUU.Order.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        userId?: string;
+        orderNumber?: string;
+        status?: OrderStatus;
+        paymentStatus?: PaymentStatus;
+        currency?: string;
+      };
+
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        orderArray: JUHUU.Order.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        orderId: string;
+        userId?: string;
+        orderNumber?: string;
+        status?: OrderStatus;
+        paymentStatus?: PaymentStatus;
+        items?: OrderItem[];
+        subtotal?: number;
+        tax?: number;
+        shipping?: number;
+        total?: number;
+        currency?: string;
+        shippingAddress?: Partial<OrderAddress>;
+        billingAddress?: Partial<OrderAddress>;
+        orderDate?: string;
+        estimatedDeliveryDate?: string | null;
+        actualDeliveryDate?: string | null;
+        notes?: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        order: JUHUU.Order.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        orderId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Order.Object;
+    }
+  }
+
+  export namespace Basket {
+    export type BasketStatus = "active" | "abandoned" | "converted" | "expired";
+    export type BasketItem = {
+      productId: string;
+      productName: string;
+      quantity: number;
+      unitPrice: number;
+      totalPrice: number;
+      discountAmount?: number;
+    };
+    export type Object = {
+      id: string;
+      readonly object: "basket";
+      userId: string;
+      sessionId: string | null;
+      status: BasketStatus;
+      items: BasketItem[];
+      itemCount: number;
+      subtotal: number;
+      discountTotal: number;
+      taxEstimate: number;
+      shippingEstimate: number;
+      total: number;
+      currency: string;
+      expiresAt: string | null;
+      notes: string | null;
+    };
+    export namespace Create {
+      export type Params = {
+        userId: string;
+        sessionId?: string | null;
+        status: BasketStatus;
+        items: BasketItem[];
+        itemCount: number;
+        subtotal: number;
+        discountTotal: number;
+        taxEstimate: number;
+        shippingEstimate: number;
+        total: number;
+        currency: string;
+        expiresAt?: string | null;
+        notes?: string | null;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        basket: JUHUU.Basket.Object;
+      };
+    }
+    export namespace Retrieve {
+      export type Params = {
+        basketId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        basket: JUHUU.Basket.Object;
+      };
+    }
+    export namespace List {
+      export type Params = {
+        userId?: string;
+        sessionId?: string;
+        status?: BasketStatus;
+        currency?: string;
+      };
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+      export type Response = {
+        basketArray: JUHUU.Basket.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+    export namespace Update {
+      export type Params = {
+        basketId: string;
+        userId?: string;
+        sessionId?: string | null;
+        status?: BasketStatus;
+        items?: BasketItem[];
+        itemCount?: number;
+        subtotal?: number;
+        discountTotal?: number;
+        taxEstimate?: number;
+        shippingEstimate?: number;
+        total?: number;
+        currency?: string;
+        expiresAt?: string | null;
+        notes?: string | null;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        basket: JUHUU.Basket.Object;
+      };
+    }
+    export namespace Delete {
+      export type Params = {
+        basketId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = JUHUU.Basket.Object;
+    }
+  }
+
+  export namespace BenefitCard {
+    export type BenefitCardType =
+      | "membership"
+      | "loyalty"
+      | "discount"
+      | "cashback"
+      | "premium"
+      | "corporate";
+    export type BenefitCardStatus =
+      | "active"
+      | "inactive"
+      | "suspended"
+      | "expired"
+      | "pending_activation";
+    export type BenefitType =
+      | "percentage_discount"
+      | "fixed_discount"
+      | "cashback"
+      | "points"
+      | "free_shipping"
+      | "priority_access";
+    export type Benefit = {
+      type: BenefitType;
+      name: string;
+      description: string;
+      value: number;
+      unit: string;
+      conditions: string[];
+      validFrom: string | null;
+      validTo: string | null;
+      usageLimit: number | null;
+      usageCount: number;
+      minimumSpend: number | null;
+      maximumDiscount: number | null;
+      applicableCategories: string[];
+      excludedCategories: string[];
+    };
+    export type BenefitCardLimits = {
+      dailyUsageLimit: number | null;
+      monthlyUsageLimit: number | null;
+      yearlyUsageLimit: number | null;
+      lifetimeUsageLimit: number | null;
+      dailySpendLimit: number | null;
+      monthlySpendLimit: number | null;
+      yearlySpendLimit: number | null;
+      perTransactionLimit: number | null;
+    };
+    export type BenefitCardMetadata = {
+      issuer: string;
+      brand: string | null;
+      level: "bronze" | "silver" | "gold" | "platinum" | "diamond";
+      renewalDate: string | null;
+      memberSince: string;
+      referralCode: string | null;
+      partnerPrograms: string[];
+      tags: string[];
+      notes: string | null;
+    };
+    export type Object = {
+      id: string;
+      readonly object: "benefitCard";
+      userId: string;
+      cardNumber: string;
+      cardHolderName: string;
+      type: BenefitCardType;
+      status: BenefitCardStatus;
+      benefits: Benefit[];
+      limits: BenefitCardLimits;
+      metadata: BenefitCardMetadata;
+      pointsBalance: number;
+      cashbackBalance: number;
+      totalSavings: number;
+      totalSpent: number;
+      transactionCount: number;
+      lastUsedAt: string | null;
+      createdAt: string;
+      updatedAt: string;
+      activatedAt: string | null;
+      expiresAt: string | null;
+      isDigital: boolean;
+      isTransferable: boolean;
+      requiresPin: boolean;
+      pin: string | null;
+      qrCode: string | null;
+      barcode: string | null;
+    };
+    export namespace Create {
+      export type Params = {
+        userId: string;
+        cardNumber: string;
+        cardHolderName: string;
+        type: BenefitCardType;
+        status: BenefitCardStatus;
+        benefits: Benefit[];
+        limits: BenefitCardLimits;
+        metadata: BenefitCardMetadata;
+        pointsBalance?: number;
+        cashbackBalance?: number;
+        totalSavings?: number;
+        totalSpent?: number;
+        transactionCount?: number;
+        expiresAt?: string | null;
+        isDigital?: boolean;
+        isTransferable?: boolean;
+        requiresPin?: boolean;
+        pin?: string | null;
+        qrCode?: string | null;
+        barcode?: string | null;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        benefitCard: JUHUU.BenefitCard.Object;
+      };
+    }
+    export namespace Retrieve {
+      export type Params = {
+        benefitCardId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        benefitCard: JUHUU.BenefitCard.Object;
+      };
+    }
+    export namespace List {
+      export type Params = {
+        userId?: string;
+        cardNumber?: string;
+        cardHolderName?: string;
+        type?: BenefitCardType;
+        status?: BenefitCardStatus;
+        issuer?: string;
+        brand?: string;
+        level?: "bronze" | "silver" | "gold" | "platinum" | "diamond";
+        isDigital?: boolean;
+        isTransferable?: boolean;
+        requiresPin?: boolean;
+      };
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+      export type Response = {
+        benefitCardArray: JUHUU.BenefitCard.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+    export namespace Update {
+      export type Params = {
+        benefitCardId: string;
+        userId?: string;
+        cardNumber?: string;
+        cardHolderName?: string;
+        type?: BenefitCardType;
+        status?: BenefitCardStatus;
+        benefits?: Benefit[];
+        limits?: BenefitCardLimits;
+        metadata?: BenefitCardMetadata;
+        pointsBalance?: number;
+        cashbackBalance?: number;
+        totalSavings?: number;
+        totalSpent?: number;
+        transactionCount?: number;
+        expiresAt?: string | null;
+        isDigital?: boolean;
+        isTransferable?: boolean;
+        requiresPin?: boolean;
+        pin?: string | null;
+        qrCode?: string | null;
+        barcode?: string | null;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        benefitCard: JUHUU.BenefitCard.Object;
+      };
+    }
+    export namespace Delete {
+      export type Params = {
+        benefitCardId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = JUHUU.BenefitCard.Object;
+    }
+  }
+
+  export namespace Catalog {
+    export type CatalogType =
+      | "product"
+      | "service"
+      | "digital"
+      | "subscription"
+      | "marketplace"
+      | "internal";
+    export type CatalogStatus =
+      | "draft"
+      | "published"
+      | "archived"
+      | "suspended"
+      | "pending_review";
+    export type CatalogVisibility =
+      | "public"
+      | "private"
+      | "restricted"
+      | "invitation_only";
+    export type CatalogCategory = {
+      id: string;
+      name: string;
+      description: string | null;
+      parentCategoryId: string | null;
+      sortOrder: number;
+      isActive: boolean;
+      imageUrl: string | null;
+      seoSlug: string;
+      metadata: Record<string, any>;
+    };
+    export type CatalogProduct = {
+      productId: string;
+      name: string;
+      description: string | null;
+      sku: string | null;
+      price: number | null;
+      currency: string | null;
+      categoryIds: string[];
+      tags: string[];
+      isActive: boolean;
+      isFeatured: boolean;
+      sortOrder: number;
+      imageUrls: string[];
+      attributes: Record<string, any>;
+      availability: {
+        inStock: boolean;
+        quantity: number | null;
+        backorderAllowed: boolean;
+        expectedRestockDate: string | null;
+      };
+    };
+    export type CatalogSettings = {
+      allowGuestAccess: boolean;
+      requiresApproval: boolean;
+      enableSearch: boolean;
+      enableFiltering: boolean;
+      enableSorting: boolean;
+      enableWishlist: boolean;
+      enableComparisons: boolean;
+      enableReviews: boolean;
+      enableRatings: boolean;
+      maxProductsPerPage: number;
+      defaultSortBy: "name" | "price" | "date" | "popularity" | "rating";
+      defaultSortOrder: "asc" | "desc";
+      supportedCurrencies: string[];
+      supportedLanguages: string[];
+    };
+    export type CatalogMetadata = {
+      displayName: string;
+      description: string | null;
+      keywords: string[];
+      industry: string | null;
+      targetAudience: string[];
+      region: string | null;
+      language: string;
+      timezone: string | null;
+      brandColors: Record<string, string>;
+      logoUrl: string | null;
+      bannerUrl: string | null;
+      customCss: string | null;
+      socialLinks: Record<string, string>;
+    };
+    export type Object = {
+      id: string;
+      readonly object: "catalog";
+      userId: string;
+      name: string;
+      type: CatalogType;
+      status: CatalogStatus;
+      visibility: CatalogVisibility;
+      categories: CatalogCategory[];
+      products: CatalogProduct[];
+      settings: CatalogSettings;
+      metadata: CatalogMetadata;
+      createdAt: string;
+      updatedAt: string;
+      publishedAt: string | null;
+      archivedAt: string | null;
+      lastSyncedAt: string | null;
+      version: number;
+      isDefault: boolean;
+      viewCount: number;
+      productCount: number;
+      categoryCount: number;
+      accessToken: string | null;
+      externalId: string | null;
+      webhookUrl: string | null;
+    };
+    export namespace Create {
+      export type Params = {
+        userId: string;
+        name: string;
+        type: CatalogType;
+        status: CatalogStatus;
+        visibility: CatalogVisibility;
+        categories: CatalogCategory[];
+        products: CatalogProduct[];
+        settings: CatalogSettings;
+        metadata: CatalogMetadata;
+        publishedAt?: string | null;
+        archivedAt?: string | null;
+        lastSyncedAt?: string | null;
+        version?: number;
+        isDefault?: boolean;
+        viewCount?: number;
+        productCount?: number;
+        categoryCount?: number;
+        accessToken?: string | null;
+        externalId?: string | null;
+        webhookUrl?: string | null;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        catalog: JUHUU.Catalog.Object;
+      };
+    }
+    export namespace Retrieve {
+      export type Params = {
+        catalogId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        catalog: JUHUU.Catalog.Object;
+      };
+    }
+    export namespace List {
+      export type Params = {
+        userId?: string;
+        name?: string;
+        type?: CatalogType;
+        status?: CatalogStatus;
+        visibility?: CatalogVisibility;
+        isDefault?: boolean;
+        industry?: string;
+        region?: string;
+        language?: string;
+        externalId?: string;
+        sortBy?: string;
+        sortOrder?: string;
+      };
+      export type Options = {
+        limit?: number;
+      } & JUHUU.RequestOptions;
+      export type Response = {
+        catalogArray: JUHUU.Catalog.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+    export namespace Update {
+      export type Params = {
+        catalogId: string;
+        userId?: string;
+        name?: string;
+        type?: CatalogType;
+        status?: CatalogStatus;
+        visibility?: CatalogVisibility;
+        categories?: CatalogCategory[];
+        products?: CatalogProduct[];
+        settings?: CatalogSettings;
+        metadata?: CatalogMetadata;
+        publishedAt?: string | null;
+        archivedAt?: string | null;
+        lastSyncedAt?: string | null;
+        version?: number;
+        isDefault?: boolean;
+        viewCount?: number;
+        productCount?: number;
+        categoryCount?: number;
+        accessToken?: string | null;
+        externalId?: string | null;
+        webhookUrl?: string | null;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        catalog: JUHUU.Catalog.Object;
+      };
+    }
+    export namespace Delete {
+      export type Params = {
+        catalogId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = JUHUU.Catalog.Object;
+    }
+  }
+
+  export namespace Offer {
+    export type OfferType =
+      | "discount"
+      | "bundle"
+      | "bogo"
+      | "loyalty"
+      | "promotional"
+      | "seasonal"
+      | "flash"
+      | "coupon";
+    export type OfferStatus =
+      | "draft"
+      | "active"
+      | "paused"
+      | "expired"
+      | "cancelled"
+      | "scheduled";
+    export type DiscountType =
+      | "percentage"
+      | "fixed_amount"
+      | "free_shipping"
+      | "buy_x_get_y";
+    export type OfferScope =
+      | "global"
+      | "product_specific"
+      | "category_specific"
+      | "user_specific"
+      | "location_specific";
+    export type OfferCondition = {
+      type:
+        | "minimum_purchase"
+        | "product_count"
+        | "user_type"
+        | "first_time_buyer"
+        | "location"
+        | "time_range";
+      value: any;
+      operator:
+        | "greater_than"
+        | "less_than"
+        | "equals"
+        | "in"
+        | "not_in"
+        | "between";
+      description: string | null;
+    };
+    export type OfferDiscount = {
+      type: DiscountType;
+      value: number;
+      maxDiscount: number | null;
+      currency: string | null;
+      buyQuantity: number | null;
+      getQuantity: number | null;
+      applicableProductIds: string[];
+      applicableCategoryIds: string[];
+      excludedProductIds: string[];
+      excludedCategoryIds: string[];
+    };
+    export type OfferUsage = {
+      totalUses: number;
+      maxUses: number | null;
+      maxUsesPerUser: number | null;
+      maxUsesPerDay: number | null;
+      currentUses: number;
+      uniqueUsers: number;
+      lastUsedAt: string | null;
+      usageHistory: {
+        userId: string;
+        usedAt: string;
+        orderValue: number;
+        discountApplied: number;
+      }[];
+    };
+    export type OfferTargeting = {
+      targetUserIds: string[];
+      targetUserGroups: string[];
+      targetLocations: string[];
+      targetDevices: ("mobile" | "desktop" | "tablet")[];
+      targetChannels: ("web" | "mobile_app" | "email" | "sms" | "social")[];
+      excludeUserIds: string[];
+      excludeUserGroups: string[];
+      minAge: number | null;
+      maxAge: number | null;
+      genderTargeting: ("male" | "female" | "other" | "all")[];
+    };
+    export type OfferScheduling = {
+      startDate: string;
+      endDate: string | null;
+      timezone: string;
+      recurringPattern: "none" | "daily" | "weekly" | "monthly" | "yearly";
+      recurringEndDate: string | null;
+      activeDays: (
+        | "monday"
+        | "tuesday"
+        | "wednesday"
+        | "thursday"
+        | "friday"
+        | "saturday"
+        | "sunday"
+      )[];
+      activeHours: {
+        start: string;
+        end: string;
+      } | null;
+      blackoutDates: string[];
+    };
+    export type OfferMetrics = {
+      impressions: number;
+      clicks: number;
+      conversions: number;
+      revenue: number;
+      clickThroughRate: number;
+      conversionRate: number;
+      averageOrderValue: number;
+      returnOnAdSpend: number;
+      customerAcquisitionCost: number;
+      lifetimeValue: number;
+    };
+    export type Object = {
+      id: string;
+      readonly object: "offer";
+      userId: string;
+      name: string;
+      description: string | null;
+      type: OfferType;
+      status: OfferStatus;
+      scope: OfferScope;
+      code: string | null;
+      title: string;
+      subtitle: string | null;
+      imageUrl: string | null;
+      bannerUrl: string | null;
+      landingPageUrl: string | null;
+      termsAndConditions: string | null;
+      conditions: OfferCondition[];
+      discount: OfferDiscount;
+      usage: OfferUsage;
+      targeting: OfferTargeting;
+      scheduling: OfferScheduling;
+      metrics: OfferMetrics;
+      priority: number;
+      isStackable: boolean;
+      requiresCouponCode: boolean;
+      isPublic: boolean;
+      isAutomaticallyApplied: boolean;
+      notificationSettings: {
+        sendEmailNotification: boolean;
+        sendPushNotification: boolean;
+        sendSmsNotification: boolean;
+        notificationMessage: string | null;
+      };
+      createdAt: string;
+      updatedAt: string;
+      publishedAt: string | null;
+      lastModifiedBy: string;
+      approvedBy: string | null;
+      approvedAt: string | null;
+      tags: string[];
+      customFields: Record<string, any>;
+      integrationData: Record<string, any>;
+    };
+    export namespace Create {
+      export type Params = {
+        userId: string;
+        name: string;
+        description?: string | null;
+        type: OfferType;
+        status: OfferStatus;
+        scope: OfferScope;
+        code?: string | null;
+        title: string;
+        subtitle?: string | null;
+        imageUrl?: string | null;
+        bannerUrl?: string | null;
+        landingPageUrl?: string | null;
+        termsAndConditions?: string | null;
+        conditions: OfferCondition[];
+        discount: OfferDiscount;
+        usage: OfferUsage;
+        targeting: OfferTargeting;
+        scheduling: OfferScheduling;
+        metrics: OfferMetrics;
+        priority: number;
+        isStackable: boolean;
+        requiresCouponCode: boolean;
+        isPublic: boolean;
+        isAutomaticallyApplied: boolean;
+        notificationSettings: {
+          sendEmailNotification: boolean;
+          sendPushNotification: boolean;
+          sendSmsNotification: boolean;
+          notificationMessage: string | null;
+        };
+        lastModifiedBy: string;
+        approvedBy?: string | null;
+        approvedAt?: string | null;
+        tags: string[];
+        customFields: Record<string, any>;
+        integrationData: Record<string, any>;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        offer: JUHUU.Offer.Object;
+      };
+    }
+    export namespace Retrieve {
+      export type Params = {
+        offerId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        offer: JUHUU.Offer.Object;
+      };
+    }
+    export namespace List {
+      export type Params = {
+        userId?: string;
+        name?: string;
+        type?: OfferType;
+        status?: OfferStatus;
+        scope?: OfferScope;
+        code?: string;
+        isPublic?: boolean;
+        isActive?: boolean;
+        requiresCouponCode?: boolean;
+        priority?: number;
+        tags?: string[];
+        sortBy?: string;
+        sortOrder?: string;
+      };
+      export type Options = {
+        limit?: number;
+      } & JUHUU.RequestOptions;
+      export type Response = {
+        offerArray: JUHUU.Offer.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+    export namespace Update {
+      export type Params = {
+        offerId: string;
+        userId?: string;
+        name?: string;
+        description?: string | null;
+        type?: OfferType;
+        status?: OfferStatus;
+        scope?: OfferScope;
+        code?: string | null;
+        title?: string;
+        subtitle?: string | null;
+        imageUrl?: string | null;
+        bannerUrl?: string | null;
+        landingPageUrl?: string | null;
+        termsAndConditions?: string | null;
+        conditions?: OfferCondition[];
+        discount?: OfferDiscount;
+        usage?: OfferUsage;
+        targeting?: OfferTargeting;
+        scheduling?: OfferScheduling;
+        metrics?: OfferMetrics;
+        priority?: number;
+        isStackable?: boolean;
+        requiresCouponCode?: boolean;
+        isPublic?: boolean;
+        isAutomaticallyApplied?: boolean;
+        notificationSettings?: {
+          sendEmailNotification: boolean;
+          sendPushNotification: boolean;
+          sendSmsNotification: boolean;
+          notificationMessage: string | null;
+        };
+        lastModifiedBy?: string;
+        approvedBy?: string | null;
+        approvedAt?: string | null;
+        tags?: string[];
+        customFields?: Record<string, any>;
+        integrationData?: Record<string, any>;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        offer: JUHUU.Offer.Object;
+      };
+    }
+    export namespace Delete {
+      export type Params = {
+        offerId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = JUHUU.Offer.Object;
+    }
+  }
+
+  export namespace Kit {
+    export type KitType =
+      | "controlKitV1"
+      | "tapkeyV1"
+      | "emzV1"
+      | "survisionNanopakTotemV1";
+    export type BaseKit = {
+      id: string;
+      readonly object: "kit";
+      name: string;
+      propertyId: string | null;
+    };
+    export type ControlKitV1 = BaseKit & {
+      type: "controlKitV1";
+      simIdArray: string[];
+    };
+    export type TapkeyV1 = BaseKit & {
+      type: "tapkeyV1";
+      physicalLockId: string;
+      boundLockId: string;
+      ownerAccountId: string;
+      ipId: string;
+    };
+    export type EmzV1 = BaseKit & {
+      type: "emzV1";
+      contractId: string;
+      targetHardwareId: string;
+      userId: string;
+      username: string;
+      password: string;
+    };
+    export type SurvisionNanopakTotemV1 = BaseKit & {
+      type: "survisionNanopakTotemV1";
+      anpr: string;
+    };
+    export type Object =
+      | ControlKitV1
+      | TapkeyV1
+      | EmzV1
+      | SurvisionNanopakTotemV1;
+    export namespace Create {
+      export type Params = {
+        name?: string;
+        propertyId: string;
+        template:
+          | { type: "controlKitV1"; simIdArray: string[] }
+          | {
+              type: "tapkeyV1";
+              physicalLockId: string;
+              boundLockId: string;
+              ownerAccountId: string;
+              ipId: string;
+            }
+          | {
+              type: "emzV1";
+              contractId: string;
+              targetHardwareId: string;
+              userId: string;
+              username: string;
+              password: string;
+            }
+          | { type: "survisionNanopakTotemV1"; anpr: string };
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        kit: JUHUU.Kit.Object;
+      };
+    }
+    export namespace Retrieve {
+      export type Params = {
+        kitId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        kit: JUHUU.Kit.Object;
+      };
+    }
+    export namespace List {
+      export type Params = {
+        name?: string;
+        propertyId?: string;
+        type?: KitType;
+      };
+      export type Options = {
+        limit?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        kitArray: JUHUU.Kit.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+    export namespace Update {
+      export type Params = {
+        kitId: string;
+        name?: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        kit: JUHUU.Kit.Object;
+      };
+    }
+    export namespace Delete {
+      export type Params = {
+        kitId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = JUHUU.Kit.Object;
+    }
+  }
+
+  export namespace Panel {
+    export type PanelType =
+      | "dashboard"
+      | "widget"
+      | "sidebar"
+      | "modal"
+      | "header"
+      | "footer";
+    export type PanelStatus = "active" | "inactive" | "hidden" | "archived";
+    export type PanelSize = "small" | "medium" | "large" | "fullscreen";
+    export type PanelPosition = {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      zIndex: number;
+    };
+    export type PanelConfig = {
+      theme: string | null;
+      colors: Record<string, string>;
+      layout: Record<string, any>;
+      settings: Record<string, any>;
+      dataSource: string | null;
+      refreshInterval: number | null;
+    };
+    export type Object = {
+      id: string;
+      readonly object: "panel";
+      userId: string;
+      name: string;
+      title: string | null;
+      description: string | null;
+      type: PanelType;
+      status: PanelStatus;
+      size: PanelSize;
+      isResizable: boolean;
+      isDraggable: boolean;
+      isVisible: boolean;
+      position: PanelPosition;
+      config: PanelConfig;
+      createdAt: string;
+      updatedAt: string;
+      lastAccessedAt: string | null;
+      accessCount: number;
+      permissions: string[];
+      tags: string[];
+      parentPanelId: string | null;
+      order: number;
+    };
+    export namespace Create {
+      export type Params = {
+        userId: string;
+        name: string;
+        title?: string | null;
+        description?: string | null;
+        type: PanelType;
+        status: PanelStatus;
+        size: PanelSize;
+        isResizable: boolean;
+        isDraggable: boolean;
+        isVisible: boolean;
+        position: PanelPosition;
+        config: PanelConfig;
+        accessCount?: number;
+        permissions: string[];
+        tags: string[];
+        parentPanelId?: string | null;
+        order: number;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        panel: JUHUU.Panel.Object;
+      };
+    }
+    export namespace Retrieve {
+      export type Params = {
+        panelId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        panel: JUHUU.Panel.Object;
+      };
+    }
+    export namespace List {
+      export type Params = {
+        userId?: string;
+        name?: string;
+        type?: PanelType;
+        status?: PanelStatus;
+        size?: PanelSize;
+        isVisible?: boolean;
+        parentPanelId?: string;
+      };
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+      export type Response = {
+        panelArray: JUHUU.Panel.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+    export namespace Update {
+      export type Params = {
+        panelId: string;
+        userId?: string;
+        name?: string;
+        title?: string | null;
+        description?: string | null;
+        type?: PanelType;
+        status?: PanelStatus;
+        size?: PanelSize;
+        isResizable?: boolean;
+        isDraggable?: boolean;
+        isVisible?: boolean;
+        position?: PanelPosition;
+        config?: PanelConfig;
+        permissions?: string[];
+        tags?: string[];
+        parentPanelId?: string | null;
+        order?: number;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        panel: JUHUU.Panel.Object;
+      };
+    }
+    export namespace Delete {
+      export type Params = {
+        panelId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = JUHUU.Panel.Object;
+    }
+  }
+
+  export namespace Price {
+    export type PriceType =
+      | "one_time"
+      | "recurring"
+      | "usage_based"
+      | "tiered"
+      | "volume"
+      | "package";
+    export type PriceStatus = "active" | "inactive" | "archived" | "draft";
+    export type RecurringInterval =
+      | "day"
+      | "week"
+      | "month"
+      | "quarter"
+      | "year";
+    export type TaxBehavior = "inclusive" | "exclusive" | "unspecified";
+    export type PriceTier = {
+      upTo: number | null;
+      unitAmount: number;
+      flatAmount: number;
+    };
+    export type PriceDiscount = {
+      type: "percentage" | "fixed_amount";
+      value: number;
+      description: string;
+      validFrom: string | null;
+      validTo: string | null;
+      minQuantity: number | null;
+      maxQuantity: number | null;
+    };
+    export type PriceMetadata = {
+      displayName: string;
+      description: string | null;
+      category: string | null;
+      tags: string[];
+      billingScheme: "per_unit" | "tiered" | "package";
+      usageAggregation:
+        | "sum"
+        | "last_during_period"
+        | "max"
+        | "last_ever"
+        | null;
+    };
+    export type Object = {
+      id: string;
+      readonly object: "price";
+      userId: string;
+      productId: string | null;
+      name: string;
+      type: PriceType;
+      status: PriceStatus;
+      amount: number;
+      currency: string;
+      taxBehavior: TaxBehavior;
+      taxPercentage: number;
+      recurringInterval: RecurringInterval | null;
+      recurringIntervalCount: number | null;
+      trialPeriodDays: number | null;
+      usageType: "metered" | "licensed" | null;
+      tiers: PriceTier[];
+      discounts: PriceDiscount[];
+      metadata: PriceMetadata;
+      createdAt: string;
+      updatedAt: string;
+      activatedAt: string | null;
+      deactivatedAt: string | null;
+      isDefault: boolean;
+      priority: number;
+      minQuantity: number;
+      maxQuantity: number | null;
+      unitLabel: string | null;
+      transformQuantityDivideBy: number | null;
+      transformQuantityRound: "up" | "down" | null;
+    };
+    export namespace Create {
+      export type Params = {
+        userId: string;
+        productId?: string | null;
+        name: string;
+        type: PriceType;
+        status: PriceStatus;
+        amount: number;
+        currency: string;
+        taxBehavior: TaxBehavior;
+        taxPercentage?: number;
+        recurringInterval?: RecurringInterval | null;
+        recurringIntervalCount?: number | null;
+        trialPeriodDays?: number | null;
+        usageType?: "metered" | "licensed" | null;
+        tiers?: PriceTier[];
+        discounts?: PriceDiscount[];
+        metadata: PriceMetadata;
+        isDefault?: boolean;
+        priority?: number;
+        minQuantity?: number;
+        maxQuantity?: number | null;
+        unitLabel?: string | null;
+        transformQuantityDivideBy?: number | null;
+        transformQuantityRound?: "up" | "down" | null;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        price: JUHUU.Price.Object;
+      };
+    }
+    export namespace Retrieve {
+      export type Params = {
+        priceId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        price: JUHUU.Price.Object;
+      };
+    }
+    export namespace List {
+      export type Params = {
+        userId?: string;
+        productId?: string;
+        name?: string;
+        type?: PriceType;
+        status?: PriceStatus;
+        currency?: string;
+        taxBehavior?: TaxBehavior;
+        recurringInterval?: RecurringInterval;
+        usageType?: "metered" | "licensed";
+        isDefault?: boolean;
+        category?: string;
+      };
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+      export type Response = {
+        priceArray: JUHUU.Price.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+    export namespace Update {
+      export type Params = {
+        priceId: string;
+        userId?: string;
+        productId?: string | null;
+        name?: string;
+        type?: PriceType;
+        status?: PriceStatus;
+        amount?: number;
+        currency?: string;
+        taxBehavior?: TaxBehavior;
+        taxPercentage?: number;
+        recurringInterval?: RecurringInterval | null;
+        recurringIntervalCount?: number | null;
+        trialPeriodDays?: number | null;
+        usageType?: "metered" | "licensed" | null;
+        tiers?: PriceTier[];
+        discounts?: PriceDiscount[];
+        metadata?: PriceMetadata;
+        isDefault?: boolean;
+        priority?: number;
+        minQuantity?: number;
+        maxQuantity?: number | null;
+        unitLabel?: string | null;
+        transformQuantityDivideBy?: number | null;
+        transformQuantityRound?: "up" | "down" | null;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        price: JUHUU.Price.Object;
+      };
+    }
+    export namespace Delete {
+      export type Params = {
+        priceId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = JUHUU.Price.Object;
     }
   }
 

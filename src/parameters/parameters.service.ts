@@ -145,7 +145,7 @@ export default class ParametersService extends Service {
     return {
       onUpdated: onUpdated,
       close: () => {
-        console.log("closing websocket connection");
+        this.logger("closing websocket connection");
         socket.close();
       },
     };

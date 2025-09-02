@@ -175,7 +175,7 @@ export default class TariffsService extends Service {
       serviceFee = tariff.serviceFeeMax;
     }
 
-    // console.log("serviceFee is", serviceFee);
+    // this.logger("serviceFee is", serviceFee);
 
     return sum + serviceFee;
   }
