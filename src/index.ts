@@ -2825,10 +2825,11 @@ export namespace JUHUU {
     type Base = {
       id: string;
       readonly object: "link";
-      propertyId: string;
+      propertyId: string | null;
       referenceObject: "location";
       referenceObjectId: string;
       name: string;
+      image: string | null;
     };
 
     export interface FiveLetterQr extends Base {
