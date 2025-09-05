@@ -2711,11 +2711,6 @@ export namespace JUHUU {
   }
 
   export namespace Product {
-    export type ProductType =
-      | "benefitCard"
-      | "session"
-      | "marketplace"
-      | "default";
     export type BaseProduct = {
       id: string;
       readonly object: "product";
@@ -2758,11 +2753,6 @@ export namespace JUHUU {
       export type Params = {
         name?: string;
         propertyId: string;
-        template:
-          | { type: "benefitCard"; benefitCardConfig: string }
-          | { type: "session"; sessionConfig: string }
-          | { type: "marketplace"; marketplaceConfig: string }
-          | { type: "default"; defaultConfig: string };
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2789,7 +2779,7 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
-        type?: ProductType;
+        type?: JUHUU.Product.Object["type"];
         categoryArray?: Category[];
         modalityArray?: Modality[];
         sectorArray?: Sector[];
@@ -2798,11 +2788,7 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = {
-        productArray: Product.Object[];
-        count: number;
-        hasMore: boolean;
-      };
+      export type Response = Product.Object[];
     }
 
     export namespace Update {
@@ -3473,12 +3459,14 @@ export namespace JUHUU {
       name: string;
       anomalyScore: number | null;
       isOutlier: boolean;
+      incidentId: string | null;
       featureReferenceParameterIdArray: Array<{
         parameterId: string;
         featureReference: string;
         shapValues: [number, number, number] | null; // Optional, if not always present
         isOutlier: boolean; // Optional, if not always present
       }>;
+      anomalyDescription: string | null; // this is set if isOutlier is true and is LLM generated.
     };
 
     export namespace Create {
@@ -3561,6 +3549,7 @@ export namespace JUHUU {
       name: string;
       propertyId: string;
       featureReferenceArray: string[];
+      description: null | string;
     };
 
     export namespace Create {
@@ -5336,11 +5325,7 @@ export namespace JUHUU {
   }
 
   export namespace Kit {
-    export type KitType =
-      | "controlKitV1"
-      | "tapkeyV1"
-      | "emzV1"
-      | "survisionNanopakTotemV1";
+    export type KitType = "controlKitV1" | "tapkeyV1" | "emzV1";
     export type BaseKit = {
       id: string;
       readonly object: "kit";
@@ -5366,15 +5351,7 @@ export namespace JUHUU {
       username: string;
       password: string;
     };
-    export type SurvisionNanopakTotemV1 = BaseKit & {
-      type: "survisionNanopakTotemV1";
-      anpr: string;
-    };
-    export type Object =
-      | ControlKitV1
-      | TapkeyV1
-      | EmzV1
-      | SurvisionNanopakTotemV1;
+    export type Object = ControlKitV1 | TapkeyV1 | EmzV1;
     export namespace Create {
       export type Params = {
         name?: string;
@@ -5395,8 +5372,7 @@ export namespace JUHUU {
               userId: string;
               username: string;
               password: string;
-            }
-          | { type: "survisionNanopakTotemV1"; anpr: string };
+            };
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
