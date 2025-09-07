@@ -1374,6 +1374,46 @@ export interface UserRetrieveBlockInputs {
   userId: string;
 }
 
+export interface UserCreateBlock extends BaseBlock {
+  type: "user.create";
+  in: {
+    name: DataEdgeConnection;
+    type: DataEdgeConnection;
+    licenseArray: DataEdgeConnection;
+  };
+  out: {
+    user: DataEdgeConnection;
+  };
+  data: {
+    name?: string | null;
+    type?: "standard" | "management" | null;
+    licenseArray?: any[] | null;
+  };
+}
+
+export interface UserCreateBlockInputs {
+  name?: string | null;
+  type: "standard" | "management";
+  licenseArray?: any[] | null;
+}
+
+export interface IncidentRetrieveBlock extends BaseBlock {
+  type: "incident.retrieve";
+  in: {
+    incidentId: DataEdgeConnection;
+  };
+  out: {
+    incident: DataEdgeConnection;
+  };
+  data: {
+    incidentId?: string;
+  };
+}
+
+export interface IncidentRetrieveBlockInputs {
+  incidentId: string;
+}
+
 export interface ParameterUpdateBlock extends BaseBlock {
   type: "parameter.update";
   in: {
@@ -1936,6 +1976,8 @@ export type FlowBlock =
   | SessionRetrieveBlock
   | DeviceRetrieveBlock
   | UserRetrieveBlock
+  | UserCreateBlock
+  | IncidentRetrieveBlock
   | ParameterUpdateBlock
   | DeviceUpdateBlock
   | LocationUpdateBlock
@@ -1965,6 +2007,8 @@ export type FlowBlockInput =
   | SessionRetrieveBlockInputs
   | DeviceRetrieveBlockInputs
   | UserRetrieveBlockInputs
+  | UserCreateBlockInputs
+  | IncidentRetrieveBlockInputs
   | ParameterUpdateBlockInputs
   | DeviceUpdateBlockInputs
   | LocationUpdateBlockInputs

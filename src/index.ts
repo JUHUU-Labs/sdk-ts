@@ -762,7 +762,7 @@ export namespace JUHUU {
       export type Params = {
         type: JUHUU.User.Object["type"];
         name?: string;
-        createdByPropertyId?: JUHUU.User.Object["createdByPropertyId"];
+        createdByPropertyId: string;
         licenseArray?: License[];
       };
 
