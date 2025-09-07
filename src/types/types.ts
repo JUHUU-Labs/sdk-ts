@@ -1416,20 +1416,47 @@ export interface DeviceUpdateBlock extends BaseBlock {
   type: "device.update";
   in: {
     deviceId: DataEdgeConnection;
-    data: DataEdgeConnection;
+    name: DataEdgeConnection;
+    description: DataEdgeConnection;
+    latitude: DataEdgeConnection;
+    longitude: DataEdgeConnection;
+    disabled: DataEdgeConnection;
+    parameterIdArray: DataEdgeConnection;
+    simIdArray: DataEdgeConnection;
+    permissionArray: DataEdgeConnection;
+    proximityStrategyArray: DataEdgeConnection;
+    adminQuickViewArray: DataEdgeConnection;
   };
   out: {
     device: DataEdgeConnection;
   };
   data: {
     deviceId?: string;
-    data?: Record<string, any>;
+    name?: string | null;
+    description?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    disabled?: boolean | null;
+    parameterIdArray?: string[] | null;
+    simIdArray?: string[] | null;
+    permissionArray?: DevicePermission[] | null;
+    proximityStrategyArray?: ProximityStrategy[] | null;
+    adminQuickViewArray?: QuickView[] | null;
   };
 }
 
 export interface DeviceUpdateBlockInputs {
   deviceId: string;
-  data: Record<string, any>;
+  name?: string;
+  description?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  disabled?: boolean;
+  parameterIdArray?: string[];
+  simIdArray?: string[];
+  permissionArray?: DevicePermission[];
+  proximityStrategyArray?: ProximityStrategy[];
+  adminQuickViewArray?: QuickView[];
 }
 
 export interface LocationUpdateBlock extends BaseBlock {
@@ -1526,6 +1553,47 @@ export interface SessionTerminateBlockInputs {
   ignoreFlowErrors: boolean;
   shouldRetry: boolean;
   autoRenewIfAvailable: boolean;
+}
+
+export interface IncidentCreateBlock extends BaseBlock {
+  type: "incident.create";
+  in: {
+    propertyId: DataEdgeConnection;
+    type: DataEdgeConnection;
+    title: DataEdgeConnection;
+    description: DataEdgeConnection;
+    severity: DataEdgeConnection;
+    deviceId: DataEdgeConnection;
+    locationId: DataEdgeConnection;
+    parameterAnomalyGroupId: DataEdgeConnection;
+    incidentTemplateId: DataEdgeConnection;
+  };
+  out: {
+    incident: DataEdgeConnection;
+  };
+  data: {
+    propertyId?: string;
+    type?: "device" | "location" | "parameterAnomalyGroup";
+    title?: string | null;
+    description?: string | null;
+    severity?: "low" | "medium" | "high" | null;
+    deviceId?: string | null;
+    locationId?: string | null;
+    parameterAnomalyGroupId?: string | null;
+    incidentTemplateId?: string | null;
+  };
+}
+
+export interface IncidentCreateBlockInputs {
+  propertyId: string;
+  type: "device" | "location" | "parameterAnomalyGroup";
+  title?: string;
+  description?: string;
+  severity?: "low" | "medium" | "high";
+  deviceId?: string;
+  locationId?: string;
+  parameterAnomalyGroupId?: string;
+  incidentTemplateId?: string;
 }
 
 // constant blocks
@@ -1672,6 +1740,7 @@ export interface SwitchBlock extends BaseBlock {
   out: Record<string, ControlEdgeConnection>;
   data: {
     expression: JsonLogic;
+    cases: string[]; // branch names
   };
 }
 
@@ -1872,6 +1941,7 @@ export type FlowBlock =
   | LocationUpdateBlock
   | PropertyUpdateBlock
   | SessionTerminateBlock
+  | IncidentCreateBlock
   | IfBlock
   | SwitchBlock
   | HttpPatchBlock
@@ -1900,6 +1970,7 @@ export type FlowBlockInput =
   | LocationUpdateBlockInputs
   | PropertyUpdateBlockInputs
   | SessionTerminateBlockInputs
+  | IncidentCreateBlockInputs
   | HttpsPatchBlockInputs
   | HttpGetBlockInputs
   | HttpPostBlockInputs

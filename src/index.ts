@@ -3146,7 +3146,12 @@ export namespace JUHUU {
       deviceId: string;
     }
 
-    export type Object = Location | Device;
+    export interface ParameterAnomalyGroup extends Base {
+      type: "parameterAnomalyGroup";
+      parameterAnomalyGroupId: string;
+    }
+
+    export type Object = Location | Device | ParameterAnomalyGroup;
 
     export namespace Create {
       export type Params = {
