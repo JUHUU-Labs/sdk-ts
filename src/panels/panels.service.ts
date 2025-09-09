@@ -15,23 +15,11 @@ export default class PanelsService extends Service {
         method: "POST",
         url: "panels",
         body: {
-          userId: params.userId,
+          propertyId: params.propertyId,
           name: params.name,
-          title: params.title,
-          description: params.description,
-          type: params.type,
-          status: params.status,
-          size: params.size,
-          isResizable: params.isResizable,
-          isDraggable: params.isDraggable,
-          isVisible: params.isVisible,
-          position: params.position,
-          config: params.config,
-          accessCount: params.accessCount,
-          permissions: params.permissions,
-          tags: params.tags,
-          parentPanelId: params.parentPanelId,
-          order: params.order,
+          layoutBlockArray: params.layoutBlockArray,
+          highlightLayoutBlockArray: params.highlightLayoutBlockArray,
+          localParameterArray: params.localParameterArray,
         },
         authenticationNotOptional: true,
       },
@@ -45,32 +33,8 @@ export default class PanelsService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.Panel.List.Response>> {
     const queryArray: string[] = [];
 
-    if (params?.userId !== undefined) {
-      queryArray.push("userId=" + params.userId);
-    }
-
-    if (params?.name !== undefined) {
-      queryArray.push("name=" + params.name);
-    }
-
-    if (params?.type !== undefined) {
-      queryArray.push("type=" + params.type);
-    }
-
-    if (params?.status !== undefined) {
-      queryArray.push("status=" + params.status);
-    }
-
-    if (params?.size !== undefined) {
-      queryArray.push("size=" + params.size);
-    }
-
-    if (params?.isVisible !== undefined) {
-      queryArray.push("isVisible=" + params.isVisible);
-    }
-
-    if (params?.parentPanelId !== undefined) {
-      queryArray.push("parentPanelId=" + params.parentPanelId);
+    if (params?.propertyId !== undefined) {
+      queryArray.push("propertyId=" + params.propertyId);
     }
 
     if (options?.limit !== undefined) {
@@ -118,22 +82,11 @@ export default class PanelsService extends Service {
         method: "PATCH",
         url: "panels/" + params.panelId,
         body: {
-          userId: params.userId,
           name: params.name,
-          title: params.title,
-          description: params.description,
-          type: params.type,
-          status: params.status,
-          size: params.size,
-          isResizable: params.isResizable,
-          isDraggable: params.isDraggable,
-          isVisible: params.isVisible,
-          position: params.position,
-          config: params.config,
-          permissions: params.permissions,
-          tags: params.tags,
-          parentPanelId: params.parentPanelId,
-          order: params.order,
+          layoutBlockArray: params.layoutBlockArray,
+          highlightLayoutBlockArray: params.highlightLayoutBlockArray,
+          localParameterArray: params.localParameterArray,
+          display: params.display,
         },
         authenticationNotOptional: true,
       },

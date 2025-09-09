@@ -1594,6 +1594,41 @@ export interface SessionTerminateBlockInputs {
   shouldRetry: boolean;
   autoRenewIfAvailable: boolean;
 }
+export interface SystemLogBlock extends BaseBlock {
+  type: "system.log";
+  in: {
+    severity: DataEdgeConnection;
+    message: DataEdgeConnection;
+  };
+  out: Record<string, never>;
+  data: {
+    severity?: "debug" | "info" | "warning" | "error";
+    message?: string;
+  };
+}
+export interface SystemLogBlockInputs {
+  severity: "debug" | "info" | "warning" | "error";
+  message: string;
+}
+export interface UiNavigateScreenBlock extends BaseBlock {
+  type: "ui.navigate.screen";
+  in: {
+    target: DataEdgeConnection;
+    transition: DataEdgeConnection;
+    params: DataEdgeConnection;
+  };
+  out: Record<string, never>;
+  data: {
+    target?: "panel" | "location";
+    transition?: "push" | "replace";
+    params?: Record<string, any>;
+  };
+}
+export interface UiNavigateScreenBlockInputs {
+  target: "panel" | "location";
+  transition: "push" | "replace";
+  params: Record<string, any>;
+}
 
 export interface IncidentCreateBlock extends BaseBlock {
   type: "incident.create";
@@ -1983,6 +2018,8 @@ export type FlowBlock =
   | LocationUpdateBlock
   | PropertyUpdateBlock
   | SessionTerminateBlock
+  | SystemLogBlock
+  | UiNavigateScreenBlock
   | IncidentCreateBlock
   | IfBlock
   | SwitchBlock
@@ -2014,6 +2051,8 @@ export type FlowBlockInput =
   | LocationUpdateBlockInputs
   | PropertyUpdateBlockInputs
   | SessionTerminateBlockInputs
+  | SystemLogBlockInputs
+  | UiNavigateScreenBlockInputs
   | IncidentCreateBlockInputs
   | HttpsPatchBlockInputs
   | HttpGetBlockInputs
@@ -2081,3 +2120,12 @@ export type QuickView = {
   icon: string | null;
   visibleCondition: Condition | null; // if null the quick view is always visible
 };
+
+export type LocalParameter = {
+  id: string;
+  name: string;
+  value: any;
+  type: string;
+};
+
+export type PanelDisplay = "modal" | "dialog" | "screen";

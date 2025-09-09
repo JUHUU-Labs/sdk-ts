@@ -63,6 +63,8 @@ import {
   FlowExecutionEnvironment,
   FlowLog,
   ProximityStrategy,
+  LocalParameter,
+  PanelDisplay,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -5430,73 +5432,27 @@ export namespace JUHUU {
   }
 
   export namespace Panel {
-    export type PanelType =
-      | "dashboard"
-      | "widget"
-      | "sidebar"
-      | "modal"
-      | "header"
-      | "footer";
-    export type PanelStatus = "active" | "inactive" | "hidden" | "archived";
-    export type PanelSize = "small" | "medium" | "large" | "fullscreen";
-    export type PanelPosition = {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      zIndex: number;
-    };
-    export type PanelConfig = {
-      theme: string | null;
-      colors: Record<string, string>;
-      layout: Record<string, any>;
-      settings: Record<string, any>;
-      dataSource: string | null;
-      refreshInterval: number | null;
-    };
     export type Object = {
       id: string;
+      version: number;
       readonly object: "panel";
-      userId: string;
+      objectType: "dto";
       name: string;
-      title: string | null;
-      description: string | null;
-      type: PanelType;
-      status: PanelStatus;
-      size: PanelSize;
-      isResizable: boolean;
-      isDraggable: boolean;
-      isVisible: boolean;
-      position: PanelPosition;
-      config: PanelConfig;
-      createdAt: string;
-      updatedAt: string;
-      lastAccessedAt: string | null;
-      accessCount: number;
-      permissions: string[];
-      tags: string[];
-      parentPanelId: string | null;
-      order: number;
+      propertyId: string;
+      layoutBlockArray: LayoutBlock[];
+      highlightLayoutBlockArray: LayoutBlock[];
+      localParameterArray: LocalParameter[];
+      display: PanelDisplay;
     };
+
     export namespace Create {
       export type Params = {
-        userId: string;
-        name: string;
-        title?: string | null;
-        description?: string | null;
-        type: PanelType;
-        status: PanelStatus;
-        size: PanelSize;
-        isResizable: boolean;
-        isDraggable: boolean;
-        isVisible: boolean;
-        position: PanelPosition;
-        config: PanelConfig;
-        accessCount?: number;
-        permissions: string[];
-        tags: string[];
-        parentPanelId?: string | null;
-        order: number;
+        propertyId: string;
+        name?: string;
+        layoutBlockArray?: LayoutBlock[];
+        highlightLayoutBlockArray?: LayoutBlock[];
+        localParameterArray?: LocalParameter[];
+        display?: PanelDisplay;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -5514,13 +5470,7 @@ export namespace JUHUU {
     }
     export namespace List {
       export type Params = {
-        userId?: string;
-        name?: string;
-        type?: PanelType;
-        status?: PanelStatus;
-        size?: PanelSize;
-        isVisible?: boolean;
-        parentPanelId?: string;
+        propertyId?: string;
       };
       export type Options = {
         limit?: number;
@@ -5528,29 +5478,16 @@ export namespace JUHUU {
       } & JUHUU.RequestOptions;
       export type Response = {
         panelArray: JUHUU.Panel.Object[];
-        count: number;
-        hasMore: boolean;
       };
     }
     export namespace Update {
       export type Params = {
         panelId: string;
-        userId?: string;
         name?: string;
-        title?: string | null;
-        description?: string | null;
-        type?: PanelType;
-        status?: PanelStatus;
-        size?: PanelSize;
-        isResizable?: boolean;
-        isDraggable?: boolean;
-        isVisible?: boolean;
-        position?: PanelPosition;
-        config?: PanelConfig;
-        permissions?: string[];
-        tags?: string[];
-        parentPanelId?: string | null;
-        order?: number;
+        layoutBlockArray?: LayoutBlock[];
+        highlightLayoutBlockArray?: LayoutBlock[];
+        localParameterArray?: LocalParameter[];
+        display?: PanelDisplay;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -5562,7 +5499,9 @@ export namespace JUHUU {
         panelId: string;
       };
       export type Options = JUHUU.RequestOptions;
-      export type Response = JUHUU.Panel.Object;
+      export type Response = {
+        panel: JUHUU.Panel.Object;
+      };
     }
   }
 
