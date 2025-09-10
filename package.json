@@ -1,6 +1,6 @@
 {
   "name": "@juhuu/sdk-ts",
-  "version": "1.2.264",
+  "version": "1.2.265",
   "description": "Typescript wrapper for JUHUU services",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -26,11 +26,13 @@
   ],
   "homepage": "https://github.com/JUHUU-Labs/sdk-ts#readme",
   "devDependencies": {
+    "@types/json-logic-js": "^2.0.8",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
     "@types/node": "^24.1.0",
+    "json-logic-js": "^2.0.5",
     "socket.io-client": "^4.7.5"
   }
 }

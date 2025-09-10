@@ -3724,7 +3724,7 @@ export namespace JUHUU {
       nodeArray: FlowBlock[];
       edgeArray: FlowEdge[];
       propertyId: string;
-      exectionEnvironmentArray: FlowExecutionEnvironment[];
+      executionEnvironmentArray: FlowExecutionEnvironment[];
       status: FlowStatus;
       errorMessage: string | null;
     };
