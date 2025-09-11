@@ -3816,6 +3816,20 @@ export namespace JUHUU {
         output: Record<string, any>; // the output of the flow execution
       };
     }
+
+    export namespace ExecuteLocally {
+      export type Params = {
+        flowId: string;
+        input?: Record<string, any>;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        output: Record<string, any>; // the output of the flow execution
+        logArray: FlowLog[];
+      };
+    }
   }
 
   export namespace FlowTrace {

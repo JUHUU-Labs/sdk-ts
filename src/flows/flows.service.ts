@@ -1,15 +1,15 @@
 import { JUHUU } from "..";
 import Service from "../index.service";
 import jsonLogic from "json-logic-js";
-import { 
-  FlowBlock, 
-  FlowEdge, 
-  StartCustomBlock, 
-  IfBlock, 
-  EndCustomBlock, 
+import {
+  FlowBlock,
+  FlowEdge,
+  StartCustomBlock,
+  IfBlock,
+  EndCustomBlock,
   FlowExecuteBlock,
   FlowLog,
-  FlowBlockInput
+  FlowBlockInput,
 } from "../types/types";
 
 type BlockExecutor = (
@@ -241,9 +241,7 @@ export default class FlowsService extends Service {
         const value = (context as any)[param.name];
 
         if (value === undefined && param.required) {
-          throw new Error(
-            `Missing required input parameter '${param.name}'`
-          );
+          throw new Error(`Missing required input parameter '${param.name}'`);
         }
 
         outputs[param.name] = value;
@@ -286,9 +284,16 @@ export default class FlowsService extends Service {
         execInput[key] = value;
       }
 
-      const { output } = await this.executeLocally(finalFlowId, execInput);
+      const response = await this.execute({
+        flowId: finalFlowId,
+        input: execInput,
+      });
 
-      return { output };
+      if (!response.ok) {
+        throw new Error(`Failed to execute flow: ${response.data?.message || "Unknown error"}`);
+      }
+
+      return { output: response.data.output };
     },
 
     "end.custom": async (inputs) => {
@@ -296,46 +301,116 @@ export default class FlowsService extends Service {
     },
 
     // Placeholder implementations for other block types (they will throw errors if used)
-    "start.quickAction.location": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "start.session.update": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "start.location.update": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "start.parameter.update": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "const.number": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "const.text": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "const.boolean": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "math.add": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "math.subtract": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "math.multiply": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "math.divide": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "map.destructure": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "parameter.retrieve": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "property.retrieve": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "location.retrieve": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "session.retrieve": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "device.retrieve": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "user.retrieve": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "user.create": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "incident.retrieve": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "parameter.update": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "device.update": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "location.update": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "property.update": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "session.terminate": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "system.log": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "ui.navigate.screen": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "incident.create": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "control.switch": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "http.patch": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "http.get": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "http.post": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "http.delete": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "http.put": async () => { throw new Error("Block type not implemented in executeLocally"); },
-    "mqtt.send": async () => { throw new Error("Block type not implemented in executeLocally"); },
+    "start.quickAction.location": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "start.session.update": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "start.location.update": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "start.parameter.update": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "const.number": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "const.text": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "const.boolean": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "math.add": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "math.subtract": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "math.multiply": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "math.divide": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "map.destructure": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "parameter.retrieve": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "property.retrieve": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "location.retrieve": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "session.retrieve": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "device.retrieve": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "user.retrieve": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "user.create": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "incident.retrieve": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "parameter.update": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "device.update": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "location.update": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "property.update": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "session.terminate": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "system.log": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "ui.navigate.screen": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "incident.create": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "control.switch": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "http.patch": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "http.get": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "http.post": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "http.delete": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "http.put": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
+    "mqtt.send": async () => {
+      throw new Error("Block type not implemented in executeLocally");
+    },
   };
 
   async executeLocally(
-    flowId: string,
-    context: Record<string, any> = {}
+    FlowExecuteLocallyParams: JUHUU.Flow.ExecuteLocally.Params,
+    FlowExecuteLocallyOptions?: JUHUU.Flow.Execute.Options
   ): Promise<{
     output: Record<string, any>;
     logArray: FlowLog[];
@@ -343,14 +418,20 @@ export default class FlowsService extends Service {
     const logArray: FlowLog[] = [];
     logArray.push({
       createdAt: new Date(),
-      message: `Starting local execution of flow '${flowId}'`,
+      message: `Starting local execution of flow '${FlowExecuteLocallyParams.flowId}'`,
       severity: "info",
     });
 
-    const flowResponse = await this.retrieve({ flowId });
-    
+    const flowResponse = await this.retrieve({
+      flowId: FlowExecuteLocallyParams.flowId,
+    });
+
     if (!flowResponse.ok) {
-      throw new Error(`Failed to retrieve flow: ${flowResponse.data?.message || "Unknown error"}`);
+      throw new Error(
+        `Failed to retrieve flow: ${
+          flowResponse.data?.message || "Unknown error"
+        }`
+      );
     }
 
     const flow = flowResponse.data.flow;
@@ -376,7 +457,11 @@ export default class FlowsService extends Service {
         throw new Error(`No executor for ${block.type}`);
       }
 
-      const raw = await executor(inputs, block, context);
+      const raw = await executor(
+        inputs,
+        block,
+        FlowExecuteLocallyParams.input ?? {}
+      );
 
       const { flowBranch, output } = raw;
       outputStore[block.id] = output;
@@ -417,7 +502,7 @@ export default class FlowsService extends Service {
 
     if (flow.startNode.type.startsWith("start.") === false) {
       throw new Error(
-        `Flow ${flowId} has an invalid start block that is not of type 'start.'`
+        `Flow ${FlowExecuteLocallyParams.flowId} has an invalid start block that is not of type 'start.'`
       );
     }
 
