@@ -65,6 +65,12 @@ export type Capability =
       stripePriceId: string | null;
       grantedAt: Date;
       requestedByUserId: string;
+    }
+  | {
+      type: "identityVerification";
+      stripePriceId: string | null;
+      grantedAt: Date;
+      requestedByUserId: string;
     };
 
 export interface Offer {
@@ -80,6 +86,8 @@ export interface Offer {
    */
   licenseTemplateCascadeArray?: string[][];
   offerTime: OfferTime;
+
+  flowId?: string | null;
 }
 
 export type DevicePermission = {

@@ -62,6 +62,10 @@ export default class PanelsService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.Panel.Retrieve.Response>> {
     const queryArray: string[] = [];
 
+    if (options?.expand !== undefined) {
+      queryArray.push("expand=" + options.expand.join(","));
+    }
+
     return await super.sendRequest<JUHUU.Panel.Retrieve.Response>(
       {
         method: "GET",

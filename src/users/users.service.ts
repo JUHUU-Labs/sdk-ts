@@ -241,4 +241,21 @@ export default class UsersService extends Service {
       UserDeleteOptions
     );
   }
+
+  async createIdentityVerificationUrl(
+    UserCreateIdentityVerificationUrlParams: JUHUU.User.CreateIdentityVerificationUrl.Params,
+    UserCreateIdentityVerificationUrlOptions?: JUHUU.User.CreateIdentityVerificationUrl.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.User.CreateIdentityVerificationUrl.Response>> {
+    return await super.sendRequest<JUHUU.User.CreateIdentityVerificationUrl.Response>(
+      {
+        method: "POST",
+        url: "users/" + UserCreateIdentityVerificationUrlParams.userId + "/createIdentityVerificationUrl",
+        body: {
+          propertyId: UserCreateIdentityVerificationUrlParams.propertyId,
+        },
+        authenticationNotOptional: true,
+      },
+      UserCreateIdentityVerificationUrlOptions
+    );
+  }
 }

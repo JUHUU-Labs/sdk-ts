@@ -11,49 +11,70 @@ export default class WebsocketsService extends Service {
   ): JUHUU.Websocket.Connect.Response {
     const socket = super.connectToWebsocket({ url: "websocket" });
 
-    const pendingRpcResponses: Map<
-      string,
-      (value: JUHUU.Websocket.Rpc.Response) => void
-    > = new Map();
-
-    socket.on("rpc.response", (message: JUHUU.Websocket.Rpc.Response) => {
-      const resolver = pendingRpcResponses.get(message.id);
-      if (resolver !== undefined) {
-        resolver(message);
-        pendingRpcResponses.delete(message.id);
-      }
+    socket.on("subscription_success", (message: any) => {
+      this.logger("Subscription success:", message);
     });
 
-    const onQueryUpdate = (
-      callback: (message: JUHUU.Websocket.QueryUpdate) => void
+    socket.on("unsubscription_success", (message: any) => {
+      this.logger("Unsubscription success:", message);
+    });
+
+    socket.on("error", (error: any) => {
+      console.error("WebSocket error:", error);
+    });
+
+    const onLocationUpdate = (
+      callback: (message: JUHUU.Websocket.LocationUpdate) => void
     ) => {
-      socket.on("query.update", (message: JUHUU.Websocket.QueryUpdate) => {
-        callback(message);
-      });
+      socket.on(
+        "location_update",
+        (message: JUHUU.Websocket.LocationUpdate) => {
+          callback(message);
+        }
+      );
+    };
+
+    const onParameterUpdate = (
+      callback: (message: JUHUU.Websocket.ParameterUpdate) => void
+    ) => {
+      socket.on(
+        "parameter_update",
+        (message: JUHUU.Websocket.ParameterUpdate) => {
+          callback(message);
+        }
+      );
     };
 
     return {
-      subscribe: (rooms: string[]) => {
-        socket.emit("subscribe", { rooms });
-      },
-      unsubscribe: (rooms: string[]) => {
-        socket.emit("unsubscribe", { rooms });
-      },
-      subscribeQuery: (payload: JUHUU.Websocket.SubscribeQuery.Params) => {
-        socket.emit("subscribeQuery", payload);
-      },
-      unsubscribeQuery: (payload: JUHUU.Websocket.UnsubscribeQuery.Params) => {
-        socket.emit("unsubscribeQuery", payload);
-      },
-      rpc: async (
-        payload: JUHUU.Websocket.Rpc.Params
-      ): Promise<JUHUU.Websocket.Rpc.Response> => {
-        return await new Promise((resolve) => {
-          pendingRpcResponses.set(payload.id, resolve);
-          socket.emit("rpc", payload);
+      subscribe: (locationIdArray?: string[], parameterIdArray?: string[]) => {
+        socket.emit("subscribe", {
+          locationIdArray: locationIdArray || [],
+          parameterIdArray: parameterIdArray || [],
         });
       },
-      onQueryUpdate,
+      unsubscribeFromLocations: (locationIdArray: string[]) => {
+        socket.emit("unsubscribe", { locationIdArray });
+      },
+      unsubscribeFromParameters: (parameterIdArray: string[]) => {
+        socket.emit("unsubscribe", { parameterIdArray });
+      },
+      unsubscribe: (
+        locationIdArray?: string[],
+        parameterIdArray?: string[]
+      ) => {
+        socket.emit("unsubscribe", {
+          locationIdArray: locationIdArray || [],
+          parameterIdArray: parameterIdArray || [],
+        });
+      },
+      ping: (data?: any) => {
+        socket.emit("ping", data);
+      },
+      onLocationUpdate,
+      onParameterUpdate,
+      onPong: (callback: (message: any) => void) => {
+        socket.on("pong", callback);
+      },
       close: () => {
         socket.close();
       },

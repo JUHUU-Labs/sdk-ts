@@ -734,6 +734,11 @@ export namespace JUHUU {
       };
       group: UserGroup;
       createdByPropertyId: string | null;
+      identity: {
+        status: "unverified" | "pending" | "verified";
+        verifiedAt: Date | null;
+        expiresAt: Date | null;
+      };
     };
 
     export interface Standard extends Base {
@@ -928,6 +933,19 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.User.Object;
+    }
+
+    export namespace CreateIdentityVerificationUrl {
+      export type Params = {
+        userId: string;
+        propertyId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        url: string;
+      };
     }
   }
 
@@ -5477,9 +5495,12 @@ export namespace JUHUU {
       export type Params = {
         panelId: string;
       };
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
       export type Response = {
         panel: JUHUU.Panel.Object;
+        property?: JUHUU.Property.Object;
       };
     }
     export namespace List {
@@ -5705,60 +5726,41 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        subscribe: (rooms: string[]) => void;
-        unsubscribe: (rooms: string[]) => void;
-        subscribeQuery: (
-          payload: JUHUU.Websocket.SubscribeQuery.Params
+        subscribe: (
+          locationIdArray?: string[],
+          parameterIdArray?: string[]
         ) => void;
-        unsubscribeQuery: (
-          payload: JUHUU.Websocket.UnsubscribeQuery.Params
+        unsubscribeFromLocations: (locationIdArray: string[]) => void;
+        unsubscribeFromParameters: (parameterIdArray: string[]) => void;
+        unsubscribe: (
+          locationIdArray?: string[],
+          parameterIdArray?: string[]
         ) => void;
-        rpc: (
-          payload: JUHUU.Websocket.Rpc.Params
-        ) => Promise<JUHUU.Websocket.Rpc.Response>;
-        onQueryUpdate: (
-          callback: (message: JUHUU.Websocket.QueryUpdate) => void
+        ping: (data?: any) => void;
+        onLocationUpdate: (
+          callback: (message: JUHUU.Websocket.LocationUpdate) => void
         ) => void;
+        onParameterUpdate: (
+          callback: (message: JUHUU.Websocket.ParameterUpdate) => void
+        ) => void;
+        onPong: (callback: (message: any) => void) => void;
         close: () => void;
       };
     }
 
-    export namespace SubscribeQuery {
-      export type Params = {
-        subId: string;
-        method: "GET";
-        path: string;
-        query?: Record<string, unknown>;
-      };
-    }
+    export type LocationUpdate = {
+      locationId: string;
+      before: JUHUU.Location.Object;
+      after: JUHUU.Location.Object;
+      changedFields: string[];
+    };
 
-    export namespace UnsubscribeQuery {
-      export type Params = {
-        subId: string;
-      };
-    }
-
-    export namespace Rpc {
-      export type Params = {
-        id: string;
-        method: "GET" | "POST" | "PATCH" | "DELETE";
-        path: string;
-        query?: Record<string, unknown>;
-        body?: unknown;
-        headers?: Record<string, unknown>;
-      };
-
-      export type Response = {
-        id: string;
-        status: number;
-        data?: unknown;
-        error?: unknown;
-      };
-    }
-
-    export type QueryUpdate = {
-      subId: string;
-      data: unknown;
+    export type ParameterUpdate = {
+      parameterId: string;
+      before: JUHUU.Parameter.Object;
+      after: JUHUU.Parameter.Object;
+      changedFields: string[];
+      initiatedAt?: Date;
     };
   }
 }
