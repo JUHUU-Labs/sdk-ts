@@ -10,6 +10,9 @@ import {
   FlowExecuteBlock,
   FlowLog,
   FlowBlockInput,
+  ConstNumberBlock,
+  ConstTextBlock,
+  ConstBooleanBlock,
 } from "../types/types";
 
 type BlockExecutor = (
@@ -218,7 +221,7 @@ export default class FlowsService extends Service {
     return (block as any).in[inputName] !== undefined;
   }
 
-  private blockExecutors: Record<FlowBlock["type"], BlockExecutor> = {
+  private blockExecutors: Partial<Record<FlowBlock["type"], BlockExecutor>> = {
     "start.custom": async (_inputs, block, context) => {
       if (block.type !== "start.custom") {
         throw new Error(
@@ -289,8 +292,10 @@ export default class FlowsService extends Service {
         input: execInput,
       });
 
-      if (!response.ok) {
-        throw new Error(`Failed to execute flow: ${response.data?.message || "Unknown error"}`);
+      if (response.ok === false) {
+        throw new Error(
+          `Failed to execute flow: ${response.data?.message || "Unknown error"}`
+        );
       }
 
       return { output: response.data.output };
@@ -300,121 +305,26 @@ export default class FlowsService extends Service {
       return { output: { ...inputs } };
     },
 
-    // Placeholder implementations for other block types (they will throw errors if used)
-    "start.quickAction.location": async () => {
-      throw new Error("Block type not implemented in executeLocally");
+    "const.number": async (_inputs, block) => {
+      const { data } = block as ConstNumberBlock;
+      return { output: { value: data?.value } };
     },
-    "start.session.update": async () => {
-      throw new Error("Block type not implemented in executeLocally");
+
+    "const.text": async (_inputs, block) => {
+      const { data } = block as ConstTextBlock;
+      return { output: { value: data?.value } };
     },
-    "start.location.update": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "start.parameter.update": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "const.number": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "const.text": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "const.boolean": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "math.add": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "math.subtract": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "math.multiply": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "math.divide": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "map.destructure": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "parameter.retrieve": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "property.retrieve": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "location.retrieve": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "session.retrieve": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "device.retrieve": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "user.retrieve": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "user.create": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "incident.retrieve": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "parameter.update": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "device.update": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "location.update": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "property.update": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "session.terminate": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "system.log": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "ui.navigate.screen": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "incident.create": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "control.switch": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "http.patch": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "http.get": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "http.post": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "http.delete": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "http.put": async () => {
-      throw new Error("Block type not implemented in executeLocally");
-    },
-    "mqtt.send": async () => {
-      throw new Error("Block type not implemented in executeLocally");
+
+    "const.boolean": async (_inputs, block) => {
+      const { data } = block as ConstBooleanBlock;
+      return { output: { value: data?.value } };
     },
   };
 
   async executeLocally(
     FlowExecuteLocallyParams: JUHUU.Flow.ExecuteLocally.Params,
-    FlowExecuteLocallyOptions?: JUHUU.Flow.Execute.Options
-  ): Promise<{
-    output: Record<string, any>;
-    logArray: FlowLog[];
-  }> {
+    FlowExecuteLocallyOptions?: JUHUU.Flow.ExecuteLocally.Options
+  ): Promise<JUHUU.Flow.ExecuteLocally.Response> {
     const logArray: FlowLog[] = [];
     logArray.push({
       createdAt: new Date(),
@@ -422,107 +332,97 @@ export default class FlowsService extends Service {
       severity: "info",
     });
 
-    const flowResponse = await this.retrieve({
-      flowId: FlowExecuteLocallyParams.flowId,
-    });
-
-    if (!flowResponse.ok) {
-      throw new Error(
-        `Failed to retrieve flow: ${
-          flowResponse.data?.message || "Unknown error"
-        }`
-      );
-    }
-
-    const flow = flowResponse.data.flow;
-
-    const blocksById = new Map(
-      flow.nodeArray.map((b: FlowBlock) => [b.id, b] as [string, FlowBlock])
-    );
-    blocksById.set(flow.startNode.id, flow.startNode);
-
-    const edgeArray = flow.edgeArray;
-    const outputStore: Record<string, Record<string, any>> = {};
-
-    const runBlock = async (block: FlowBlock): Promise<string | null> => {
-      logArray.push({
-        createdAt: new Date(),
-        message: `Running block ${block.type} (${block.id})`,
-        severity: "info",
+    try {
+      const flowResponse = await this.retrieve({
+        flowId: FlowExecuteLocallyParams.flowId,
       });
 
-      const inputs = this.resolveInputs(block, outputStore, edgeArray);
-      const executor = this.blockExecutors[block.type];
-      if (executor === undefined || executor === null) {
-        throw new Error(`No executor for ${block.type}`);
-      }
-
-      const raw = await executor(
-        inputs,
-        block,
-        FlowExecuteLocallyParams.input ?? {}
-      );
-
-      const { flowBranch, output } = raw;
-      outputStore[block.id] = output;
-
-      if (raw.logArray !== undefined) {
-        logArray.push(...raw.logArray);
-      }
-
-      logArray.push({
-        createdAt: new Date(),
-        message: `Block ${block.type} (${block.id}) executed successfully`,
-        severity: "info",
-      });
-
-      return flowBranch ?? null;
-    };
-
-    const getNext = (
-      fromId: string,
-      branch: string | null
-    ): FlowBlock | null => {
-      let ce = edgeArray.find(
-        (e: FlowEdge) =>
-          e.type === "control" &&
-          e.from.blockId === fromId &&
-          (e.from.output ?? null) === branch
-      );
-      if ((ce === null || ce === undefined) && branch === null) {
-        ce = edgeArray.find(
-          (e: FlowEdge) => e.type === "control" && e.from.blockId === fromId
+      if (!flowResponse.ok) {
+        throw new Error(
+          `Failed to retrieve flow: ${
+            flowResponse.data?.message || "Unknown error"
+          }`
         );
       }
-      if (ce === null || ce === undefined) {
-        return null;
-      }
-      return blocksById.get(ce.to.blockId) ?? null;
-    };
 
-    if (flow.startNode.type.startsWith("start.") === false) {
-      throw new Error(
-        `Flow ${FlowExecuteLocallyParams.flowId} has an invalid start block that is not of type 'start.'`
+      const flow = flowResponse.data.flow;
+
+      const blocksById = new Map(
+        flow.nodeArray.map((b: FlowBlock) => [b.id, b] as [string, FlowBlock])
       );
-    }
+      blocksById.set(flow.startNode.id, flow.startNode);
 
-    let current = flow.startNode;
+      const edgeArray = flow.edgeArray;
+      const outputStore: Record<string, Record<string, any>> = {};
 
-    await runBlock(current);
-    const next = getNext(current.id, null);
+      const runBlock = async (block: FlowBlock): Promise<string | null> => {
+        logArray.push({
+          createdAt: new Date(),
+          message: `Running block ${block.type} (${block.id})`,
+          severity: "info",
+        });
 
-    if (next === null) {
-      return {
-        output: {},
-        logArray,
+        const inputs = this.resolveInputs(block, outputStore, edgeArray);
+        const executor = this.blockExecutors[block.type];
+        if (executor === undefined || executor === null) {
+          throw new Error(
+            `Block type '${block.type}' is not implemented in the local executor`
+          );
+        }
+
+        const raw = await executor(
+          inputs,
+          block,
+          FlowExecuteLocallyParams.input ?? {}
+        );
+
+        const { flowBranch, output } = raw;
+        outputStore[block.id] = output;
+
+        if (raw.logArray !== undefined) {
+          logArray.push(...raw.logArray);
+        }
+
+        logArray.push({
+          createdAt: new Date(),
+          message: `Block ${block.type} (${block.id}) executed successfully`,
+          severity: "info",
+        });
+
+        return flowBranch ?? null;
       };
-    }
 
-    current = next;
+      const getNext = (
+        fromId: string,
+        branch: string | null
+      ): FlowBlock | null => {
+        let ce = edgeArray.find(
+          (e: FlowEdge) =>
+            e.type === "control" &&
+            e.from.blockId === fromId &&
+            (e.from.output ?? null) === branch
+        );
+        if ((ce === null || ce === undefined) && branch === null) {
+          ce = edgeArray.find(
+            (e: FlowEdge) => e.type === "control" && e.from.blockId === fromId
+          );
+        }
+        if (ce === null || ce === undefined) {
+          return null;
+        }
+        return blocksById.get(ce.to.blockId) ?? null;
+      };
 
-    while (current.type.startsWith("end.") === false) {
-      const branch = await runBlock(current);
-      const next = getNext(current.id, branch);
+      if (flow.startNode.type.startsWith("start.") === false) {
+        throw new Error(
+          `Flow ${FlowExecuteLocallyParams.flowId} has an invalid start block that is not of type 'start.'`
+        );
+      }
+
+      let current = flow.startNode;
+
+      await runBlock(current);
+      const next = getNext(current.id, null);
 
       if (next === null) {
         return {
@@ -532,19 +432,45 @@ export default class FlowsService extends Service {
       }
 
       current = next;
-    }
 
-    await runBlock(current);
-    const endBlock = current as Extract<FlowBlock, { type: "end.custom" }>;
-    const result: Record<string, any> = {};
-    const definitions = endBlock.data.outputParamDefinitionArray ?? [];
-    for (const def of definitions) {
-      result[def.name] = outputStore[current.id]?.[def.name] ?? null;
-    }
+      while (current.type.startsWith("end.") === false) {
+        const branch = await runBlock(current);
+        const next = getNext(current.id, branch);
 
-    return {
-      output: result,
-      logArray: logArray,
-    };
+        if (next === null) {
+          return {
+            output: {},
+            logArray,
+          };
+        }
+
+        current = next;
+      }
+
+      await runBlock(current);
+      const endBlock = current as Extract<FlowBlock, { type: "end.custom" }>;
+      const result: Record<string, any> = {};
+      const definitions = endBlock.data.outputParamDefinitionArray ?? [];
+      for (const def of definitions) {
+        result[def.name] = outputStore[current.id]?.[def.name] ?? null;
+      }
+
+      return {
+        output: result,
+        logArray: logArray,
+      };
+    } catch (error) {
+      logArray.push({
+        createdAt: new Date(),
+        message: `Flow execution failed: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+        severity: "error",
+      });
+      return {
+        output: {},
+        logArray,
+      };
+    }
   }
 }
