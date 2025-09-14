@@ -2112,6 +2112,16 @@ export type FlowLog = {
   createdAt: Date; // ISO 8601 date string
 };
 
+export type BlockExecutor = (
+  inputs: FlowBlockInput,
+  block: FlowBlock,
+  context: Record<string, any>
+) => Promise<{
+  output: Record<string, any>;
+  logArray?: FlowLog[];
+  flowBranch?: string | null;
+}>;
+
 export type DataEdgeConnection = string | null; // null if not connected
 export type ControlEdgeConnection = string | null; // null if not connected
 

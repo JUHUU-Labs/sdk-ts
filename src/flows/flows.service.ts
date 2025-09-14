@@ -13,17 +13,9 @@ import {
   ConstNumberBlock,
   ConstTextBlock,
   ConstBooleanBlock,
+  UiNavigateScreenBlock,
+  BlockExecutor,
 } from "../types/types";
-
-type BlockExecutor = (
-  inputs: FlowBlockInput,
-  block: FlowBlock,
-  context: Record<string, any>
-) => Promise<{
-  output: Record<string, any>;
-  logArray?: FlowLog[];
-  flowBranch?: string | null;
-}>;
 
 export default class FlowsService extends Service {
   constructor(config: JUHUU.SetupConfig) {
@@ -147,33 +139,6 @@ export default class FlowsService extends Service {
     );
   }
 
-  private areInputsAvailable(
-    block: FlowBlock,
-    outputStore: Record<string, Record<string, any>>,
-    edgeArray: FlowEdge[]
-  ): boolean {
-    if (block.in === null || block.in === undefined) {
-      return true;
-    }
-
-    return Object.values(block.in).every((edgeId) => {
-      const edge = edgeArray.find((e) => e.id === edgeId);
-      if (edge === undefined) {
-        return false;
-      }
-
-      if (edge.type === "control") {
-        return true;
-      }
-      const srcOutputs = outputStore[edge.from.blockId];
-      return (
-        srcOutputs !== null &&
-        srcOutputs !== undefined &&
-        edge.from.output in srcOutputs
-      );
-    });
-  }
-
   private resolveInputs(
     block: FlowBlock,
     outputStore: Record<string, Record<string, any>>,
@@ -213,7 +178,7 @@ export default class FlowsService extends Service {
     return inputs;
   }
 
-  private isInputConnected(block: FlowBlock, inputName: string): boolean {
+  isInputConnected(block: FlowBlock, inputName: string): boolean {
     if (block.in === undefined || block.in === null) {
       return false;
     }
@@ -221,7 +186,7 @@ export default class FlowsService extends Service {
     return (block as any).in[inputName] !== undefined;
   }
 
-  private blockExecutors: Partial<Record<FlowBlock["type"], BlockExecutor>> = {
+  blockExecutors: Partial<Record<FlowBlock["type"], BlockExecutor>> = {
     "start.custom": async (_inputs, block, context) => {
       if (block.type !== "start.custom") {
         throw new Error(
@@ -355,6 +320,12 @@ export default class FlowsService extends Service {
       const edgeArray = flow.edgeArray;
       const outputStore: Record<string, Record<string, any>> = {};
 
+      // Merge default blockExecutors with custom ones from options
+      const mergedBlockExecutors = {
+        ...this.blockExecutors,
+        ...(FlowExecuteLocallyOptions?.blockExecutors || {}),
+      };
+
       const runBlock = async (block: FlowBlock): Promise<string | null> => {
         logArray.push({
           createdAt: new Date(),
@@ -363,7 +334,7 @@ export default class FlowsService extends Service {
         });
 
         const inputs = this.resolveInputs(block, outputStore, edgeArray);
-        const executor = this.blockExecutors[block.type];
+        const executor = mergedBlockExecutors[block.type];
         if (executor === undefined || executor === null) {
           throw new Error(
             `Block type '${block.type}' is not implemented in the local executor`

@@ -62,6 +62,7 @@ import {
   FlowStatus,
   FlowExecutionEnvironment,
   FlowLog,
+  BlockExecutor,
   ProximityStrategy,
   LocalParameter,
   PanelDisplay,
@@ -3841,7 +3842,9 @@ export namespace JUHUU {
         input?: Record<string, any>;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = JUHUU.RequestOptions & {
+        blockExecutors?: Partial<Record<FlowBlock["type"], BlockExecutor>>;
+      };
 
       export type Response = {
         output: Record<string, any>; // the output of the flow execution
