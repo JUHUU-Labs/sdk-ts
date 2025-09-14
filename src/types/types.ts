@@ -1984,6 +1984,43 @@ export interface FlowExecuteBlockInputs {
   [key: string]: any;
 }
 
+export interface VariableSetBlock extends BaseBlock {
+  type: "variable.set";
+  in: {
+    key: DataEdgeConnection;
+    value: DataEdgeConnection;
+  };
+  out: {
+    success: DataEdgeConnection;
+  };
+  data: {
+    key?: string;
+    value?: any;
+  };
+}
+
+export interface VariableSetBlockInputs {
+  key: string;
+  value: any;
+}
+
+export interface VariableGetBlock extends BaseBlock {
+  type: "variable.get";
+  in: {
+    key: DataEdgeConnection;
+  };
+  out: {
+    value: DataEdgeConnection;
+  };
+  data: {
+    key?: string;
+  };
+}
+
+export interface VariableGetBlockInputs {
+  key: string;
+}
+
 export interface EndCustomBlock extends BaseBlock {
   type: "end.custom";
   // maps each output‐param name to its edge ID
@@ -2039,6 +2076,8 @@ export type FlowBlock =
   | MqttSendBlock
   | FlowExecuteBlock
   | HttpPatchBlock
+  | VariableSetBlock
+  | VariableGetBlock
   | EndCustomBlock;
 
 export type FlowBlockInput =
@@ -2070,6 +2109,8 @@ export type FlowBlockInput =
   | MqttSendBlockInputs
   | FlowExecuteBlockInputs
   | MapDestructureBlockInputs
+  | VariableSetBlockInputs
+  | VariableGetBlockInputs
   | Record<string, unknown>;
 
 export interface FlowDataEdge {
@@ -2139,11 +2180,5 @@ export type QuickView = {
   visibleCondition: Condition | null; // if null the quick view is always visible
 };
 
-export type LocalParameter = {
-  id: string;
-  name: string;
-  value: any;
-  type: string;
-};
 
 export type PanelDisplay = "modal" | "dialog" | "screen";

@@ -64,7 +64,6 @@ import {
   FlowLog,
   BlockExecutor,
   ProximityStrategy,
-  LocalParameter,
   PanelDisplay,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
@@ -5480,7 +5479,7 @@ export namespace JUHUU {
       propertyId: string;
       layoutBlockArray: LayoutBlock[];
       highlightLayoutBlockArray: LayoutBlock[];
-      localParameterArray: LocalParameter[];
+      variables: Record<string, any>;
       display: PanelDisplay;
     };
 
@@ -5490,7 +5489,7 @@ export namespace JUHUU {
         name?: string;
         layoutBlockArray?: LayoutBlock[];
         highlightLayoutBlockArray?: LayoutBlock[];
-        localParameterArray?: LocalParameter[];
+        variables?: Record<string, any>;
         display?: PanelDisplay;
       };
       export type Options = JUHUU.RequestOptions;
@@ -5528,7 +5527,7 @@ export namespace JUHUU {
         name?: string;
         layoutBlockArray?: LayoutBlock[];
         highlightLayoutBlockArray?: LayoutBlock[];
-        localParameterArray?: LocalParameter[];
+        variables?: Record<string, any>;
         display?: PanelDisplay;
       };
       export type Options = JUHUU.RequestOptions;

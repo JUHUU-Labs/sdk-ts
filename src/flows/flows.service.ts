@@ -14,6 +14,10 @@ import {
   ConstTextBlock,
   ConstBooleanBlock,
   UiNavigateScreenBlock,
+  VariableSetBlock,
+  VariableSetBlockInputs,
+  VariableGetBlock,
+  VariableGetBlockInputs,
   BlockExecutor,
 } from "../types/types";
 
@@ -283,6 +287,59 @@ export default class FlowsService extends Service {
     "const.boolean": async (_inputs, block) => {
       const { data } = block as ConstBooleanBlock;
       return { output: { value: data?.value } };
+    },
+
+    "variable.set": async (inputs, block, context) => {
+      const { key, value } = inputs as VariableSetBlockInputs;
+      const typedBlock = block as VariableSetBlock;
+
+      // Get key from inputs or block data
+      const finalKey = this.isInputConnected(typedBlock, "key")
+        ? key
+        : typedBlock.data?.key;
+
+      // Get value from inputs or block data
+      const finalValue = this.isInputConnected(typedBlock, "value")
+        ? value
+        : typedBlock.data?.value;
+
+      if (finalKey === undefined || finalKey === null) {
+        throw new Error("Variable key is required");
+      }
+
+      // Initialize variables store if it doesn't exist
+      if (!context.variables) {
+        context.variables = new Map();
+      }
+
+      // Store the variable in the context
+      context.variables.set(finalKey, finalValue);
+
+      return { output: { success: true } };
+    },
+
+    "variable.get": async (inputs, block, context) => {
+      const { key } = inputs as VariableGetBlockInputs;
+      const typedBlock = block as VariableGetBlock;
+
+      // Get key from inputs or block data
+      const finalKey = this.isInputConnected(typedBlock, "key")
+        ? key
+        : typedBlock.data?.key;
+
+      if (finalKey === undefined || finalKey === null) {
+        throw new Error("Variable key is required");
+      }
+
+      // Initialize variables store if it doesn't exist
+      if (!context.variables) {
+        context.variables = new Map();
+      }
+
+      // Retrieve the variable from the context
+      const retrievedValue = context.variables.get(finalKey);
+
+      return { output: { value: retrievedValue } };
     },
   };
 
