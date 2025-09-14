@@ -2847,8 +2847,8 @@ export namespace JUHUU {
       id: string;
       readonly object: "link";
       propertyId: string | null;
-      referenceObject: "location";
-      referenceObjectId: string;
+      referenceObject: "location" | "panel";
+      referenceObjectId: string | null;
       name: string;
       image: string | null;
     };
@@ -2866,6 +2866,8 @@ export namespace JUHUU {
         name?: string;
         fiveLetterQr?: string;
         type: JUHUU.Link.Object["type"];
+        referenceObject?: JUHUU.Link.Object["referenceObject"];
+        referenceObjectId?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2908,7 +2910,7 @@ export namespace JUHUU {
       export type Params = {
         fiveLetterQr?: string;
         propertyId?: string;
-        referenceObjectId?: string; // id of the object that the link is assigned to
+        referenceObjectId?: string | null; // id of the object that the link is assigned to
       };
 
       export type Options = {};
@@ -2920,6 +2922,8 @@ export namespace JUHUU {
       export type Params = {
         linkId: string;
         name?: string;
+        referenceObject?: JUHUU.Link.Object["referenceObject"];
+        referenceObjectId?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;

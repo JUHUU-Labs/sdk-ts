@@ -39,6 +39,8 @@ export default class LinkService extends Service {
           propertyId: LinkCreateParams.propertyId,
           name: LinkCreateParams.name,
           fiveLetterQr: LinkCreateParams.fiveLetterQr,
+          referenceObject: LinkCreateParams.referenceObject,
+          referenceObjectId: LinkCreateParams.referenceObjectId,
         },
         authenticationNotOptional: true,
       },
@@ -102,6 +104,8 @@ export default class LinkService extends Service {
         url: "links/" + LinkUpdateParams.linkId,
         body: {
           name: LinkUpdateParams.name,
+          referenceObject: LinkUpdateParams.referenceObject,
+          referenceObjectId: LinkUpdateParams.referenceObjectId,
         },
         authenticationNotOptional: true,
       },
