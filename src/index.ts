@@ -5768,5 +5768,29 @@ export namespace JUHUU {
       changedFields: string[];
       initiatedAt?: Date;
     };
+
+    export type SubscriptionSuccess = {
+      locationIdArray: string[];
+      parameterIdArray: string[];
+      subscriptionResultArray: Array<{
+        type: "location" | "parameter";
+        id: string;
+        roomName: string;
+        success: boolean;
+      }>;
+      message: string;
+    };
+
+    export type UnsubscriptionSuccess = {
+      locationIdArray: string[];
+      parameterIdArray: string[];
+      unsubscriptionResultArray: Array<{
+        type: "location" | "parameter";
+        id: string;
+        roomName: string;
+        success: boolean;
+      }>;
+      message: string;
+    };
   }
 }

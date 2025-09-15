@@ -958,7 +958,7 @@ export namespace Layout {
 
     export interface General extends FormBlock {
       type: "form";
-      columnArray: Array<Column.One>;
+      columnArray: Array<AnyColumn>;
     }
 
     export type AnyColumn = Column.One | Column.Two;
