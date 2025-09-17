@@ -146,7 +146,7 @@ export default class Service {
           (token === null || token === undefined) &&
           authenticationNotOptional === true
         ) {
-          console.error(
+          this.logger(
             "endpoint",
             url,
             "should use authentication but no token was found"
@@ -170,7 +170,7 @@ export default class Service {
         }
 
         if (apiKey === null) {
-          console.error(
+          this.logger(
             "endpoint",
             url,
             "should use authentication but no apiKey was found"
@@ -233,7 +233,7 @@ export default class Service {
         status: response.status,
       };
     } catch (error) {
-      console.error("JUHUU SDK, error sending request: ", error);
+      this.logger("JUHUU SDK, error sending request: ", error);
 
       responseObject = {
         ok: false,
@@ -469,7 +469,7 @@ export default class Service {
     });
 
     socket.on("connect_error", (error) => {
-      console.error("Connection error:", error);
+      this.logger("Connection error:", error);
     });
 
     return socket;

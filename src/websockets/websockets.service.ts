@@ -11,16 +11,22 @@ export default class WebsocketsService extends Service {
   ): JUHUU.Websocket.Connect.Response {
     const socket = super.connectToWebsocket({ url: "websocket" });
 
-    socket.on("subscription_success", (message: JUHUU.Websocket.SubscriptionSuccess) => {
-      this.logger("Subscription success:", message);
-    });
+    socket.on(
+      "subscription_success",
+      (message: JUHUU.Websocket.SubscriptionSuccess) => {
+        this.logger("Subscription success:", message);
+      }
+    );
 
-    socket.on("unsubscription_success", (message: JUHUU.Websocket.UnsubscriptionSuccess) => {
-      this.logger("Unsubscription success:", message);
-    });
+    socket.on(
+      "unsubscription_success",
+      (message: JUHUU.Websocket.UnsubscriptionSuccess) => {
+        this.logger("Unsubscription success:", message);
+      }
+    );
 
     socket.on("error", (error: any) => {
-      console.error("WebSocket error:", error);
+      this.logger("WebSocket error:", error);
     });
 
     const onLocationUpdate = (
