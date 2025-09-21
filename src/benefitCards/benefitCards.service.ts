@@ -15,26 +15,11 @@ export default class BenefitCardsService extends Service {
         method: "POST",
         url: "benefitCards",
         body: {
+          propertyId: params.propertyId,
+          imageLight: params.imageLight,
+          imageDark: params.imageDark,
           userId: params.userId,
-          cardNumber: params.cardNumber,
-          cardHolderName: params.cardHolderName,
-          type: params.type,
-          status: params.status,
-          benefits: params.benefits,
-          limits: params.limits,
-          metadata: params.metadata,
-          pointsBalance: params.pointsBalance,
-          cashbackBalance: params.cashbackBalance,
-          totalSavings: params.totalSavings,
-          totalSpent: params.totalSpent,
-          transactionCount: params.transactionCount,
-          expiresAt: params.expiresAt,
-          isDigital: params.isDigital,
-          isTransferable: params.isTransferable,
-          requiresPin: params.requiresPin,
-          pin: params.pin,
-          qrCode: params.qrCode,
-          barcode: params.barcode,
+          reference: params.reference,
         },
         authenticationNotOptional: true,
       },
@@ -48,48 +33,8 @@ export default class BenefitCardsService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.BenefitCard.List.Response>> {
     const queryArray: string[] = [];
 
-    if (params?.userId !== undefined) {
-      queryArray.push("userId=" + params.userId);
-    }
-
-    if (params?.cardNumber !== undefined) {
-      queryArray.push("cardNumber=" + params.cardNumber);
-    }
-
-    if (params?.cardHolderName !== undefined) {
-      queryArray.push("cardHolderName=" + params.cardHolderName);
-    }
-
-    if (params?.type !== undefined) {
-      queryArray.push("type=" + params.type);
-    }
-
-    if (params?.status !== undefined) {
-      queryArray.push("status=" + params.status);
-    }
-
-    if (params?.issuer !== undefined) {
-      queryArray.push("issuer=" + params.issuer);
-    }
-
-    if (params?.brand !== undefined) {
-      queryArray.push("brand=" + params.brand);
-    }
-
-    if (params?.level !== undefined) {
-      queryArray.push("level=" + params.level);
-    }
-
-    if (params?.isDigital !== undefined) {
-      queryArray.push("isDigital=" + params.isDigital);
-    }
-
-    if (params?.isTransferable !== undefined) {
-      queryArray.push("isTransferable=" + params.isTransferable);
-    }
-
-    if (params?.requiresPin !== undefined) {
-      queryArray.push("requiresPin=" + params.requiresPin);
+    if (params?.propertyId !== undefined) {
+      queryArray.push("propertyId=" + params.propertyId);
     }
 
     if (options?.limit !== undefined) {
@@ -105,7 +50,7 @@ export default class BenefitCardsService extends Service {
         method: "GET",
         url: "benefitCards?" + queryArray.join("&"),
         body: undefined,
-        authenticationNotOptional: false,
+        authenticationNotOptional: true,
       },
       options
     );
@@ -115,14 +60,12 @@ export default class BenefitCardsService extends Service {
     params: JUHUU.BenefitCard.Retrieve.Params,
     options?: JUHUU.BenefitCard.Retrieve.Options
   ): Promise<JUHUU.HttpResponse<JUHUU.BenefitCard.Retrieve.Response>> {
-    const queryArray: string[] = [];
-
     return await super.sendRequest<JUHUU.BenefitCard.Retrieve.Response>(
       {
         method: "GET",
-        url: "benefitCards/" + params.benefitCardId + "?" + queryArray.join("&"),
+        url: "benefitCards/" + params.benefitCardId,
         body: undefined,
-        authenticationNotOptional: false,
+        authenticationNotOptional: true,
       },
       options
     );
@@ -137,26 +80,10 @@ export default class BenefitCardsService extends Service {
         method: "PATCH",
         url: "benefitCards/" + params.benefitCardId,
         body: {
+          imageLight: params.imageLight,
+          imageDark: params.imageDark,
           userId: params.userId,
-          cardNumber: params.cardNumber,
-          cardHolderName: params.cardHolderName,
-          type: params.type,
-          status: params.status,
-          benefits: params.benefits,
-          limits: params.limits,
-          metadata: params.metadata,
-          pointsBalance: params.pointsBalance,
-          cashbackBalance: params.cashbackBalance,
-          totalSavings: params.totalSavings,
-          totalSpent: params.totalSpent,
-          transactionCount: params.transactionCount,
-          expiresAt: params.expiresAt,
-          isDigital: params.isDigital,
-          isTransferable: params.isTransferable,
-          requiresPin: params.requiresPin,
-          pin: params.pin,
-          qrCode: params.qrCode,
-          barcode: params.barcode,
+          reference: params.reference,
         },
         authenticationNotOptional: true,
       },

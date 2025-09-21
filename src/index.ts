@@ -4698,113 +4698,25 @@ export namespace JUHUU {
   }
 
   export namespace BenefitCard {
-    export type BenefitCardType =
-      | "membership"
-      | "loyalty"
-      | "discount"
-      | "cashback"
-      | "premium"
-      | "corporate";
-    export type BenefitCardStatus =
-      | "active"
-      | "inactive"
-      | "suspended"
-      | "expired"
-      | "pending_activation";
-    export type BenefitType =
-      | "percentage_discount"
-      | "fixed_discount"
-      | "cashback"
-      | "points"
-      | "free_shipping"
-      | "priority_access";
-    export type Benefit = {
-      type: BenefitType;
-      name: string;
-      description: string;
-      value: number;
-      unit: string;
-      conditions: string[];
-      validFrom: string | null;
-      validTo: string | null;
-      usageLimit: number | null;
-      usageCount: number;
-      minimumSpend: number | null;
-      maximumDiscount: number | null;
-      applicableCategories: string[];
-      excludedCategories: string[];
-    };
-    export type BenefitCardLimits = {
-      dailyUsageLimit: number | null;
-      monthlyUsageLimit: number | null;
-      yearlyUsageLimit: number | null;
-      lifetimeUsageLimit: number | null;
-      dailySpendLimit: number | null;
-      monthlySpendLimit: number | null;
-      yearlySpendLimit: number | null;
-      perTransactionLimit: number | null;
-    };
-    export type BenefitCardMetadata = {
-      issuer: string;
-      brand: string | null;
-      level: "bronze" | "silver" | "gold" | "platinum" | "diamond";
-      renewalDate: string | null;
-      memberSince: string;
-      referralCode: string | null;
-      partnerPrograms: string[];
-      tags: string[];
-      notes: string | null;
-    };
     export type Object = {
       id: string;
+      version: number;
       readonly object: "benefitCard";
-      userId: string;
-      cardNumber: string;
-      cardHolderName: string;
-      type: BenefitCardType;
-      status: BenefitCardStatus;
-      benefits: Benefit[];
-      limits: BenefitCardLimits;
-      metadata: BenefitCardMetadata;
-      pointsBalance: number;
-      cashbackBalance: number;
-      totalSavings: number;
-      totalSpent: number;
-      transactionCount: number;
-      lastUsedAt: string | null;
-      createdAt: string;
-      updatedAt: string;
-      activatedAt: string | null;
-      expiresAt: string | null;
-      isDigital: boolean;
-      isTransferable: boolean;
-      requiresPin: boolean;
-      pin: string | null;
-      qrCode: string | null;
-      barcode: string | null;
+      readonly objectType: "dto";
+      createdAt: Date;
+      imageLight: string | null;
+      imageDark: string | null;
+      userId: string | null;
+      propertyId: string;
+      reference: string | null;
     };
     export namespace Create {
       export type Params = {
-        userId: string;
-        cardNumber: string;
-        cardHolderName: string;
-        type: BenefitCardType;
-        status: BenefitCardStatus;
-        benefits: Benefit[];
-        limits: BenefitCardLimits;
-        metadata: BenefitCardMetadata;
-        pointsBalance?: number;
-        cashbackBalance?: number;
-        totalSavings?: number;
-        totalSpent?: number;
-        transactionCount?: number;
-        expiresAt?: string | null;
-        isDigital?: boolean;
-        isTransferable?: boolean;
-        requiresPin?: boolean;
-        pin?: string | null;
-        qrCode?: string | null;
-        barcode?: string | null;
+        propertyId: string;
+        imageLight?: string | null;
+        imageDark?: string | null;
+        userId?: string | null;
+        reference?: string | null;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -4822,17 +4734,7 @@ export namespace JUHUU {
     }
     export namespace List {
       export type Params = {
-        userId?: string;
-        cardNumber?: string;
-        cardHolderName?: string;
-        type?: BenefitCardType;
-        status?: BenefitCardStatus;
-        issuer?: string;
-        brand?: string;
-        level?: "bronze" | "silver" | "gold" | "platinum" | "diamond";
-        isDigital?: boolean;
-        isTransferable?: boolean;
-        requiresPin?: boolean;
+        propertyId: string;
       };
       export type Options = {
         limit?: number;
@@ -4847,26 +4749,10 @@ export namespace JUHUU {
     export namespace Update {
       export type Params = {
         benefitCardId: string;
-        userId?: string;
-        cardNumber?: string;
-        cardHolderName?: string;
-        type?: BenefitCardType;
-        status?: BenefitCardStatus;
-        benefits?: Benefit[];
-        limits?: BenefitCardLimits;
-        metadata?: BenefitCardMetadata;
-        pointsBalance?: number;
-        cashbackBalance?: number;
-        totalSavings?: number;
-        totalSpent?: number;
-        transactionCount?: number;
-        expiresAt?: string | null;
-        isDigital?: boolean;
-        isTransferable?: boolean;
-        requiresPin?: boolean;
-        pin?: string | null;
-        qrCode?: string | null;
-        barcode?: string | null;
+        imageLight?: string | null;
+        imageDark?: string | null;
+        userId?: string | null;
+        reference?: string | null;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -4878,7 +4764,9 @@ export namespace JUHUU {
         benefitCardId: string;
       };
       export type Options = JUHUU.RequestOptions;
-      export type Response = JUHUU.BenefitCard.Object;
+      export type Response = {
+        benefitCard: JUHUU.BenefitCard.Object;
+      };
     }
   }
 
