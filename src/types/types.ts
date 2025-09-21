@@ -13,7 +13,7 @@ export type ProximityStrategy =
       type: "location";
       radius: number | null;
     };
-
+export type KitStatus = "setupComplete" | "waitingForSetup";
 export type Platform = "ios" | "android" | "windows" | "macos" | "web";
 export type DeviceStatus = "running" | "sleeping" | "shutdown"; // sleeping = running, but offline
 export type PushToken = {
@@ -1255,6 +1255,7 @@ export interface StartSessionUpdateBlock extends BaseBlock {
   out: {
     before: DataEdgeConnection;
     after: DataEdgeConnection;
+    changedFields: DataEdgeConnection;
   };
 }
 
@@ -1264,6 +1265,7 @@ export interface StartLocationUpdateBlock extends BaseBlock {
   out: {
     before: DataEdgeConnection;
     after: DataEdgeConnection;
+    changedFields: DataEdgeConnection;
   };
 }
 
@@ -1273,6 +1275,7 @@ export interface StartParameterUpdateBlock extends BaseBlock {
   out: {
     beforeParameter: DataEdgeConnection;
     afterParameter: DataEdgeConnection;
+    changedFields: DataEdgeConnection;
   };
 }
 
@@ -1621,19 +1624,19 @@ export interface SystemLogBlockInputs {
 export interface UiNavigateScreenBlock extends BaseBlock {
   type: "ui.navigate.screen";
   in: {
-    target: DataEdgeConnection;
+    screenName: DataEdgeConnection;
     transition: DataEdgeConnection;
     params: DataEdgeConnection;
   };
   out: Record<string, never>;
   data: {
-    target?: "panel" | "location";
+    screenName?: string;
     transition?: "push" | "replace";
     params?: Record<string, any>;
   };
 }
 export interface UiNavigateScreenBlockInputs {
-  target: "panel" | "location";
+  screenName: string;
   transition: "push" | "replace";
   params: Record<string, any>;
 }
@@ -1805,6 +1808,24 @@ export interface MapDestructureBlock extends BaseBlock {
 export interface MapDestructureBlockInputs {
   map: Record<string, string | number | boolean>;
   keys: string[];
+}
+
+export interface MapConstructBlock extends BaseBlock {
+  type: "map.construct";
+  // the list of keys you want to include in the constructed map
+  data: {
+    keys?: string[];
+  };
+  // dynamic inputs: one for each key you want to include
+  in: Record<string, DataEdgeConnection>;
+  // single output: the constructed map
+  out: {
+    map: DataEdgeConnection;
+  };
+}
+
+export interface MapConstructBlockInputs {
+  [key: string]: any;
 }
 
 // control blocks
@@ -2050,6 +2071,7 @@ export type FlowBlock =
   | MathMultiplyBlock
   | MathDivideBlock
   | MapDestructureBlock
+  | MapConstructBlock
   | ParameterRetrieveBlock
   | PropertyRetrieveBlock
   | LocationRetrieveBlock
@@ -2075,7 +2097,6 @@ export type FlowBlock =
   | HttpPutBlock
   | MqttSendBlock
   | FlowExecuteBlock
-  | HttpPatchBlock
   | VariableSetBlock
   | VariableGetBlock
   | EndCustomBlock;
@@ -2109,6 +2130,7 @@ export type FlowBlockInput =
   | MqttSendBlockInputs
   | FlowExecuteBlockInputs
   | MapDestructureBlockInputs
+  | MapConstructBlockInputs
   | VariableSetBlockInputs
   | VariableGetBlockInputs
   | Record<string, unknown>;
@@ -2179,6 +2201,5 @@ export type QuickView = {
   icon: string | null;
   visibleCondition: Condition | null; // if null the quick view is always visible
 };
-
 
 export type PanelDisplay = "modal" | "dialog" | "screen";

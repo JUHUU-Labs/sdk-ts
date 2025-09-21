@@ -51,11 +51,27 @@ export default class WebsocketsService extends Service {
       );
     };
 
+    const onSessionUpdate = (
+      callback: (message: JUHUU.Websocket.SessionUpdate) => void
+    ) => {
+      socket.on(
+        "session_update",
+        (message: JUHUU.Websocket.SessionUpdate) => {
+          callback(message);
+        }
+      );
+    };
+
     return {
-      subscribe: (locationIdArray?: string[], parameterIdArray?: string[]) => {
+      subscribe: (
+        locationIdArray?: string[],
+        parameterIdArray?: string[],
+        sessionIdArray?: string[]
+      ) => {
         socket.emit("subscribe", {
           locationIdArray: locationIdArray || [],
           parameterIdArray: parameterIdArray || [],
+          sessionIdArray: sessionIdArray || [],
         });
       },
       unsubscribeFromLocations: (locationIdArray: string[]) => {
@@ -64,13 +80,18 @@ export default class WebsocketsService extends Service {
       unsubscribeFromParameters: (parameterIdArray: string[]) => {
         socket.emit("unsubscribe", { parameterIdArray });
       },
+      unsubscribeFromSessions: (sessionIdArray: string[]) => {
+        socket.emit("unsubscribe", { sessionIdArray });
+      },
       unsubscribe: (
         locationIdArray?: string[],
-        parameterIdArray?: string[]
+        parameterIdArray?: string[],
+        sessionIdArray?: string[]
       ) => {
         socket.emit("unsubscribe", {
           locationIdArray: locationIdArray || [],
           parameterIdArray: parameterIdArray || [],
+          sessionIdArray: sessionIdArray || [],
         });
       },
       ping: (data?: any) => {
@@ -78,6 +99,7 @@ export default class WebsocketsService extends Service {
       },
       onLocationUpdate,
       onParameterUpdate,
+      onSessionUpdate,
       onPong: (callback: (message: any) => void) => {
         socket.on("pong", callback);
       },

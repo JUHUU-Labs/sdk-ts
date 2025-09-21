@@ -65,6 +65,7 @@ import {
   BlockExecutor,
   ProximityStrategy,
   PanelDisplay,
+  KitStatus,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -2964,6 +2965,7 @@ export namespace JUHUU {
       proximityStrategyArray: ProximityStrategy[];
       adminQuickViewArray: QuickView[]; // quick views that are available for admins in the app
       simIdArray: string[]; // array of sim ids that are assigned to this device
+      panelId: string | null;
     };
 
     export namespace Create {
@@ -2972,6 +2974,7 @@ export namespace JUHUU {
         acceptTerms: boolean;
         name?: string;
         deviceTemplateId: string;
+        panelId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3031,6 +3034,7 @@ export namespace JUHUU {
         simIdArray?: string[];
         permissionArray?: DevicePermission[];
         parameterIdArray?: string[]; // array of parameter ids that are assigned to this device
+        panelId?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3175,7 +3179,12 @@ export namespace JUHUU {
       parameterAnomalyGroupId: string;
     }
 
-    export type Object = Location | Device | ParameterAnomalyGroup;
+    export interface Sim extends Base {
+      type: "sim";
+      simId: string;
+    }
+
+    export type Object = Location | Device | ParameterAnomalyGroup | Sim;
 
     export namespace Create {
       export type Params = {
@@ -3184,6 +3193,8 @@ export namespace JUHUU {
         severity?: JUHUU.Incident.Object["severity"];
         deviceId?: string;
         locationId?: string;
+        parameterAnomalyGroupId?: string;
+        simId?: string;
         incidentTemplateId?: string;
         title?: JUHUU.Incident.Object["title"];
         type: JUHUU.Incident.Object["type"];
@@ -3986,6 +3997,7 @@ export namespace JUHUU {
       dataQuotaThresholdPercentage: number | null;
       providerUsername: string | null;
       providerPassword: string | null;
+      lastProviderUpdateAt: Date | null;
     };
 
     export namespace Create {
@@ -5371,17 +5383,23 @@ export namespace JUHUU {
   }
 
   export namespace Kit {
-    export type KitType = "controlKitV1" | "tapkeyV1" | "emzV1";
     export type BaseKit = {
       id: string;
       readonly object: "kit";
       name: string;
       propertyId: string | null;
+      status: KitStatus;
     };
+
     export type ControlKitV1 = BaseKit & {
       type: "controlKitV1";
       simIdArray: string[];
+      mqttTopicId: string;
+      signalStrengthPercentage: number;
+      teltonikaSerialNumber: string;
+      flowIdArray: string[];
     };
+
     export type TapkeyV1 = BaseKit & {
       type: "tapkeyV1";
       physicalLockId: string;
@@ -5389,6 +5407,7 @@ export namespace JUHUU {
       ownerAccountId: string;
       ipId: string;
     };
+
     export type EmzV1 = BaseKit & {
       type: "emzV1";
       contractId: string;
@@ -5397,29 +5416,38 @@ export namespace JUHUU {
       username: string;
       password: string;
     };
+
     export type Object = ControlKitV1 | TapkeyV1 | EmzV1;
+
     export namespace Create {
-      export type Params = {
-        name?: string;
-        propertyId: string;
-        template:
-          | { type: "controlKitV1"; simIdArray: string[] }
-          | {
-              type: "tapkeyV1";
-              physicalLockId: string;
-              boundLockId: string;
-              ownerAccountId: string;
-              ipId: string;
-            }
-          | {
-              type: "emzV1";
-              contractId: string;
-              targetHardwareId: string;
-              userId: string;
-              username: string;
-              password: string;
-            };
-      };
+      export type Params =
+        | {
+            name?: string;
+            propertyId?: string;
+            type: "controlKitV1";
+            simIdArray: string[];
+            signalStrengthPercentage: number;
+            teltonikaSerialNumber: string;
+          }
+        | {
+            name?: string;
+            propertyId?: string;
+            type: "tapkeyV1";
+            physicalLockId: string;
+            boundLockId: string;
+            ownerAccountId: string;
+            ipId: string;
+          }
+        | {
+            name?: string;
+            propertyId?: string;
+            type: "emzV1";
+            contractId: string;
+            targetHardwareId: string;
+            userId: string;
+            username: string;
+            password: string;
+          };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
         kit: JUHUU.Kit.Object;
@@ -5438,7 +5466,7 @@ export namespace JUHUU {
       export type Params = {
         name?: string;
         propertyId?: string;
-        type?: KitType;
+        type?: JUHUU.Kit.Object["type"];
       };
       export type Options = {
         limit?: number;
@@ -5454,6 +5482,7 @@ export namespace JUHUU {
       export type Params = {
         kitId: string;
         name?: string;
+        flowIdArray?: string[];
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -5466,6 +5495,25 @@ export namespace JUHUU {
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = JUHUU.Kit.Object;
+    }
+    export namespace AttachProperty {
+      export type Params = {
+        kitId: string;
+        propertyId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        kit: JUHUU.Kit.Object;
+      };
+    }
+    export namespace DetachProperty {
+      export type Params = {
+        kitId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        kit: JUHUU.Kit.Object;
+      };
     }
   }
 
@@ -5481,6 +5529,8 @@ export namespace JUHUU {
       highlightLayoutBlockArray: LayoutBlock[];
       variables: Record<string, any>;
       display: PanelDisplay;
+      permissionArray: DevicePermission[];
+      proximityStrategyArray: ProximityStrategy[];
     };
 
     export namespace Create {
@@ -5491,6 +5541,8 @@ export namespace JUHUU {
         highlightLayoutBlockArray?: LayoutBlock[];
         variables?: Record<string, any>;
         display?: PanelDisplay;
+        permissionArray?: DevicePermission[];
+        proximityStrategyArray?: ProximityStrategy[];
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -5529,6 +5581,8 @@ export namespace JUHUU {
         highlightLayoutBlockArray?: LayoutBlock[];
         variables?: Record<string, any>;
         display?: PanelDisplay;
+        permissionArray?: DevicePermission[];
+        proximityStrategyArray?: ProximityStrategy[];
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -5734,13 +5788,16 @@ export namespace JUHUU {
       export type Response = {
         subscribe: (
           locationIdArray?: string[],
-          parameterIdArray?: string[]
+          parameterIdArray?: string[],
+          sessionIdArray?: string[]
         ) => void;
         unsubscribeFromLocations: (locationIdArray: string[]) => void;
         unsubscribeFromParameters: (parameterIdArray: string[]) => void;
+        unsubscribeFromSessions: (sessionIdArray: string[]) => void;
         unsubscribe: (
           locationIdArray?: string[],
-          parameterIdArray?: string[]
+          parameterIdArray?: string[],
+          sessionIdArray?: string[]
         ) => void;
         ping: (data?: any) => void;
         onLocationUpdate: (
@@ -5748,6 +5805,9 @@ export namespace JUHUU {
         ) => void;
         onParameterUpdate: (
           callback: (message: JUHUU.Websocket.ParameterUpdate) => void
+        ) => void;
+        onSessionUpdate: (
+          callback: (message: JUHUU.Websocket.SessionUpdate) => void
         ) => void;
         onPong: (callback: (message: any) => void) => void;
         close: () => void;
@@ -5769,11 +5829,19 @@ export namespace JUHUU {
       initiatedAt?: Date;
     };
 
+    export type SessionUpdate = {
+      sessionId: string;
+      before: JUHUU.Session.Object;
+      after: JUHUU.Session.Object;
+      changedFields: string[];
+    };
+
     export type SubscriptionSuccess = {
       locationIdArray: string[];
       parameterIdArray: string[];
+      sessionIdArray: string[];
       subscriptionResultArray: Array<{
-        type: "location" | "parameter";
+        type: "location" | "parameter" | "session";
         id: string;
         roomName: string;
         success: boolean;
@@ -5784,8 +5852,9 @@ export namespace JUHUU {
     export type UnsubscriptionSuccess = {
       locationIdArray: string[];
       parameterIdArray: string[];
+      sessionIdArray: string[];
       unsubscriptionResultArray: Array<{
-        type: "location" | "parameter";
+        type: "location" | "parameter" | "session";
         id: string;
         roomName: string;
         success: boolean;

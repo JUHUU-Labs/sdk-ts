@@ -10,15 +10,35 @@ export default class KitsService extends Service {
     params: JUHUU.Kit.Create.Params,
     options?: JUHUU.Kit.Create.Options
   ): Promise<JUHUU.HttpResponse<JUHUU.Kit.Create.Response>> {
+    const body: any = {
+      name: params.name,
+      propertyId: params.propertyId,
+      type: params.type,
+    };
+
+    // Add type-specific fields based on kit type
+    if (params.type === "controlKitV1") {
+      body.simIdArray = params.simIdArray;
+      body.signalStrengthPercentage = params.signalStrengthPercentage;
+      body.teltonikaSerialNumber = params.teltonikaSerialNumber;
+    } else if (params.type === "tapkeyV1") {
+      body.physicalLockId = params.physicalLockId;
+      body.boundLockId = params.boundLockId;
+      body.ownerAccountId = params.ownerAccountId;
+      body.ipId = params.ipId;
+    } else if (params.type === "emzV1") {
+      body.contractId = params.contractId;
+      body.targetHardwareId = params.targetHardwareId;
+      body.userId = params.userId;
+      body.username = params.username;
+      body.password = params.password;
+    }
+
     return await super.sendRequest<JUHUU.Kit.Create.Response>(
       {
         method: "POST",
         url: "kits",
-        body: {
-          name: params.name,
-          propertyId: params.propertyId,
-          template: params.template,
-        },
+        body,
         authenticationNotOptional: true,
       },
       options
@@ -85,6 +105,7 @@ export default class KitsService extends Service {
         url: "kits/" + params.kitId,
         body: {
           name: params.name,
+          flowIdArray: params.flowIdArray,
         },
         authenticationNotOptional: true,
       },
@@ -102,6 +123,38 @@ export default class KitsService extends Service {
         url: "kits/" + params.kitId,
         authenticationNotOptional: true,
         body: undefined,
+      },
+      options
+    );
+  }
+
+  async attachProperty(
+    params: JUHUU.Kit.AttachProperty.Params,
+    options?: JUHUU.Kit.AttachProperty.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Kit.AttachProperty.Response>> {
+    return await super.sendRequest<JUHUU.Kit.AttachProperty.Response>(
+      {
+        method: "PATCH",
+        url: "kits/" + params.kitId + "/attachProperty",
+        body: {
+          propertyId: params.propertyId,
+        },
+        authenticationNotOptional: true,
+      },
+      options
+    );
+  }
+
+  async detachProperty(
+    params: JUHUU.Kit.DetachProperty.Params,
+    options?: JUHUU.Kit.DetachProperty.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Kit.DetachProperty.Response>> {
+    return await super.sendRequest<JUHUU.Kit.DetachProperty.Response>(
+      {
+        method: "PATCH",
+        url: "kits/" + params.kitId + "/detachProperty",
+        body: undefined,
+        authenticationNotOptional: true,
       },
       options
     );

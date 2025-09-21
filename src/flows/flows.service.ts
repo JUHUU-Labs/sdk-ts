@@ -18,6 +18,14 @@ import {
   VariableSetBlockInputs,
   VariableGetBlock,
   VariableGetBlockInputs,
+  MapDestructureBlock,
+  MapDestructureBlockInputs,
+  MapConstructBlock,
+  MapConstructBlockInputs,
+  MathAddBlock,
+  MathSubtractBlock,
+  MathMultiplyBlock,
+  MathDivideBlock,
   BlockExecutor,
 } from "../types/types";
 
@@ -287,6 +295,111 @@ export default class FlowsService extends Service {
     "const.boolean": async (_inputs, block) => {
       const { data } = block as ConstBooleanBlock;
       return { output: { value: data?.value } };
+    },
+
+    "math.add": async (inputs, block) => {
+      const mb = block as MathAddBlock & {
+        data: { a?: number; b?: number };
+      };
+
+      const inA = (inputs as any).a;
+      const inB = (inputs as any).b;
+
+      const defaultA = mb.data.a ?? 0;
+      const defaultB = mb.data.b ?? 0;
+
+      const a = inA !== undefined ? inA : defaultA;
+      const b = inB !== undefined ? inB : defaultB;
+
+      return { output: { result: a + b } };
+    },
+
+    "math.subtract": async (inputs, block) => {
+      const mb = block as MathSubtractBlock & {
+        data: { a?: number; b?: number };
+      };
+
+      const inA = (inputs as any).a;
+      const inB = (inputs as any).b;
+
+      const defaultA = mb.data.a ?? 0;
+      const defaultB = mb.data.b ?? 0;
+
+      const a = inA !== undefined ? inA : defaultA;
+      const b = inB !== undefined ? inB : defaultB;
+
+      return { output: { result: a - b } };
+    },
+
+    "math.multiply": async (inputs, block) => {
+      const mb = block as MathMultiplyBlock & {
+        data: { a?: number; b?: number };
+      };
+
+      const inA = (inputs as any).a;
+      const inB = (inputs as any).b;
+
+      const defaultA = mb.data.a ?? 0;
+      const defaultB = mb.data.b ?? 0;
+
+      const a = inA !== undefined ? inA : defaultA;
+      const b = inB !== undefined ? inB : defaultB;
+
+      return { output: { result: a * b } };
+    },
+
+    "math.divide": async (inputs, block) => {
+      const mb = block as MathDivideBlock & {
+        data: { a?: number; b?: number };
+      };
+
+      const inA = (inputs as any).a;
+      const inB = (inputs as any).b;
+
+      const defaultA = mb.data.a ?? 0;
+      const defaultB = mb.data.b ?? 1;
+
+      const a = inA !== undefined ? inA : defaultA;
+      const b = inB !== undefined ? inB : defaultB;
+
+      return { output: { result: a / b } };
+    },
+
+    "map.destructure": async (inputs, block) => {
+      if (block.type !== "map.destructure") {
+        throw new Error(
+          `Expected block type 'map.destructure', got '${block.type}'`
+        );
+      }
+
+      const source = (inputs as MapDestructureBlockInputs).map;
+      const mb = block as MapDestructureBlock;
+
+      const outputs: Record<string, any> = {};
+      const keys = mb.data.keys ?? [];
+      for (const key of keys) {
+        outputs[key] = source[key];
+      }
+      return { output: outputs };
+    },
+
+    "map.construct": async (inputs, block) => {
+      if (block.type !== "map.construct") {
+        throw new Error(
+          `Expected block type 'map.construct', got '${block.type}'`
+        );
+      }
+
+      const mb = block as MapConstructBlock;
+
+      const constructedMap: Record<string, any> = {};
+      const keys = mb.data.keys ?? [];
+      const inputValues = inputs as MapConstructBlockInputs;
+
+      for (const key of keys) {
+        constructedMap[key] = inputValues[key];
+      }
+      return { output: { map: constructedMap } };
     },
 
     "variable.set": async (inputs, block, context) => {

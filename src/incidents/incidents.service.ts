@@ -21,6 +21,8 @@ export default class IncidentsService extends Service {
           type: IncidentCreateParams.type,
           deviceId: IncidentCreateParams.deviceId,
           locationId: IncidentCreateParams.locationId,
+          parameterAnomalyGroupId: IncidentCreateParams.parameterAnomalyGroupId,
+          simId: IncidentCreateParams.simId,
           incidentTemplateId: IncidentCreateParams.incidentTemplateId,
           severity: IncidentCreateParams.severity,
         },
