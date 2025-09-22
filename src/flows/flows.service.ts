@@ -425,8 +425,36 @@ export default class FlowsService extends Service {
         context.variables = new Map();
       }
 
-      // Store the variable in the context
-      context.variables.set(finalKey, finalValue);
+      // Handle dot notation for nested object setting
+      if (finalKey.includes('.')) {
+        const keys = finalKey.split('.');
+        const rootKey = keys[0];
+        let rootValue = context.variables.get(rootKey);
+
+        // Create root object if it doesn't exist
+        if (rootValue === undefined || rootValue === null) {
+          rootValue = {};
+          context.variables.set(rootKey, rootValue);
+        }
+
+        // Navigate to the parent object and set the final property
+        const finalPropertyKey = keys[keys.length - 1];
+        const parentKeys = keys.slice(1, -1);
+
+        let current = rootValue;
+        for (const key of parentKeys) {
+          if (current[key] === undefined || current[key] === null) {
+            current[key] = {};
+          }
+          current = current[key];
+        }
+
+        // Set the final value
+        current[finalPropertyKey] = finalValue;
+      } else {
+        // Simple key setting
+        context.variables.set(finalKey, finalValue);
+      }
 
       return { output: { success: true } };
     },
@@ -449,8 +477,26 @@ export default class FlowsService extends Service {
         context.variables = new Map();
       }
 
-      // Retrieve the variable from the context
-      const retrievedValue = context.variables.get(finalKey);
+      let retrievedValue;
+
+      // Handle dot notation for nested object access
+      if (finalKey.includes('.')) {
+        const keys = finalKey.split('.');
+        const rootKey = keys[0];
+        const rootValue = context.variables.get(rootKey);
+
+        if (rootValue !== undefined && rootValue !== null) {
+          // Navigate through the nested properties
+          retrievedValue = keys.slice(1).reduce((obj, key) => {
+            return obj && obj[key];
+          }, rootValue);
+        } else {
+          retrievedValue = undefined;
+        }
+      } else {
+        // Simple key lookup
+        retrievedValue = context.variables.get(finalKey);
+      }
 
       return { output: { value: retrievedValue } };
     },

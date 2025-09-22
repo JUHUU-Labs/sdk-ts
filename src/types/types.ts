@@ -937,6 +937,25 @@ export namespace Layout {
     height: number;
   }
 
+  export namespace Input {
+    interface InputBlock extends Block {
+      title: LocaleString | null;
+      placeholder: LocaleString | null;
+      description: LocaleString | null;
+      variable: string | null; // the variable the input is linked to. If the variable is set, the input will be prefilled with the value of the variable
+    }
+
+    export interface Text extends InputBlock {
+      type: "input.text";
+      validationRegex: string | null;
+    }
+
+    export interface Number extends InputBlock {
+      type: "input.number";
+      validationRegex: string | null;
+    }
+  }
+
   export namespace Button {
     export interface General extends Block {
       text: LocaleString;
@@ -1010,6 +1029,8 @@ export type LayoutBlock =
   | Layout.Text.Heading
   | Layout.Text.Subtitle
   | Layout.Image
+  | Layout.Input.Text
+  | Layout.Input.Number
   | Layout.Button.Small
   | Layout.Button.Large
   | Layout.Form.General;
@@ -1423,6 +1444,54 @@ export interface IncidentRetrieveBlock extends BaseBlock {
 
 export interface IncidentRetrieveBlockInputs {
   incidentId: string;
+}
+
+export interface BenefitCardRetrieveBlock extends BaseBlock {
+  type: "benefitCard.retrieve";
+  in: {
+    benefitCardId: DataEdgeConnection;
+  };
+  out: {
+    benefitCard: DataEdgeConnection;
+  };
+  data: {
+    benefitCardId?: string;
+  };
+}
+
+export interface BenefitCardRetrieveBlockInputs {
+  benefitCardId: string;
+}
+
+export interface BenefitCardListBlock extends BaseBlock {
+  type: "benefitCard.list";
+  in: {
+    propertyId: DataEdgeConnection;
+    userId: DataEdgeConnection;
+    reference: DataEdgeConnection;
+    limit: DataEdgeConnection;
+    skip: DataEdgeConnection;
+  };
+  out: {
+    benefitCardArray: DataEdgeConnection;
+    count: DataEdgeConnection;
+    hasMore: DataEdgeConnection;
+  };
+  data: {
+    propertyId?: string;
+    userId?: string;
+    reference?: string | null;
+    limit?: number;
+    skip?: number;
+  };
+}
+
+export interface BenefitCardListBlockInputs {
+  propertyId?: string;
+  userId?: string;
+  reference?: string | null;
+  limit?: number;
+  skip?: number;
 }
 
 export interface ParameterUpdateBlock extends BaseBlock {
@@ -2080,6 +2149,8 @@ export type FlowBlock =
   | UserRetrieveBlock
   | UserCreateBlock
   | IncidentRetrieveBlock
+  | BenefitCardRetrieveBlock
+  | BenefitCardListBlock
   | ParameterUpdateBlock
   | DeviceUpdateBlock
   | LocationUpdateBlock
@@ -2114,6 +2185,8 @@ export type FlowBlockInput =
   | UserRetrieveBlockInputs
   | UserCreateBlockInputs
   | IncidentRetrieveBlockInputs
+  | BenefitCardRetrieveBlockInputs
+  | BenefitCardListBlockInputs
   | ParameterUpdateBlockInputs
   | DeviceUpdateBlockInputs
   | LocationUpdateBlockInputs

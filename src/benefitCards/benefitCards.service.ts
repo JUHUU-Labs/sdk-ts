@@ -16,6 +16,7 @@ export default class BenefitCardsService extends Service {
         url: "benefitCards",
         body: {
           propertyId: params.propertyId,
+          name: params.name,
           imageLight: params.imageLight,
           imageDark: params.imageDark,
           userId: params.userId,
@@ -35,6 +36,10 @@ export default class BenefitCardsService extends Service {
 
     if (params?.propertyId !== undefined) {
       queryArray.push("propertyId=" + params.propertyId);
+    }
+
+    if (params?.userId !== undefined) {
+      queryArray.push("userId=" + params.userId);
     }
 
     if (options?.limit !== undefined) {
@@ -80,6 +85,7 @@ export default class BenefitCardsService extends Service {
         method: "PATCH",
         url: "benefitCards/" + params.benefitCardId,
         body: {
+          name: params.name,
           imageLight: params.imageLight,
           imageDark: params.imageDark,
           userId: params.userId,

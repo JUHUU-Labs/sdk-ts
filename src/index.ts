@@ -4704,6 +4704,7 @@ export namespace JUHUU {
       readonly object: "benefitCard";
       readonly objectType: "dto";
       createdAt: Date;
+      name: LocaleString;
       imageLight: string | null;
       imageDark: string | null;
       userId: string | null;
@@ -4713,6 +4714,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
+        name?: LocaleString;
         imageLight?: string | null;
         imageDark?: string | null;
         userId?: string | null;
@@ -4734,7 +4736,8 @@ export namespace JUHUU {
     }
     export namespace List {
       export type Params = {
-        propertyId: string;
+        propertyId?: string;
+        userId?: string;
       };
       export type Options = {
         limit?: number;
@@ -4749,6 +4752,7 @@ export namespace JUHUU {
     export namespace Update {
       export type Params = {
         benefitCardId: string;
+        name?: LocaleString;
         imageLight?: string | null;
         imageDark?: string | null;
         userId?: string | null;
