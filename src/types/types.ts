@@ -288,7 +288,9 @@ export type SessionTerminatedByType =
   | "user"
   | "system"
   | "propertyAdmin"
-  | "nodeArray";
+  | "nodeArray"
+  | "flow"
+  | "apiKey";
 
 // export type ServiceMonth =
 //   | "jan"
@@ -1494,6 +1496,51 @@ export interface BenefitCardListBlockInputs {
   skip?: number;
 }
 
+export interface BenefitCardCopyBlock extends BaseBlock {
+  type: "benefitCard.copy";
+  in: {
+    benefitCardId: DataEdgeConnection;
+  };
+  out: {
+    benefitCard: DataEdgeConnection;
+  };
+  data: {
+    benefitCardId?: string;
+  };
+}
+
+export interface BenefitCardCopyBlockInputs {
+  benefitCardId: string;
+}
+
+export interface BenefitCardUpdateBlock extends BaseBlock {
+  type: "benefitCard.update";
+  in: {
+    benefitCardId: DataEdgeConnection;
+    name: DataEdgeConnection;
+    userId: DataEdgeConnection;
+    reference: DataEdgeConnection;
+  };
+  out: {
+    beforeBenefitCard: DataEdgeConnection;
+    afterBenefitCard: DataEdgeConnection;
+    changedFields: DataEdgeConnection;
+  };
+  data: {
+    benefitCardId?: string;
+    name?: LocaleString;
+    userId?: string | null;
+    reference?: string | null;
+  };
+}
+
+export interface BenefitCardUpdateBlockInputs {
+  benefitCardId: string;
+  name?: LocaleString;
+  userId?: string | null;
+  reference?: string | null;
+}
+
 export interface ParameterUpdateBlock extends BaseBlock {
   type: "parameter.update";
   in: {
@@ -2151,6 +2198,8 @@ export type FlowBlock =
   | IncidentRetrieveBlock
   | BenefitCardRetrieveBlock
   | BenefitCardListBlock
+  | BenefitCardCopyBlock
+  | BenefitCardUpdateBlock
   | ParameterUpdateBlock
   | DeviceUpdateBlock
   | LocationUpdateBlock
@@ -2187,6 +2236,8 @@ export type FlowBlockInput =
   | IncidentRetrieveBlockInputs
   | BenefitCardRetrieveBlockInputs
   | BenefitCardListBlockInputs
+  | BenefitCardCopyBlockInputs
+  | BenefitCardUpdateBlockInputs
   | ParameterUpdateBlockInputs
   | DeviceUpdateBlockInputs
   | LocationUpdateBlockInputs
