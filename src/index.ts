@@ -1433,6 +1433,19 @@ export namespace JUHUU {
         article: JUHUU.Article.Object;
       };
     }
+    
+    export namespace Pdf {
+      export type Params = {
+        articleId: string;
+        languageCode: LanguageCode;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        article: JUHUU.Article.Object;
+      };
+    }
   }
 
   export namespace ArticleGroup {
