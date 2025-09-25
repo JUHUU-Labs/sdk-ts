@@ -182,4 +182,21 @@ export default class ArticlesService extends Service {
       ArticleTranslateOptions
     );
   }
+
+  async pdf(
+    ArticlePdfParams: JUHUU.Article.Pdf.Params,
+    ArticlePdfOptions?: JUHUU.Article.Pdf.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Article.Pdf.Response>> {
+    return await super.sendRequest<JUHUU.Article.Pdf.Response>(
+      {
+        method: "POST",
+        url: "articles/" + ArticlePdfParams.articleId + "/pdf",
+        body: {
+          languageCode: ArticlePdfParams.languageCode,
+        },
+        authenticationNotOptional: false,
+      },
+      ArticlePdfOptions
+    );
+  }
 }
