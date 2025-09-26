@@ -1541,6 +1541,27 @@ export interface BenefitCardUpdateBlockInputs {
   reference?: string | null;
 }
 
+export interface TextMatchBlock extends BaseBlock {
+  type: "text.match";
+  in: {
+    text: DataEdgeConnection;
+    pattern: DataEdgeConnection;
+  };
+  out: {
+    isMatch: DataEdgeConnection;
+    matchArray: DataEdgeConnection;
+  };
+  data: {
+    text?: string;
+    pattern?: string;
+  };
+}
+
+export interface TextMatchBlockInputs {
+  text?: string;
+  pattern?: string;
+}
+
 export interface ParameterUpdateBlock extends BaseBlock {
   type: "parameter.update";
   in: {
@@ -2200,6 +2221,7 @@ export type FlowBlock =
   | BenefitCardListBlock
   | BenefitCardCopyBlock
   | BenefitCardUpdateBlock
+  | TextMatchBlock
   | ParameterUpdateBlock
   | DeviceUpdateBlock
   | LocationUpdateBlock
@@ -2238,6 +2260,7 @@ export type FlowBlockInput =
   | BenefitCardListBlockInputs
   | BenefitCardCopyBlockInputs
   | BenefitCardUpdateBlockInputs
+  | TextMatchBlockInputs
   | ParameterUpdateBlockInputs
   | DeviceUpdateBlockInputs
   | LocationUpdateBlockInputs
