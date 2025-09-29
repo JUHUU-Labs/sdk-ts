@@ -3654,7 +3654,8 @@ export namespace JUHUU {
     export namespace Update {
       export type Params = {
         parameterAnomalyGroupTrackerId: string;
-        name: string;
+        name?: string;
+        description?: string;
       };
 
       export type Options = JUHUU.RequestOptions;

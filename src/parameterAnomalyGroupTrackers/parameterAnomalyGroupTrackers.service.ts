@@ -18,6 +18,7 @@ export default class ParameterAnomalyGroupTrackersService extends Service {
         url: "parameterAnomalyGroupTrackers",
         body: {
           propertyId: ParameterAnomalyGroupTrackerCreateParams.propertyId,
+          name: ParameterAnomalyGroupTrackerCreateParams.name,
         },
         authenticationNotOptional: true,
       },
@@ -101,6 +102,7 @@ export default class ParameterAnomalyGroupTrackersService extends Service {
           ParameterAnomalyGroupTrackerUpdateParams.parameterAnomalyGroupTrackerId,
         body: {
           name: ParameterAnomalyGroupTrackerUpdateParams.name,
+          description: ParameterAnomalyGroupTrackerUpdateParams.description,
         },
         authenticationNotOptional: true,
       },
