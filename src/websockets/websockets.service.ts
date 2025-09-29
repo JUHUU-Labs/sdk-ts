@@ -11,6 +11,10 @@ export default class WebsocketsService extends Service {
   ): JUHUU.Websocket.Connect.Response {
     const socket = super.connectToWebsocket({ url: "websocket" });
 
+    socket.on("connect", () => {
+      this.logger("connected to websocket");
+    });
+
     socket.on(
       "subscription_success",
       (message: JUHUU.Websocket.SubscriptionSuccess) => {
@@ -54,12 +58,37 @@ export default class WebsocketsService extends Service {
     const onSessionUpdate = (
       callback: (message: JUHUU.Websocket.SessionUpdate) => void
     ) => {
-      socket.on(
-        "session_update",
-        (message: JUHUU.Websocket.SessionUpdate) => {
-          callback(message);
-        }
-      );
+      socket.on("session_update", (message: JUHUU.Websocket.SessionUpdate) => {
+        callback(message);
+      });
+    };
+
+    const onConnect = (callback: () => void) => {
+      socket.on("connect", callback);
+    };
+
+    const onDisconnect = (callback: (reason: string) => void) => {
+      socket.on("disconnect", callback);
+    };
+
+    const onReconnect = (callback: (attemptNumber: number) => void) => {
+      socket.on("reconnect", callback);
+    };
+
+    const onConnectError = (callback: (error: any) => void) => {
+      socket.on("connect_error", callback);
+    };
+
+    const onReconnectAttempt = (callback: (attemptNumber: number) => void) => {
+      socket.on("reconnect_attempt", callback);
+    };
+
+    const onReconnectError = (callback: (error: any) => void) => {
+      socket.on("reconnect_error", callback);
+    };
+
+    const onReconnectFailed = (callback: () => void) => {
+      socket.on("reconnect_failed", callback);
     };
 
     return {
@@ -100,8 +129,18 @@ export default class WebsocketsService extends Service {
       onLocationUpdate,
       onParameterUpdate,
       onSessionUpdate,
+      onConnect,
+      onDisconnect,
+      onReconnect,
+      onConnectError,
+      onReconnectAttempt,
+      onReconnectError,
+      onReconnectFailed,
       onPong: (callback: (message: any) => void) => {
         socket.on("pong", callback);
+      },
+      isConnected: () => {
+        return socket.connected;
       },
       close: () => {
         socket.close();

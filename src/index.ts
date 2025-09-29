@@ -5715,7 +5715,15 @@ export namespace JUHUU {
         onSessionUpdate: (
           callback: (message: JUHUU.Websocket.SessionUpdate) => void
         ) => void;
+        onConnect: (callback: () => void) => void;
+        onDisconnect: (callback: (reason: string) => void) => void;
+        onReconnect: (callback: (attemptNumber: number) => void) => void;
+        onConnectError: (callback: (error: any) => void) => void;
+        onReconnectAttempt: (callback: (attemptNumber: number) => void) => void;
+        onReconnectError: (callback: (error: any) => void) => void;
+        onReconnectFailed: (callback: () => void) => void;
         onPong: (callback: (message: any) => void) => void;
+        isConnected: () => boolean;
         close: () => void;
       };
     }

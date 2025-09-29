@@ -464,14 +464,6 @@ export default class Service {
     this.logger("connecting to websocket", uri);
     const socket = io(uri, { transports: ["websocket"] });
 
-    socket.on("connect", () => {
-      this.logger("connected to websocket", uri);
-    });
-
-    socket.on("connect_error", (error) => {
-      this.logger("Connection error:", error);
-    });
-
     return socket;
   }
 
