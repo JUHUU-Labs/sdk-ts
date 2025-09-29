@@ -1433,7 +1433,7 @@ export namespace JUHUU {
         article: JUHUU.Article.Object;
       };
     }
-    
+
     export namespace Pdf {
       export type Params = {
         articleId: string;
@@ -2244,6 +2244,7 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
+        invalidAt?: Date | null;
       };
 
       export type Options = JUHUU.RequestOptions;
