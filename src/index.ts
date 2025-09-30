@@ -66,6 +66,7 @@ import {
   ProximityStrategy,
   PanelDisplay,
   KitStatus,
+  Unit,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -3377,6 +3378,7 @@ export namespace JUHUU {
 
     export interface Number extends Base {
       type: "number";
+      unit: Unit | null;
       currentValue: number;
     }
 
@@ -3520,6 +3522,7 @@ export namespace JUHUU {
         featureReference: string;
         shapValues: [number, number, number] | null; // Optional, if not always present
         isOutlier: boolean; // Optional, if not always present
+        unit: Unit | null;
       }>;
       anomalyDescription: string | null; // this is set if isOutlier is true and is LLM generated.
     };
@@ -3574,6 +3577,12 @@ export namespace JUHUU {
     export namespace Update {
       export type Params = {
         parameterAnomalyGroupId: string;
+        parameterAnomalyGroupTrackerId?: string;
+        name?: string;
+        featureReferenceParameterIdArray?: Array<{
+          parameterId: string;
+          featureReference: string;
+        }>;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3714,6 +3723,7 @@ export namespace JUHUU {
 
     export interface Number extends Base {
       type: "number";
+      unit: Unit | null;
       currentValue: number;
     }
 
