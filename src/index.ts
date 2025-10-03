@@ -67,6 +67,8 @@ import {
   PanelDisplay,
   KitStatus,
   Unit,
+  PropertyAgreement,
+  AdditionalSubscriptionItem,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -1960,7 +1962,7 @@ export namespace JUHUU {
   }
 
   export namespace Property {
-    type Base = {
+    export type Object = {
       id: string;
       readonly object: "property";
       email: string | null;
@@ -1976,9 +1978,6 @@ export namespace JUHUU {
       version: number;
       colorScheme: ColorScheme;
       contactUrl: string | null;
-    };
-
-    export interface Internal extends Base {
       type: "internal";
       legalName: string | null;
       emailSignature: string | null;
@@ -2025,30 +2024,17 @@ export namespace JUHUU {
         | "active"
         | "waitingForExpiry";
 
+      additionalSubscriptionItemArray: AdditionalSubscriptionItem[];
+
       capabilityArray: Capability[];
 
-      agreement: {
-        isAccepted: boolean;
-        currentAgreement: string | null;
-        previousAgreements: string[];
-        acceptedAt: Date | null;
-        acceptedByUserId: string | null;
-        acceptedByUserEmail: string | null;
-        acceptedByUserName: string | null;
-      };
-    }
-
-    export interface External extends Base {
-      type: "external";
-    }
-
-    export type Object = Internal | External;
+      agreement: PropertyAgreement;
+    };
 
     export namespace Create {
       export type Params = {
         userId?: string;
         name: string;
-        type?: JUHUU.Property.Object["type"];
       };
 
       export type Options = {};

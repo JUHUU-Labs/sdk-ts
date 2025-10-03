@@ -2350,3 +2350,18 @@ export type QuickView = {
 };
 
 export type PanelDisplay = "modal" | "dialog" | "screen";
+
+export interface AdditionalSubscriptionItem {
+  stripePriceId: string;
+  quantity: number;
+}
+
+export interface PropertyAgreement {
+  isAccepted: boolean;
+  currentAgreement: string | null;
+  previousAgreements: string[];
+  acceptedAt: Date | null;
+  acceptedByUserId: string | null;
+  acceptedByUserEmail: string | null;
+  acceptedByUserName: string | null;
+}

@@ -19,7 +19,6 @@ export default class PropertiesService extends Service {
         body: {
           userId: PropertyCreateParams.userId,
           name: PropertyCreateParams.name,
-          type: PropertyCreateParams.type,
         },
         authenticationNotOptional: true,
       },
