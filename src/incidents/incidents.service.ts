@@ -110,4 +110,21 @@ export default class IncidentsService extends Service {
       IncidentUpdateOptions
     );
   }
+
+  async notifyAffected(
+    IncidentNotifyAffectedParams: JUHUU.Incident.NotifyAffected.Params,
+    IncidentNotifyAffectedOptions?: JUHUU.Incident.NotifyAffected.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Incident.NotifyAffected.Response>> {
+    return await super.sendRequest<JUHUU.Incident.NotifyAffected.Response>(
+      {
+        method: "POST",
+        url: "incidents/" + IncidentNotifyAffectedParams.incidentId + "/notifyAffected",
+        body: {
+          message: IncidentNotifyAffectedParams.message,
+        },
+        authenticationNotOptional: true,
+      },
+      IncidentNotifyAffectedOptions
+    );
+  }
 }

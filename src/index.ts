@@ -3163,6 +3163,8 @@ export namespace JUHUU {
       description: string;
       imageUrlArray: string[];
       incidentTemplateId: string | null;
+      responsiblesNotified: boolean;
+      affectedNotified: boolean;
     };
 
     export interface Location extends Base {
@@ -3246,6 +3248,19 @@ export namespace JUHUU {
         title?: JUHUU.Incident.Object["title"];
         status?: JUHUU.Incident.Object["status"];
         severity?: JUHUU.Incident.Object["severity"];
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        incident: JUHUU.Incident.Object;
+      };
+    }
+
+    export namespace NotifyAffected {
+      export type Params = {
+        incidentId: string;
+        message: string;
       };
 
       export type Options = JUHUU.RequestOptions;
