@@ -21,6 +21,8 @@ export default class BenefitCardsService extends Service {
           imageDark: params.imageDark,
           userId: params.userId,
           reference: params.reference,
+          text: params.text,
+          metadata: params.metadata,
         },
         authenticationNotOptional: true,
       },
@@ -90,6 +92,8 @@ export default class BenefitCardsService extends Service {
           imageDark: params.imageDark,
           userId: params.userId,
           reference: params.reference,
+          text: params.text,
+          metadata: params.metadata,
         },
         authenticationNotOptional: true,
       },
@@ -105,6 +109,21 @@ export default class BenefitCardsService extends Service {
       {
         method: "DELETE",
         url: "benefitCards/" + params.benefitCardId,
+        authenticationNotOptional: true,
+        body: undefined,
+      },
+      options
+    );
+  }
+
+  async copy(
+    params: JUHUU.BenefitCard.Copy.Params,
+    options?: JUHUU.BenefitCard.Copy.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.BenefitCard.Copy.Response>> {
+    return await super.sendRequest<JUHUU.BenefitCard.Copy.Response>(
+      {
+        method: "POST",
+        url: "benefitCards/" + params.benefitCardId + "/copy",
         authenticationNotOptional: true,
         body: undefined,
       },

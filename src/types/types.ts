@@ -16,10 +16,6 @@ export type ProximityStrategy =
 export type KitStatus = "setupComplete" | "waitingForSetup";
 export type Platform = "ios" | "android" | "windows" | "macos" | "web";
 export type DeviceStatus = "running" | "sleeping" | "shutdown"; // sleeping = running, but offline
-export type PushToken = {
-  platform: Platform;
-  token: string;
-};
 export type ExtractType<T> = T extends { type: infer U } ? U : never;
 export type UserGroup = "retailer" | "engineer" | "operator" | "user";
 export type Frontend = "dashboard" | "app";

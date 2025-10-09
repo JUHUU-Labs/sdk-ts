@@ -21,6 +21,7 @@ export default class SessionService extends Service {
           type: SessionCreateParams.sessionType,
           isOffSession: SessionCreateParams.isOffSession,
           userId: SessionCreateParams.userId,
+          propertyId: SessionCreateParams.propertyId,
         },
         authenticationNotOptional: true,
       },

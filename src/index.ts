@@ -539,6 +539,7 @@ export namespace JUHUU {
         sessionType: Object["type"];
         isOffSession: boolean;
         userId: string;
+        propertyId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -4736,6 +4737,8 @@ export namespace JUHUU {
       userId: string | null;
       propertyId: string;
       reference: string | null;
+      text: string | null;
+      metadata: Record<string, any>;
     };
     export namespace Create {
       export type Params = {
@@ -4745,6 +4748,8 @@ export namespace JUHUU {
         imageDark?: string | null;
         userId?: string | null;
         reference?: string | null;
+        text?: string | null;
+        metadata?: Record<string, any>;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -4783,6 +4788,8 @@ export namespace JUHUU {
         imageDark?: string | null;
         userId?: string | null;
         reference?: string | null;
+        text?: string | null;
+        metadata?: Record<string, any>;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -4790,6 +4797,15 @@ export namespace JUHUU {
       };
     }
     export namespace Delete {
+      export type Params = {
+        benefitCardId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        benefitCard: JUHUU.BenefitCard.Object;
+      };
+    }
+    export namespace Copy {
       export type Params = {
         benefitCardId: string;
       };
