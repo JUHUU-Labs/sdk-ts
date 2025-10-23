@@ -47,7 +47,6 @@ import {
   Platform,
   PlatformString,
   PostingRow,
-  PushToken,
   SimStatus,
   StarRating,
   TaxCode,
@@ -70,7 +69,6 @@ import {
   PropertyAgreement,
   AdditionalSubscriptionItem,
   AppStatus,
-  AppType,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -5809,7 +5807,7 @@ export namespace JUHUU {
   }
 
   export namespace Application {
-    export type Object = {
+    export type Base = {
       id: string;
       version: number;
       readonly object: "application";
@@ -5819,8 +5817,18 @@ export namespace JUHUU {
       appIconLight: string | null;
       appIconDark: string | null;
       status: AppStatus;
-      type: AppType;
     };
+
+    export interface Android extends Base {
+      type: "android";
+    }
+
+    export interface Ios extends Base {
+      type: "ios";
+    }
+
+    export type Object = Android | Ios;
+
     export namespace Create {
       export type Params = {
         propertyId: string;
