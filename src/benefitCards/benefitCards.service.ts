@@ -44,6 +44,10 @@ export default class BenefitCardsService extends Service {
       queryArray.push("userId=" + params.userId);
     }
 
+    if (params?.text !== undefined) {
+      queryArray.push("text=" + params.text);
+    }
+
     if (options?.limit !== undefined) {
       queryArray.push("limit=" + options.limit);
     }

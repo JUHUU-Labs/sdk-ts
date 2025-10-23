@@ -13,13 +13,20 @@ export type ProximityStrategy =
       type: "location";
       radius: number | null;
     };
-export type KitStatus = "setupComplete" | "waitingForSetup";
+export type KitStatus =
+  | "setupComplete"
+  | "waitingForAssignmentToProperty"
+  | "waitingForSetup";
 export type Platform = "ios" | "android" | "windows" | "macos" | "web";
 export type DeviceStatus = "running" | "sleeping" | "shutdown"; // sleeping = running, but offline
 export type ExtractType<T> = T extends { type: infer U } ? U : never;
 export type UserGroup = "retailer" | "engineer" | "operator" | "user";
 export type Frontend = "dashboard" | "app";
-export type FlowExecutionEnvironment = "dashboard" | "app" | "backend";
+export type FlowExecutionEnvironment =
+  | "dashboard"
+  | "app"
+  | "backend"
+  | "controlKit";
 export type ApiKeyStatus = "enabled" | "disabled";
 
 export type FlowStatus = "error" | "ready";
@@ -1464,9 +1471,9 @@ export interface BenefitCardRetrieveBlockInputs {
 export interface BenefitCardListBlock extends BaseBlock {
   type: "benefitCard.list";
   in: {
-    propertyId: DataEdgeConnection;
     userId: DataEdgeConnection;
     reference: DataEdgeConnection;
+    text: DataEdgeConnection;
     limit: DataEdgeConnection;
     skip: DataEdgeConnection;
   };
@@ -1476,18 +1483,18 @@ export interface BenefitCardListBlock extends BaseBlock {
     hasMore: DataEdgeConnection;
   };
   data: {
-    propertyId?: string;
     userId?: string;
     reference?: string | null;
+    text?: string | null;
     limit?: number;
     skip?: number;
   };
 }
 
 export interface BenefitCardListBlockInputs {
-  propertyId?: string;
   userId?: string;
   reference?: string | null;
+  text?: string | null;
   limit?: number;
   skip?: number;
 }
@@ -1516,6 +1523,8 @@ export interface BenefitCardUpdateBlock extends BaseBlock {
     name: DataEdgeConnection;
     userId: DataEdgeConnection;
     reference: DataEdgeConnection;
+    text: DataEdgeConnection;
+    metadata: DataEdgeConnection;
   };
   out: {
     beforeBenefitCard: DataEdgeConnection;
@@ -1527,6 +1536,8 @@ export interface BenefitCardUpdateBlock extends BaseBlock {
     name?: LocaleString;
     userId?: string | null;
     reference?: string | null;
+    text?: string | null;
+    metadata?: Record<string, any>;
   };
 }
 
@@ -1535,6 +1546,8 @@ export interface BenefitCardUpdateBlockInputs {
   name?: LocaleString;
   userId?: string | null;
   reference?: string | null;
+  text?: string | null;
+  metadata?: Record<string, any>;
 }
 
 export interface TextMatchBlock extends BaseBlock {
@@ -1556,6 +1569,21 @@ export interface TextMatchBlock extends BaseBlock {
 export interface TextMatchBlockInputs {
   text?: string;
   pattern?: string;
+}
+
+export interface TextTemplateBlock extends BaseBlock {
+  type: "text.template";
+  in: Record<string, DataEdgeConnection>;
+  out: {
+    text: DataEdgeConnection;
+  };
+  data: {
+    template?: string;
+  };
+}
+
+export interface TextTemplateBlockInputs {
+  [key: string]: any;
 }
 
 export interface ParameterUpdateBlock extends BaseBlock {
@@ -1961,6 +1989,45 @@ export interface MapConstructBlockInputs {
   [key: string]: any;
 }
 
+// array blocks
+export interface ArrayLengthBlock extends BaseBlock {
+  type: "array.length";
+  in: {
+    array: DataEdgeConnection;
+  };
+  out: {
+    length: DataEdgeConnection;
+  };
+  data: {
+    array?: any[];
+  };
+}
+
+export interface ArrayLengthBlockInputs {
+  array: any[];
+}
+
+export interface ArrayGetBlock extends BaseBlock {
+  type: "array.get";
+  in: {
+    array: DataEdgeConnection;
+    index: DataEdgeConnection;
+  };
+  out: {
+    value: DataEdgeConnection;
+    exists: DataEdgeConnection;
+  };
+  data: {
+    array?: any[];
+    index?: number;
+  };
+}
+
+export interface ArrayGetBlockInputs {
+  array: any[];
+  index: number;
+}
+
 // control blocks
 export interface IfBlock extends BaseBlock {
   type: "control.if";
@@ -2205,6 +2272,8 @@ export type FlowBlock =
   | MathDivideBlock
   | MapDestructureBlock
   | MapConstructBlock
+  | ArrayLengthBlock
+  | ArrayGetBlock
   | ParameterRetrieveBlock
   | PropertyRetrieveBlock
   | LocationRetrieveBlock
@@ -2218,6 +2287,7 @@ export type FlowBlock =
   | BenefitCardCopyBlock
   | BenefitCardUpdateBlock
   | TextMatchBlock
+  | TextTemplateBlock
   | ParameterUpdateBlock
   | DeviceUpdateBlock
   | LocationUpdateBlock
@@ -2257,6 +2327,7 @@ export type FlowBlockInput =
   | BenefitCardCopyBlockInputs
   | BenefitCardUpdateBlockInputs
   | TextMatchBlockInputs
+  | TextTemplateBlockInputs
   | ParameterUpdateBlockInputs
   | DeviceUpdateBlockInputs
   | LocationUpdateBlockInputs
@@ -2274,6 +2345,8 @@ export type FlowBlockInput =
   | FlowExecuteBlockInputs
   | MapDestructureBlockInputs
   | MapConstructBlockInputs
+  | ArrayLengthBlockInputs
+  | ArrayGetBlockInputs
   | VariableSetBlockInputs
   | VariableGetBlockInputs
   | Record<string, unknown>;

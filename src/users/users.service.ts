@@ -183,6 +183,7 @@ export default class UsersService extends Service {
           taxCodeArray: UserUpdateParams?.taxCodeArray,
           acceptedTermIdArray: UserUpdateParams?.acceptedTermIdArray,
           group: UserUpdateParams?.group,
+          expoPushTokenArray: UserUpdateParams?.expoPushTokenArray,
         },
         authenticationNotOptional: true,
       },

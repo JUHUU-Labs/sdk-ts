@@ -47,7 +47,6 @@ import {
   Platform,
   PlatformString,
   PostingRow,
-  PushToken,
   SimStatus,
   StarRating,
   TaxCode,
@@ -723,20 +722,7 @@ export namespace JUHUU {
       billingEmail: string | null; // primary email that must never be empty
       billingEmailVerified: boolean;
       taxCodeArray: TaxCode[];
-      notifications: {
-        email: {
-          enabled: boolean;
-          emailArray: string[];
-        };
-        sms: {
-          enabled: boolean;
-          phoneNumberArray: string[];
-        };
-        push: {
-          enabled: boolean;
-          pushTokenArray: PushToken[];
-        };
-      };
+      expoPushTokenArray: string[];
       group: UserGroup;
       createdByPropertyId: string | null;
       identity: {
@@ -830,6 +816,7 @@ export namespace JUHUU {
         taxCodeArray?: TaxCode[];
         acceptedTermIdArray?: string[];
         group?: UserGroup;
+        expoPushTokenArray?: string[];
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -4016,7 +4003,7 @@ export namespace JUHUU {
       provider: "1nce" | null;
       countryCode: CountryCode | null;
       imei: string | null;
-      propertyId: string;
+      propertyId: string | null;
       description: string | null;
       name: string;
       dataQuotaMax: number | null;
@@ -4769,6 +4756,7 @@ export namespace JUHUU {
       export type Params = {
         propertyId?: string;
         userId?: string;
+        text?: string;
       };
       export type Options = {
         limit?: number;
