@@ -2420,6 +2420,8 @@ export type QuickView = {
 
 export type PanelDisplay = "modal" | "dialog" | "screen";
 
+export type AppStatus = "active" | "disabled";
+
 export interface AdditionalSubscriptionItem {
   stripePriceId: string;
   quantity: number;

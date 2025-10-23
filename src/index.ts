@@ -68,6 +68,7 @@ import {
   Unit,
   PropertyAgreement,
   AdditionalSubscriptionItem,
+  AppStatus,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -433,6 +434,7 @@ export namespace JUHUU {
     et?: string;
     gsw?: string;
   }
+
   export type DeepNullable<T> = {
     [P in keyof T]?: DeepNullable<T[P]> | null;
   };
@@ -5791,5 +5793,88 @@ export namespace JUHUU {
       }>;
       message: string;
     };
+  }
+
+  export namespace Application {
+    export type Base = {
+      id: string;
+      version: number;
+      readonly object: "application";
+      readonly objectType: "dto";
+      propertyId: string;
+      colorScheme: ColorScheme | null;
+      appIconLight: string | null;
+      appIconDark: string | null;
+      status: AppStatus;
+    };
+
+    export interface Android extends Base {
+      type: "android";
+    }
+
+    export interface Ios extends Base {
+      type: "ios";
+    }
+
+    export type Object = Android | Ios;
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        colorScheme?: ColorScheme | null;
+        appIconLight?: string | null;
+        appIconDark?: string | null;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        application: JUHUU.Application.Object;
+      };
+    }
+    export namespace Retrieve {
+      export type Params = {
+        applicationId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        application: JUHUU.Application.Object;
+      };
+    }
+    export namespace List {
+      export type Params = {
+        propertyId: string;
+      };
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
+      export type Response = {
+        applicationArray: JUHUU.Application.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+    export namespace Update {
+      export type Params = {
+        applicationId: string;
+        colorScheme?: ColorScheme | null;
+        appIconLight?: string | null;
+        appIconDark?: string | null;
+        status?: AppStatus;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        application: JUHUU.Application.Object;
+      };
+    }
+    export namespace Delete {
+      export type Params = {
+        applicationId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        application: JUHUU.Application.Object;
+      };
+    }
   }
 }
