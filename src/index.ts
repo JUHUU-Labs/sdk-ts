@@ -103,6 +103,7 @@ import OffersService from "./offers/offers.service";
 import KitsService from "./kits/kits.service";
 import PanelsService from "./panels/panels.service";
 import PricesService from "./prices/prices.service";
+import ApplicationsService from "./applications/applications.service";
 
 export * from "./types/types";
 
@@ -157,6 +158,7 @@ export class Juhuu {
     this.kits = new KitsService(config);
     this.panels = new PanelsService(config);
     this.prices = new PricesService(config);
+    this.applications = new ApplicationsService(config);
   }
 
   /**
@@ -209,6 +211,7 @@ export class Juhuu {
   readonly kits: KitsService;
   readonly panels: PanelsService;
   readonly prices: PricesService;
+  readonly applications: ApplicationsService;
 }
 
 export namespace JUHUU {
