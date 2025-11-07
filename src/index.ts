@@ -2960,6 +2960,7 @@ export namespace JUHUU {
       adminQuickViewArray: QuickView[]; // quick views that are available for admins in the app
       simIdArray: string[]; // array of sim ids that are assigned to this device
       panelId: string | null;
+      adminQuickActionArray: QuickAction[]; // quick actions that are available for admins in the app
     };
 
     export namespace Create {
@@ -3029,6 +3030,7 @@ export namespace JUHUU {
         permissionArray?: DevicePermission[];
         parameterIdArray?: string[]; // array of parameter ids that are assigned to this device
         panelId?: string | null;
+        adminQuickActionArray?: QuickAction[]; // quick actions that are available for admins in the app
       };
 
       export type Options = JUHUU.RequestOptions;

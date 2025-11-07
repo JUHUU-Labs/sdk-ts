@@ -114,6 +114,7 @@ export default class DevicesService extends Service {
           proximityStrategyArray: DeviceUpdateParams.proximityStrategyArray,
           simIdArray: DeviceUpdateParams.simIdArray,
           panelId: DeviceUpdateParams.panelId,
+          adminQuickActionArray: DeviceUpdateParams.adminQuickActionArray,
         },
         authenticationNotOptional: true,
       },
