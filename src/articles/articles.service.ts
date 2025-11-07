@@ -192,7 +192,7 @@ export default class ArticlesService extends Service {
         method: "POST",
         url: "articles/" + ArticlePdfParams.articleId + "/pdf",
         body: {
-          languageCode: ArticlePdfParams.languageCode,
+          languageCodeArray: ArticlePdfParams.languageCodeArray,
         },
         authenticationNotOptional: false,
       },

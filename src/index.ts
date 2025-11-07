@@ -1433,7 +1433,7 @@ export namespace JUHUU {
     export namespace Pdf {
       export type Params = {
         articleId: string;
-        languageCode: LanguageCode[];
+        languageCodeArray: LanguageCode[];
       };
 
       export type Options = JUHUU.RequestOptions;
