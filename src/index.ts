@@ -1313,6 +1313,7 @@ export namespace JUHUU {
       embeddingsGenerationEnabled: boolean; // whether or not embeddings should be generated for this article
       order: number; // order of the article in the list of articles
       articleGroupIdArray: string[];
+      pdfUrls: LocaleString;
     };
 
     export namespace Create {
