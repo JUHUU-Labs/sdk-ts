@@ -898,6 +898,122 @@ export type Unit =
   | "month"
   | "year";
 
+// Anomaly Detection Plot Data Types
+// Plots are nullable since different dataTypes have different available plots
+export interface PlotData {
+  // Time-series only - null for cross-sectional
+  volume: {
+    series: Array<{
+      groupId: string;
+      isOutlier: boolean;
+      points: Array<{
+        timestamp: string;
+        value: number;
+        isOutlier: boolean;
+      }>;
+    }>;
+  } | null;
+
+  // Shared - distribution of values for each feature
+  violin: {
+    features: Array<{
+      featureName: string;
+      color: string;
+      values: number[];
+      outlierFlags: boolean[];
+    }>;
+  } | null;
+
+  // Time-series only - null for cross-sectional
+  std: {
+    series: Array<{
+      groupId: string;
+      groupName: string;
+      color: string;
+      lineWidth: number;
+      dataPoints: Array<[number, number]>; // [timestamp_ms, value]
+    }>;
+  } | null;
+
+  // Shared - different implementation per dataType (hourly for time-series, features×groups for cross-sectional)
+  heatmap: {
+    data: number[][];
+    rowLabels: string[];
+    columnLabels: string[];
+    colorScale: {
+      min: number;
+      max: number;
+      colors: string[];
+    };
+  } | null;
+
+  // Shared - distribution comparison across groups
+  boxPlot: {
+    boxes: Array<{
+      groupId: string;
+      groupName: string;
+      color: string;
+      min: number;
+      q1: number;
+      median: number;
+      q3: number;
+      max: number;
+      mean: number;
+      outliers: number[];
+    }>;
+  } | null;
+
+  // Time-series only - null for cross-sectional
+  shapValues: {
+    groups: Array<{
+      groupId: string;
+      isOutlier: boolean;
+      features: Array<{
+        featureName: string;
+        slope: number;
+        maxDrop: number;
+        derivative: number;
+      }>;
+    }>;
+  } | null;
+
+  // Shared - degradation vs z-score for time-series, PCA for cross-sectional
+  scatter: {
+    points: Array<{
+      groupId: string;
+      groupName: string;
+      x: number;
+      y: number;
+      color: string;
+      size: number;
+      isOutlier: boolean;
+    }>;
+    axisLabels?: {
+      // Only for cross-sectional (PCA)
+      x: string;
+      y: string;
+    };
+  } | null;
+
+  // Shared - which features contribute most to anomalies
+  featureImportance: {
+    features: Array<{
+      featureName: string;
+      importance: number;
+      color: string;
+      affectedGroups: number;
+    }>;
+  } | null;
+
+  // Cross-sectional only - null for time-series
+  distribution: {
+    scores: number[];
+    groupIds: string[];
+    isOutlier: boolean[];
+    threshold: number;
+  } | null;
+}
+
 export type AccessControlListElement = {
   topic: string;
   acc: number;
@@ -2242,6 +2358,23 @@ export interface VariableGetBlockInputs {
   key: string;
 }
 
+export interface DelaySleepBlock extends BaseBlock {
+  type: "delay.sleep";
+  in: {
+    milliseconds: DataEdgeConnection;
+  };
+  out: {
+    done: DataEdgeConnection;
+  };
+  data: {
+    milliseconds?: number;
+  };
+}
+
+export interface DelaySleepBlockInputs {
+  milliseconds: number;
+}
+
 export interface EndCustomBlock extends BaseBlock {
   type: "end.custom";
   // maps each output‐param name to its edge ID
@@ -2307,6 +2440,7 @@ export type FlowBlock =
   | FlowExecuteBlock
   | VariableSetBlock
   | VariableGetBlock
+  | DelaySleepBlock
   | EndCustomBlock;
 
 export type FlowBlockInput =
@@ -2349,6 +2483,7 @@ export type FlowBlockInput =
   | ArrayGetBlockInputs
   | VariableSetBlockInputs
   | VariableGetBlockInputs
+  | DelaySleepBlockInputs
   | Record<string, unknown>;
 
 export interface FlowDataEdge {

@@ -69,6 +69,7 @@ import {
   PropertyAgreement,
   AdditionalSubscriptionItem,
   AppStatus,
+  PlotData,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -89,6 +90,7 @@ import IncidentTemplatesService from "./incidentTemplates/incidentTemplates.serv
 import IncidentsService from "./incidents/incidents.service";
 import ParameterAnomalyGroupsService from "./parameterAnomalyGroups/parameterAnomalyGroups.service";
 import ParameterAnomalyGroupTrackersService from "./parameterAnomalyGroupTrackers/parameterAnomalyGroupTrackers.service";
+import ParameterAnomalyGroupTrackerTracesService from "./parameterAnomalyGroupTrackerTraces/parameterAnomalyGroupTrackerTraces.service";
 import EmzService from "./emz/emz.service";
 import FlowsService from "./flows/flows.service";
 import FlowTracesService from "./flowTraces/flowTraces.service";
@@ -144,6 +146,8 @@ export class Juhuu {
     this.parameterAnomalyGroups = new ParameterAnomalyGroupsService(config);
     this.parameterAnomalyGroupTrackers =
       new ParameterAnomalyGroupTrackersService(config);
+    this.parameterAnomalyGroupTrackerTraces =
+      new ParameterAnomalyGroupTrackerTracesService(config);
     this.emz = new EmzService(config);
     this.flows = new FlowsService(config);
     this.flowTraces = new FlowTracesService(config);
@@ -197,6 +201,7 @@ export class Juhuu {
   readonly incidents: IncidentsService;
   readonly parameterAnomalyGroups: ParameterAnomalyGroupsService;
   readonly parameterAnomalyGroupTrackers: ParameterAnomalyGroupTrackersService;
+  readonly parameterAnomalyGroupTrackerTraces: ParameterAnomalyGroupTrackerTracesService;
   readonly emz: EmzService;
   readonly flows: FlowsService;
   readonly flowTraces: FlowTracesService;
@@ -3366,6 +3371,7 @@ export namespace JUHUU {
       lastUpdatedAt: Date | null;
       createdAt: Date | null;
       reference: string | null;
+      history: boolean;
     };
 
     export interface Text extends Base {
@@ -3377,6 +3383,8 @@ export namespace JUHUU {
       type: "number";
       unit: Unit | null;
       currentValue: number;
+      min: number | null;
+      max: number | null;
     }
 
     export interface Enum extends Base {
@@ -3611,6 +3619,7 @@ export namespace JUHUU {
       propertyId: string;
       featureReferenceArray: string[];
       description: null | string;
+      dataType: "time-series" | "cross-sectional";
     };
 
     export namespace Create {
@@ -3662,6 +3671,7 @@ export namespace JUHUU {
         parameterAnomalyGroupTrackerId: string;
         name?: string;
         description?: string;
+        dataType?: "time-series" | "cross-sectional";
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -3696,43 +3706,116 @@ export namespace JUHUU {
     }
   }
 
+  export namespace ParameterAnomalyGroupTrackerTrace {
+    export type Object = {
+      id: string;
+      readonly object: "parameterAnomalyGroupTrackerTrace";
+      parameterAnomalyGroupTrackerId: string;
+      propertyId: string;
+      plotData: PlotData;
+      metadata: {
+        totalGroups: number;
+        outlierGroups: number;
+        normalGroups: number;
+        featuresAnalyzed: number;
+        detectionMethod: string;
+        executionTimeMs: number;
+      };
+      executedAt: Date;
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        parameterAnomalyGroupTrackerTraceId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        parameterAnomalyGroupTrackerTrace: JUHUU.ParameterAnomalyGroupTrackerTrace.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+        parameterAnomalyGroupTrackerId?: string;
+      };
+
+      export type Options = {
+        skip?: number;
+        limit?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        parameterAnomalyGroupTrackerTraceArray: JUHUU.ParameterAnomalyGroupTrackerTrace.Object[];
+        count: number;
+        hasMore: boolean;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        parameterAnomalyGroupTrackerTraceId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        parameterAnomalyGroupTrackerTrace: JUHUU.ParameterAnomalyGroupTrackerTrace.Object;
+      };
+    }
+  }
+
   export namespace ParameterHistory {
     type Base = {
       id: string;
-      readonly object: "parameter";
-      description: string | null;
-      name: string | null;
-      propertyId: string;
+      readonly object: "parameterHistory";
       createdAt: Date;
-      reference: string | null;
-      parameterId: string;
-      isOutlier: boolean;
-      shapAnomalyArray: Array<{
-        parameterAnomalyGroupId: string;
-        shapScore: number | null;
-      }>;
     };
 
     export interface Text extends Base {
-      type: "text";
       currentValue: string;
+      static: {
+        type: "text";
+        propertyId: string;
+        reference: string | null;
+        parameterId: string;
+      };
     }
 
     export interface Number extends Base {
-      type: "number";
       unit: Unit | null;
       currentValue: number;
+      static: {
+        type: "number";
+        propertyId: string;
+        reference: string | null;
+        parameterId: string;
+      };
     }
 
     export interface Enum extends Base {
-      type: "enum";
       currentValue: string;
       enumArray: string[];
+      static: {
+        type: "enum";
+        propertyId: string;
+        reference: string | null;
+        parameterId: string;
+      };
     }
 
     export interface Boolean extends Base {
-      type: "boolean";
       currentValue: boolean;
+      static: {
+        type: "boolean";
+        propertyId: string;
+        reference: string | null;
+        parameterId: string;
+      };
     }
 
     export type Object = Number | Boolean | Enum | Text;
