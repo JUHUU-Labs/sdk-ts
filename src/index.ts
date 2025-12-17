@@ -70,6 +70,7 @@ import {
   AdditionalSubscriptionItem,
   AppStatus,
   PlotData,
+  SessionStatus
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -496,7 +497,7 @@ export namespace JUHUU {
   export namespace Session {
     type Base = {
       id: string;
-      status: "waitingForPayment" | "ready" | "completed";
+      status: SessionStatus; // status of the session
       paymentId: string | null; // paymentId is null if session is free
       userId: string | null; // id of the user who owns the session
       propertyId: string;
@@ -522,6 +523,9 @@ export namespace JUHUU {
       locationName: string | null; // name of the RentableDeviceLocation
       locationGroupId: string | null; // id of the RentableDeviceLocationGroup
       locationGroupName: string | null; // name of the RentableDeviceLocationGroup
+      scheduledReadyAt: Date; // waiting for session to be ready
+      readyAt: Date | null; // when the session became ready
+      metadata: Record<string, any>; //meta data for each session
     };
 
     export interface Rent extends Base {
@@ -549,6 +553,8 @@ export namespace JUHUU {
         isOffSession: boolean;
         userId: string;
         propertyId?: string;
+        scheduledReadyAt?: Date;
+        metadata: Record<string, any>;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -710,6 +716,21 @@ export namespace JUHUU {
           }) => void
         ) => void;
         close: () => void;
+      };
+    }
+
+    export namespace CheckAvailability {
+      export type Params = {
+        locationId: string;
+        tariffId: string;
+        autoRenew: boolean;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        available: boolean
+        conflictingSessions: JUHUU.Session.Object[];
       };
     }
   }
