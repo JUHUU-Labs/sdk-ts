@@ -283,7 +283,7 @@ export type PaymentRefundReason =
   | "fraudulent"
   | "duplicate"
   | "unknown";
-export type SessionStatus = "waitingForPayment" | "ready" | "completed";
+export type SessionStatus = "waitingForPayment" | "waitingForReady" | "ready" | "completed";
 export type AutoRenewMode = "off" | "optIn" | "optOut" | "on";
 export type RefundStatus = "inTransitToUser" | "succeeded";
 

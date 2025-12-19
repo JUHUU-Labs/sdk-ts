@@ -22,6 +22,8 @@ export default class SessionService extends Service {
           isOffSession: SessionCreateParams.isOffSession,
           userId: SessionCreateParams.userId,
           propertyId: SessionCreateParams.propertyId,
+          scheduledReadyAt: SessionCreateParams.scheduledReadyAt,
+          metadata: SessionCreateParams.metadata,
         },
         authenticationNotOptional: true,
       },
@@ -263,5 +265,24 @@ export default class SessionService extends Service {
         socket.close();
       },
     };
+  }
+
+  async checkAvailability(
+    SessionCheckAvailabilityParams: JUHUU.Session.CheckAvailability.Params,
+    SessionCheckAvailabilityOptions?: JUHUU.Session.CheckAvailability.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Session.CheckAvailability.Response>> {
+    return await super.sendRequest<JUHUU.Session.CheckAvailability.Response>(
+      {
+        method: "POST",
+        url: "sessions/checkAvailability",
+        body: {
+          locationId: SessionCheckAvailabilityParams.locationId,
+          tariffId: SessionCheckAvailabilityParams.tariffId,
+          autoRenew: SessionCheckAvailabilityParams.autoRenew,
+        },
+        authenticationNotOptional: false,
+      },
+      SessionCheckAvailabilityOptions
+    );
   }
 }
