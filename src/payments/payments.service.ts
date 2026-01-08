@@ -6,6 +6,29 @@ export default class PaymentsService extends Service {
     super(config);
   }
 
+  async create(
+    PaymentCreateParams: JUHUU.Payment.Create.Params,
+    PaymentCreateOptions?: JUHUU.Payment.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Payment.Create.Response>> {
+    return await super.sendRequest<JUHUU.Payment.Create.Response>(
+      {
+        method: "POST",
+        url: "payments",
+        body: {
+          accountingAreaId: PaymentCreateParams.accountingAreaId,
+          amountWithoutServiceFee: PaymentCreateParams.amountWithoutServiceFee,
+          currencyCode: PaymentCreateParams.currencyCode,
+          propertyId: PaymentCreateParams.propertyId,
+          isOffSession: PaymentCreateParams.isOffSession,
+          salesTaxPercentage: PaymentCreateParams.salesTaxPercentage,
+          userId: PaymentCreateParams.userId,
+        },
+        authenticationNotOptional: true,
+      },
+      PaymentCreateOptions
+    );
+  }
+
   async list(
     PaymentListParams: JUHUU.Payment.List.Params,
     PaymentListOptions?: JUHUU.Payment.List.Options

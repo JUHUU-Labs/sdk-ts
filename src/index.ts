@@ -70,7 +70,7 @@ import {
   AdditionalSubscriptionItem,
   AppStatus,
   PlotData,
-  SessionStatus
+  SessionStatus,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -729,7 +729,7 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        available: boolean
+        available: boolean;
         conflictingSessions: JUHUU.Session.Object[];
       };
     }
@@ -2012,6 +2012,9 @@ export namespace JUHUU {
       automaticPayoutsEnabled: boolean;
       payoutCurrencyCode: CurrencyCode;
       timeZone: TimeZone;
+      defaultServiceFeeMax: number;
+      defaultServiceFeeMin: number;
+      defaultServiceFeePercentage: number;
 
       /**
        * Used to charge the property
@@ -2403,6 +2406,24 @@ export namespace JUHUU {
       export type Response = {
         payment: JUHUU.Payment.Object;
         property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace Create {
+      export type Params = {
+        accountingAreaId: string;
+        amountWithoutServiceFee: number;
+        currencyCode: string;
+        propertyId: string;
+        isOffSession: boolean;
+        salesTaxPercentage: number;
+        userId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        payout: JUHUU.Payment.Object;
       };
     }
 

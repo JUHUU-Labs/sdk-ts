@@ -276,7 +276,7 @@ export type PaymentMethod =
   | "sofort"
   | "unknown";
 
-export type PaymentReason = "session";
+export type PaymentReason = "custom" | "session";
 export type PaymentRefundReason =
   | "requestedByUser"
   | "expiredUncapturedCharge"
