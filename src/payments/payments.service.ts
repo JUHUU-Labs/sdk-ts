@@ -22,6 +22,7 @@ export default class PaymentsService extends Service {
           isOffSession: PaymentCreateParams.isOffSession,
           salesTaxPercentage: PaymentCreateParams.salesTaxPercentage,
           userId: PaymentCreateParams.userId,
+          postingRowArray: PaymentCreateParams.postingRowArray,
         },
         authenticationNotOptional: true,
       },

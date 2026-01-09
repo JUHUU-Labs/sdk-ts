@@ -2418,6 +2418,7 @@ export namespace JUHUU {
         isOffSession: boolean;
         salesTaxPercentage: number;
         userId: string;
+        postingRowArray: PostingRow[];
       };
 
       export type Options = JUHUU.RequestOptions;

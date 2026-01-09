@@ -354,6 +354,7 @@ export interface PostingRow {
   quantity: number;
   unitPrice: number;
   unitPriceIsFlexible: boolean;
+  taxPercentage?: number;
   total: number;
 }
 
