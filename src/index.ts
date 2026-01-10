@@ -2413,7 +2413,7 @@ export namespace JUHUU {
       export type Params = {
         accountingAreaId: string;
         amountWithoutServiceFee: number;
-        currencyCode: string;
+        currencyCode: CurrencyCode;
         propertyId: string;
         isOffSession: boolean;
         salesTaxPercentage: number;
@@ -2424,7 +2424,7 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-        payout: JUHUU.Payment.Object;
+        payment: JUHUU.Payment.Object;
       };
     }
 
