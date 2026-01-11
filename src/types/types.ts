@@ -283,7 +283,11 @@ export type PaymentRefundReason =
   | "fraudulent"
   | "duplicate"
   | "unknown";
-export type SessionStatus = "waitingForPayment" | "waitingForReady" | "ready" | "completed";
+export type SessionStatus =
+  | "waitingForPayment"
+  | "waitingForReady"
+  | "ready"
+  | "completed";
 export type AutoRenewMode = "off" | "optIn" | "optOut" | "on";
 export type RefundStatus = "inTransitToUser" | "succeeded";
 
@@ -2390,6 +2394,44 @@ export interface EndCustomBlock extends BaseBlock {
   };
 }
 
+export interface PaymentCreateBlock extends BaseBlock {
+  type: "payment.create";
+  in: {
+    accountingAreaId: DataEdgeConnection;
+    amountWithoutServiceFee: DataEdgeConnection;
+    currencyCode: DataEdgeConnection;
+    propertyId: DataEdgeConnection;
+    userId: DataEdgeConnection;
+    isOffSession: DataEdgeConnection;
+    salesTaxPercentage: DataEdgeConnection;
+    postingRowArray: DataEdgeConnection;
+  };
+  out: {
+    payment: DataEdgeConnection;
+  };
+  data: {
+    accountingAreaId?: string | null;
+    amountWithoutServiceFee?: number | null;
+    currencyCode?: CurrencyCode | null;
+    propertyId?: string | null;
+    userId?: string | null;
+    isOffSession?: boolean | null;
+    salesTaxPercentage?: number | null;
+    postingRowArray?: PostingRow[] | null;
+  };
+}
+
+export interface PaymentCreateBlockInputs {
+  accountingAreaId: string;
+  amountWithoutServiceFee: number;
+  currencyCode: CurrencyCode;
+  propertyId: string;
+  userId: string;
+  isOffSession: boolean;
+  salesTaxPercentage?: number | null;
+  postingRowArray?: PostingRow[] | null;
+}
+
 // The union of all block types:
 export type FlowBlock =
   | StartCustomBlock
@@ -2442,7 +2484,8 @@ export type FlowBlock =
   | VariableSetBlock
   | VariableGetBlock
   | DelaySleepBlock
-  | EndCustomBlock;
+  | EndCustomBlock
+  | PaymentCreateBlock;
 
 export type FlowBlockInput =
   | MathAddBlockInputs
@@ -2485,7 +2528,8 @@ export type FlowBlockInput =
   | VariableSetBlockInputs
   | VariableGetBlockInputs
   | DelaySleepBlockInputs
-  | Record<string, unknown>;
+  | Record<string, unknown>
+  | PaymentCreateBlockInputs;
 
 export interface FlowDataEdge {
   id: string;
