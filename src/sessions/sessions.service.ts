@@ -271,15 +271,24 @@ export default class SessionService extends Service {
     SessionCheckAvailabilityParams: JUHUU.Session.CheckAvailability.Params,
     SessionCheckAvailabilityOptions?: JUHUU.Session.CheckAvailability.Options
   ): Promise<JUHUU.HttpResponse<JUHUU.Session.CheckAvailability.Response>> {
+    const queryArray: string[] = [];
+
+    queryArray.push("locationId=" + SessionCheckAvailabilityParams.locationId);
+    queryArray.push("tariffId=" + SessionCheckAvailabilityParams.tariffId);
+    queryArray.push("autoRenew=" + SessionCheckAvailabilityParams.autoRenew);
+
+    if (SessionCheckAvailabilityParams.scheduledReadyAt !== undefined) {
+      queryArray.push(
+        "scheduledReadyAt=" +
+          SessionCheckAvailabilityParams.scheduledReadyAt.toISOString()
+      );
+    }
+
     return await super.sendRequest<JUHUU.Session.CheckAvailability.Response>(
       {
-        method: "POST",
-        url: "sessions/checkAvailability",
-        body: {
-          locationId: SessionCheckAvailabilityParams.locationId,
-          tariffId: SessionCheckAvailabilityParams.tariffId,
-          autoRenew: SessionCheckAvailabilityParams.autoRenew,
-        },
+        method: "GET",
+        url: "sessions/checkAvailability?" + queryArray.join("&"),
+        body: undefined,
         authenticationNotOptional: false,
       },
       SessionCheckAvailabilityOptions

@@ -724,6 +724,7 @@ export namespace JUHUU {
         locationId: string;
         tariffId: string;
         autoRenew: boolean;
+        scheduledReadyAt?: Date;
       };
 
       export type Options = JUHUU.RequestOptions;
