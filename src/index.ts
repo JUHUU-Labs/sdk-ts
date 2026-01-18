@@ -554,7 +554,7 @@ export namespace JUHUU {
         userId: string;
         propertyId?: string;
         scheduledReadyAt?: Date;
-        metadata: Record<string, any>;
+        metadata?: Record<string, any>;
       };
 
       export type Options = JUHUU.RequestOptions;
