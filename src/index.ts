@@ -1,4 +1,5 @@
 import AchievementsService from "./achievements/achievements.service";
+import AuthService from "./auth/auth.service";
 import SessionsService from "./sessions/sessions.service";
 import LinksService from "./links/links.service";
 import UsersService from "./users/users.service";
@@ -115,6 +116,7 @@ export * from "./types/types";
 export class Juhuu {
   constructor(config: JUHUU.SetupConfig) {
     this.achievements = new AchievementsService(config);
+    this.auth = new AuthService(config);
     this.sessions = new SessionsService(config);
     this.links = new LinksService(config);
     this.users = new UsersService(config);
@@ -172,6 +174,7 @@ export class Juhuu {
    * Top Level Resources
    */
   readonly achievements: AchievementsService;
+  readonly auth: AuthService;
   readonly sessions: SessionsService;
   readonly links: LinksService;
   readonly users: UsersService;
