@@ -71,6 +71,8 @@ import {
   AppStatus,
   PlotData,
   SessionStatus,
+  AuthMethodType,
+  PhoneCountryCode,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -394,13 +396,12 @@ export namespace JUHUU {
 
   export interface HttpResponse<T> {
     ok: boolean;
-    data:
-      | T & {
-          /**
-           * Might be defined if the request failed
-           */
-          message?: string | LocaleString;
-        };
+    data: T & {
+      /**
+       * Might be defined if the request failed
+       */
+      message?: string | LocaleString;
+    };
     statusText?: string;
     status?: number;
   }
@@ -713,7 +714,7 @@ export namespace JUHUU {
               before: JUHUU.Session.Object;
               changedFields: string[];
             };
-          }) => void
+          }) => void,
         ) => void;
         close: () => void;
       };
@@ -753,6 +754,8 @@ export namespace JUHUU {
       billingAddress: DeepNullable<Address>;
       billingEmail: string | null; // primary email that must never be empty
       billingEmailVerified: boolean;
+      billingPhone: string | null; // phone number for OTP authentication
+      billingPhoneVerified: boolean;
       taxCodeArray: TaxCode[];
       expoPushTokenArray: string[];
       group: UserGroup;
@@ -969,6 +972,177 @@ export namespace JUHUU {
 
       export type Response = {
         url: string;
+      };
+    }
+
+    export namespace Identify {
+      export type Params = {
+        identifier: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        exists: boolean;
+        type: "email" | "phone";
+        availableMethods: AuthMethodType[];
+        preferredMethod: AuthMethodType | null;
+        canRegister: boolean;
+      };
+    }
+
+    export namespace OtpRequest {
+      export type Params = {
+        destination: string;
+        countryCode: PhoneCountryCode;
+        nationalNumber: string;
+        purpose: "login" | "register" | "verify";
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        message: string;
+        type: "email" | "phone";
+        destination: string;
+      };
+    }
+
+    export namespace OtpVerify {
+      export type Params = {
+        destination: string;
+        countryCode: PhoneCountryCode;
+        nationalNumber: string;
+        code: string;
+        purpose: "login" | "register" | "verify";
+        name: string;
+        billingAddress: DeepNullable<Address>;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        accessToken: string;
+        refreshToken: string;
+        isNewUser: boolean;
+      };
+    }
+
+    export namespace SetPassword {
+      export type Params = {
+        password: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        message: string;
+        success: boolean;
+      };
+    }
+
+    export namespace ChangePhoneRequest {
+      export type Params = {
+        phone: string;
+        countryCode: PhoneCountryCode;
+        nationalNumber: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        message: string;
+        destination: string;
+      };
+    }
+
+    export namespace ChangePhoneVerify {
+      export type Params = {
+        phone: string;
+        countryCode: PhoneCountryCode;
+        nationalNumber: string;
+        code: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        message: string;
+        success: boolean;
+      };
+    }
+
+    export namespace RemovePhone {
+      export type Params = {};
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        message: string;
+        success: boolean;
+      };
+    }
+
+    
+    export namespace ChangeEmailRequest {
+      export type Params = {
+        email : string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        message: string;
+        destination: string;
+      };
+    }
+
+     export namespace ChangeEmailVerify {
+      export type Params = {
+        email : string;
+        code : string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        message: string;
+        success: boolean;
+      };
+    }
+
+    export namespace RemoveEmail {
+      export type Params = {};
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        message: string;
+        success: boolean;
+      };
+    }
+
+     export namespace GetAvailableEmails {
+      export type Params = {};
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+          emails: string[];
+          primaryEmail: string | null;
+      };
+    }
+
+     export namespace SetPrimaryEmail {
+      export type Params = {
+        email : string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+          success: boolean;
+          message: string;
       };
     }
   }
@@ -3105,7 +3279,7 @@ export namespace JUHUU {
               before: JUHUU.Device.Object;
               changedFields: string[];
             };
-          }) => void
+          }) => void,
         ) => void;
         close: () => void;
       };
@@ -3477,7 +3651,7 @@ export namespace JUHUU {
               before: JUHUU.Parameter.Object;
               changedFields: string[];
             };
-          }) => void
+          }) => void,
         ) => void;
         close: () => void;
       };
@@ -5846,7 +6020,7 @@ export namespace JUHUU {
         subscribe: (
           locationIdArray?: string[],
           parameterIdArray?: string[],
-          sessionIdArray?: string[]
+          sessionIdArray?: string[],
         ) => void;
         unsubscribeFromLocations: (locationIdArray: string[]) => void;
         unsubscribeFromParameters: (parameterIdArray: string[]) => void;
@@ -5854,17 +6028,17 @@ export namespace JUHUU {
         unsubscribe: (
           locationIdArray?: string[],
           parameterIdArray?: string[],
-          sessionIdArray?: string[]
+          sessionIdArray?: string[],
         ) => void;
         ping: (data?: any) => void;
         onLocationUpdate: (
-          callback: (message: JUHUU.Websocket.LocationUpdate) => void
+          callback: (message: JUHUU.Websocket.LocationUpdate) => void,
         ) => void;
         onParameterUpdate: (
-          callback: (message: JUHUU.Websocket.ParameterUpdate) => void
+          callback: (message: JUHUU.Websocket.ParameterUpdate) => void,
         ) => void;
         onSessionUpdate: (
-          callback: (message: JUHUU.Websocket.SessionUpdate) => void
+          callback: (message: JUHUU.Websocket.SessionUpdate) => void,
         ) => void;
         onConnect: (callback: () => void) => void;
         onDisconnect: (callback: (reason: string) => void) => void;
