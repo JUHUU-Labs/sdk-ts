@@ -8,7 +8,7 @@ export default class UsersService extends Service {
 
   async create(
     UserCreateParams: JUHUU.User.Create.Params,
-    UserCreateOptions?: JUHUU.User.Create.Options
+    UserCreateOptions?: JUHUU.User.Create.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.User.Create.Response>> {
     return await super.sendRequest<JUHUU.User.Create.Response>(
       {
@@ -22,13 +22,13 @@ export default class UsersService extends Service {
         },
         authenticationNotOptional: true,
       },
-      UserCreateOptions
+      UserCreateOptions,
     );
   }
 
   async retrieve(
     UserRetrieveParams: JUHUU.User.Retrieve.Params,
-    UserRetrieveOptions?: JUHUU.User.Retrieve.Options
+    UserRetrieveOptions?: JUHUU.User.Retrieve.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.User.Retrieve.Response>> {
     const queryArray: string[] = [];
 
@@ -45,49 +45,13 @@ export default class UsersService extends Service {
         body: undefined,
         authenticationNotOptional: true,
       },
-      UserRetrieveOptions
-    );
-  }
-
-  async registerEmailPassword(
-    UserRegisterEmailPasswordParams: JUHUU.User.RegisterEmailPassword.Params,
-    UserRegisterEmailPasswordOptions?: JUHUU.User.RegisterEmailPassword.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.User.RegisterEmailPassword.Response>> {
-    return await super.sendRequest<JUHUU.User.RegisterEmailPassword.Response>(
-      {
-        method: "POST",
-        url: "auth/emailPassword/register",
-        body: {
-          email: UserRegisterEmailPasswordParams.email,
-          password: UserRegisterEmailPasswordParams.password,
-        },
-        authenticationNotOptional: false,
-      },
-      UserRegisterEmailPasswordOptions
-    );
-  }
-
-  async loginEmailPassword(
-    UserLoginEmailPasswordParams: JUHUU.User.LoginEmailPassword.Params,
-    UserLoginEmailPasswordOptions?: JUHUU.User.LoginEmailPassword.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.User.LoginEmailPassword.Response>> {
-    return await super.sendRequest<JUHUU.User.LoginEmailPassword.Response>(
-      {
-        method: "POST",
-        url: "auth/emailPassword/login",
-        body: {
-          email: UserLoginEmailPasswordParams.email,
-          password: UserLoginEmailPasswordParams.password,
-        },
-        authenticationNotOptional: false,
-      },
-      UserLoginEmailPasswordOptions
+      UserRetrieveOptions,
     );
   }
 
   async paymentMethodTokens(
     UserPaymentMethodTokensParams: JUHUU.User.PaymentMethodTokens.Params,
-    UserPaymentMethodTokensOptions?: JUHUU.User.PaymentMethodTokens.Options
+    UserPaymentMethodTokensOptions?: JUHUU.User.PaymentMethodTokens.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.User.PaymentMethodTokens.Response>> {
     return await super.sendRequest<JUHUU.User.PaymentMethodTokens.Response>(
       {
@@ -99,31 +63,13 @@ export default class UsersService extends Service {
         body: undefined,
         authenticationNotOptional: true,
       },
-      UserPaymentMethodTokensOptions
-    );
-  }
-
-  async refreshAccessToken(
-    UserRefreshAccessTokenParams: JUHUU.User.RefreshAccessToken.Params,
-    UserRefreshAccessTokenOptions?: JUHUU.User.RefreshAccessToken.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.User.RefreshAccessToken.Response>> {
-    return await super.sendRequest<JUHUU.User.RefreshAccessToken.Response>(
-      {
-        method: "GET",
-        url: "auth/refresh",
-        body: undefined,
-        authenticationNotOptional: true,
-      },
-      {
-        accessToken: UserRefreshAccessTokenParams?.refreshToken,
-        ...UserRefreshAccessTokenOptions,
-      }
+      UserPaymentMethodTokensOptions,
     );
   }
 
   async list(
     UserListParams: JUHUU.User.List.Params,
-    UserListOptions?: JUHUU.User.List.Options
+    UserListOptions?: JUHUU.User.List.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.User.List.Response>> {
     const queryArray: string[] = [];
 
@@ -133,13 +79,13 @@ export default class UsersService extends Service {
 
     if (UserListParams.createdByPropertyId !== undefined) {
       queryArray.push(
-        "createdByPropertyId=" + UserListParams.createdByPropertyId
+        "createdByPropertyId=" + UserListParams.createdByPropertyId,
       );
     }
 
     if (UserListParams.customerOfPropertyId !== undefined) {
       queryArray.push(
-        "customerOfPropertyId=" + UserListParams.customerOfPropertyId
+        "customerOfPropertyId=" + UserListParams.customerOfPropertyId,
       );
     }
 
@@ -162,13 +108,13 @@ export default class UsersService extends Service {
         body: undefined,
         authenticationNotOptional: true,
       },
-      UserListOptions
+      UserListOptions,
     );
   }
 
   async update(
     UserUpdateParams: JUHUU.User.Update.Params,
-    UserUpdateOptions?: JUHUU.User.Update.Options
+    UserUpdateOptions?: JUHUU.User.Update.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.User.Update.Response>> {
     return await super.sendRequest<JUHUU.User.Update.Response>(
       {
@@ -187,13 +133,13 @@ export default class UsersService extends Service {
         },
         authenticationNotOptional: true,
       },
-      UserUpdateOptions
+      UserUpdateOptions,
     );
   }
 
   async memberCreate(
     UserInviteMemberParams: JUHUU.User.InviteMember.Params,
-    UserInviteMemberOptions?: JUHUU.User.InviteMember.Options
+    UserInviteMemberOptions?: JUHUU.User.InviteMember.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.User.InviteMember.Response>> {
     return await super.sendRequest<JUHUU.User.InviteMember.Response>(
       {
@@ -205,13 +151,13 @@ export default class UsersService extends Service {
         },
         authenticationNotOptional: true,
       },
-      UserInviteMemberOptions
+      UserInviteMemberOptions,
     );
   }
 
   async memberDelete(
     UserRemoveMemberParams: JUHUU.User.RemoveMember.Params,
-    UserRemoveMemberOptions?: JUHUU.User.RemoveMember.Options
+    UserRemoveMemberOptions?: JUHUU.User.RemoveMember.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.User.RemoveMember.Response>> {
     return await super.sendRequest<JUHUU.User.RemoveMember.Response>(
       {
@@ -224,13 +170,13 @@ export default class UsersService extends Service {
         body: undefined,
         authenticationNotOptional: true,
       },
-      UserRemoveMemberOptions
+      UserRemoveMemberOptions,
     );
   }
 
   async delete(
     UserDeleteParams: JUHUU.User.Delete.Params,
-    UserDeleteOptions?: JUHUU.User.Delete.Options
+    UserDeleteOptions?: JUHUU.User.Delete.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.User.Delete.Response>> {
     return await super.sendRequest<JUHUU.User.Delete.Response>(
       {
@@ -239,24 +185,29 @@ export default class UsersService extends Service {
         authenticationNotOptional: true,
         body: undefined,
       },
-      UserDeleteOptions
+      UserDeleteOptions,
     );
   }
 
   async createIdentityVerificationUrl(
     UserCreateIdentityVerificationUrlParams: JUHUU.User.CreateIdentityVerificationUrl.Params,
-    UserCreateIdentityVerificationUrlOptions?: JUHUU.User.CreateIdentityVerificationUrl.Options
-  ): Promise<JUHUU.HttpResponse<JUHUU.User.CreateIdentityVerificationUrl.Response>> {
+    UserCreateIdentityVerificationUrlOptions?: JUHUU.User.CreateIdentityVerificationUrl.Options,
+  ): Promise<
+    JUHUU.HttpResponse<JUHUU.User.CreateIdentityVerificationUrl.Response>
+  > {
     return await super.sendRequest<JUHUU.User.CreateIdentityVerificationUrl.Response>(
       {
         method: "POST",
-        url: "users/" + UserCreateIdentityVerificationUrlParams.userId + "/createIdentityVerificationUrl",
+        url:
+          "users/" +
+          UserCreateIdentityVerificationUrlParams.userId +
+          "/createIdentityVerificationUrl",
         body: {
           propertyId: UserCreateIdentityVerificationUrlParams.propertyId,
         },
         authenticationNotOptional: true,
       },
-      UserCreateIdentityVerificationUrlOptions
+      UserCreateIdentityVerificationUrlOptions,
     );
   }
 }
