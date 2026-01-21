@@ -324,7 +324,7 @@ export default class AuthService extends Service {
   ): Promise<JUHUU.HttpResponse<JUHUU.User.SetPrimaryEmail.Response>> {
     return await super.sendRequest<JUHUU.User.SetPrimaryEmail.Response>(
       {
-        method: "POST",
+        method: "PATCH",
         url: "auth/email/primary",
         authenticationNotOptional: true,
         body: {
