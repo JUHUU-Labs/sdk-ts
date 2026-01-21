@@ -137,6 +137,53 @@ export default class AuthService extends Service {
     );
   }
 
+  async removePassword(
+    AuthRemovePasswordParams: JUHUU.User.RemovePassword.Params,
+    AuthRemovePasswordOptions?: JUHUU.User.RemovePassword.Options,
+  ): Promise<JUHUU.HttpResponse<JUHUU.User.RemovePassword.Response>> {
+    return await super.sendRequest<JUHUU.User.RemovePassword.Response>(
+      {
+        method: "DELETE",
+        url: "auth/password",
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      AuthRemovePasswordOptions,
+    );
+  }
+
+  async removeGoogle(
+    AuthRemoveGoogleParams: JUHUU.User.RemoveGoogle.Params,
+    AuthRemoveGoogleOptions?: JUHUU.User.RemoveGoogle.Options,
+  ): Promise<JUHUU.HttpResponse<JUHUU.User.RemoveGoogle.Response>> {
+    return await super.sendRequest<JUHUU.User.RemoveGoogle.Response>(
+      {
+        method: "DELETE",
+        url: "auth/google",
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      AuthRemoveGoogleOptions,
+    );
+  }
+
+  async removeApple(
+    AuthRemoveAppleParams: JUHUU.User.RemoveApple.Params,
+    AuthRemoveAppleOptions?: JUHUU.User.RemoveApple.Options,
+  ): Promise<JUHUU.HttpResponse<JUHUU.User.RemoveApple.Response>> {
+    return await super.sendRequest<JUHUU.User.RemoveApple.Response>(
+      {
+        method: "DELETE",
+        url: "auth/apple",
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      AuthRemoveAppleOptions,
+    );
+  }
+
+
+
   async changePhoneRequest(
     AuthChangePhoneRequestParams: JUHUU.User.ChangePhoneRequest.Params,
     AuthChangePhoneRequestOptions?: JUHUU.User.ChangePhoneRequest.Options,

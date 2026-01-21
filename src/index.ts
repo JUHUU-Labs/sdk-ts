@@ -1044,6 +1044,39 @@ export namespace JUHUU {
       };
     }
 
+    export namespace RemovePassword {
+      export type Params = {};
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        message: string;
+        success: boolean;
+      };
+    }
+
+    export namespace RemoveGoogle {
+      export type Params = {};
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        message: string;
+        success: boolean;
+      };
+    }
+
+    export namespace RemoveApple {
+      export type Params = {};
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        message: string;
+        success: boolean;
+      };
+    }
+
     export namespace ChangePhoneRequest {
       export type Params = {
         phone: string;
