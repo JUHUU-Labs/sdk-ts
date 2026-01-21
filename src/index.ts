@@ -1119,10 +1119,9 @@ export namespace JUHUU {
       };
     }
 
-    
     export namespace ChangeEmailRequest {
       export type Params = {
-        email : string;
+        email: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1133,10 +1132,10 @@ export namespace JUHUU {
       };
     }
 
-     export namespace ChangeEmailVerify {
+    export namespace ChangeEmailVerify {
       export type Params = {
-        email : string;
-        code : string;
+        email: string;
+        code: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1158,27 +1157,47 @@ export namespace JUHUU {
       };
     }
 
-     export namespace GetAvailableEmails {
+    export namespace GetAvailableEmails {
       export type Params = {};
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-          emails: string[];
-          primaryEmail: string | null;
+        emails: string[];
+        primaryEmail: string | null;
       };
     }
 
-     export namespace SetPrimaryEmail {
+    export namespace GetAuthMethods {
+      export type Params = {};
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        methods: {
+          email: boolean;
+          phone: boolean;
+          password: boolean;
+          google: boolean;
+          apple: boolean;
+        };
+        details: {
+          email: string | null;
+          phone: string | null;
+        };
+      };
+    }
+
+    export namespace SetPrimaryEmail {
       export type Params = {
-        email : string;
+        email: string;
       };
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = {
-          success: boolean;
-          message: string;
+        success: boolean;
+        message: string;
       };
     }
   }

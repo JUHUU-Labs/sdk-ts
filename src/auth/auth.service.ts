@@ -303,6 +303,21 @@ export default class AuthService extends Service {
     );
   }
 
+  async getAuthMethods(
+    AuthGetAuthMethodsParams: JUHUU.User.GetAuthMethods.Params,
+    AuthGetAuthMethodsOptions?: JUHUU.User.GetAuthMethods.Options,
+  ): Promise<JUHUU.HttpResponse<JUHUU.User.GetAuthMethods.Response>> {
+    return await super.sendRequest<JUHUU.User.GetAuthMethods.Response>(
+      {
+        method: "GET",
+        url: "auth/methods",
+        authenticationNotOptional: true,
+        body: undefined,
+      },
+      AuthGetAuthMethodsOptions,
+    );
+  }
+
   async setPrimaryEmail(
     AuthSetPrimaryEmailParams: JUHUU.User.SetPrimaryEmail.Params,
     AuthSetPrimaryEmailOptions?: JUHUU.User.SetPrimaryEmail.Options,
