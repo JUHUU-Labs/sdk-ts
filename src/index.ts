@@ -2449,8 +2449,9 @@ export namespace JUHUU {
     export interface Single extends Base {
       type: "single";
       source: "fluctuo" | null;
-      referenceObject: "location";
-      referenceObjectId: string;
+      referenceObject: "location" | "panel";
+      referenceObjectId: string | null;
+      propertyId: string | null;
       iconLight: string | null; // image that is being displayed on the map
       iconDark: string | null; // if null, category or modality icon is always shown
       utilization: Utilization | null;
@@ -2485,11 +2486,74 @@ export namespace JUHUU {
       export type Params = {
         propertyId?: string;
         invalidAt?: Date | null;
+        referenceObject?: "location" | "panel";
+        referenceObjectId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
 
       export type Response = JUHUU.Point.Object[];
+    }
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        referenceObject: "location" | "panel";
+        referenceObjectId?: string | null;
+        location: GeoPoint;
+        altitudeRange?: [number, number];
+        purposeArray?: Purpose[];
+        iconLight?: string | null;
+        iconDark?: string | null;
+        visualPriority?: VisualPriority;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        point: JUHUU.Point.Object;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        pointId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        point: JUHUU.Point.Object;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        pointId: string;
+        location?: GeoPoint;
+        altitudeRange?: [number, number];
+        purposeArray?: Purpose[];
+        iconLight?: string | null;
+        iconDark?: string | null;
+        visualPriority?: VisualPriority;
+        invalidAt?: Date | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        point: JUHUU.Point.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        pointId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.Point.Object;
     }
   }
 
@@ -2849,8 +2913,6 @@ export namespace JUHUU {
       source: "fluctuo" | null;
       rentOfferArray: Offer[];
       reservationOfferArray: Offer[];
-      iconLight: string | null;
-      iconDark: string | null;
       address: Address | null;
       termId: string | null;
       timeZone: TimeZone | null;
@@ -2972,18 +3034,6 @@ export namespace JUHUU {
          * Set to null to remove the image
          */
         logoDark?: string | null;
-
-        /**
-         * Base64 encoded image
-         * Set to null to remove the image
-         */
-        iconLight?: string | null;
-
-        /**
-         * Base64 encoded image
-         * Set to null to remove the image
-         */
-        iconDark?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;

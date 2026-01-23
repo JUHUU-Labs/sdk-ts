@@ -49,6 +49,14 @@ export default class PointsService extends Service {
       }
     }
 
+    if (PointListParams?.referenceObject !== undefined) {
+      queryArray.push("referenceObject=" + PointListParams.referenceObject);
+    }
+
+    if (PointListParams?.referenceObjectId !== undefined) {
+      queryArray.push("referenceObjectId=" + PointListParams.referenceObjectId);
+    }
+
     return await super.sendRequest<JUHUU.Point.List.Response>(
       {
         method: "GET",
@@ -57,6 +65,84 @@ export default class PointsService extends Service {
         authenticationNotOptional: false,
       },
       PointListOptions
+    );
+  }
+
+  async create(
+    PointCreateParams: JUHUU.Point.Create.Params,
+    PointCreateOptions?: JUHUU.Point.Create.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Point.Create.Response>> {
+    return await super.sendRequest<JUHUU.Point.Create.Response>(
+      {
+        method: "POST",
+        url: "points",
+        body: {
+          propertyId: PointCreateParams.propertyId,
+          referenceObject: PointCreateParams.referenceObject,
+          referenceObjectId: PointCreateParams.referenceObjectId,
+          location: PointCreateParams.location,
+          altitudeRange: PointCreateParams.altitudeRange,
+          purposeArray: PointCreateParams.purposeArray,
+          iconLight: PointCreateParams.iconLight,
+          iconDark: PointCreateParams.iconDark,
+          visualPriority: PointCreateParams.visualPriority,
+        },
+        authenticationNotOptional: true,
+      },
+      PointCreateOptions
+    );
+  }
+
+  async retrieve(
+    PointRetrieveParams: JUHUU.Point.Retrieve.Params,
+    PointRetrieveOptions?: JUHUU.Point.Retrieve.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Point.Retrieve.Response>> {
+    return await super.sendRequest<JUHUU.Point.Retrieve.Response>(
+      {
+        method: "GET",
+        url: "points/" + PointRetrieveParams.pointId,
+        body: undefined,
+        authenticationNotOptional: false,
+      },
+      PointRetrieveOptions
+    );
+  }
+
+  async update(
+    PointUpdateParams: JUHUU.Point.Update.Params,
+    PointUpdateOptions?: JUHUU.Point.Update.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Point.Update.Response>> {
+    return await super.sendRequest<JUHUU.Point.Update.Response>(
+      {
+        method: "PATCH",
+        url: "points/" + PointUpdateParams.pointId,
+        body: {
+          location: PointUpdateParams.location,
+          altitudeRange: PointUpdateParams.altitudeRange,
+          purposeArray: PointUpdateParams.purposeArray,
+          iconLight: PointUpdateParams.iconLight,
+          iconDark: PointUpdateParams.iconDark,
+          visualPriority: PointUpdateParams.visualPriority,
+          invalidAt: PointUpdateParams.invalidAt,
+        },
+        authenticationNotOptional: true,
+      },
+      PointUpdateOptions
+    );
+  }
+
+  async delete(
+    PointDeleteParams: JUHUU.Point.Delete.Params,
+    PointDeleteOptions?: JUHUU.Point.Delete.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Point.Delete.Response>> {
+    return await super.sendRequest<JUHUU.Point.Delete.Response>(
+      {
+        method: "DELETE",
+        url: "points/" + PointDeleteParams.pointId,
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      PointDeleteOptions
     );
   }
 
