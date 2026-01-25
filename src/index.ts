@@ -2617,7 +2617,8 @@ export namespace JUHUU {
     export namespace Update {
       export type Params = {
         pointId: string;
-        location?: GeoPoint;
+        latitude?: number;
+        longitude?: number;
         altitudeRange?: [number, number];
         purposeArray?: Purpose[];
         iconLight?: string | null;

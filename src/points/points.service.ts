@@ -119,7 +119,8 @@ export default class PointsService extends Service {
         method: "PATCH",
         url: "points/" + PointUpdateParams.pointId,
         body: {
-          location: PointUpdateParams.location,
+          latitude: PointUpdateParams.latitude,
+          longitude: PointUpdateParams.longitude,
           altitudeRange: PointUpdateParams.altitudeRange,
           purposeArray: PointUpdateParams.purposeArray,
           iconLight: PointUpdateParams.iconLight,
