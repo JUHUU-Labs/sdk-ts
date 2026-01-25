@@ -1469,7 +1469,11 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.PointCluster.Object[];
+      export type Response = {
+        pointClusterArray: JUHUU.PointCluster.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Retrieve {
@@ -2524,6 +2528,7 @@ export namespace JUHUU {
       altitudeRange: [number, number]; // from, to
       invalidAt: Date | null;
       purposeArray: Purpose[];
+      pointClusterId: string | null;
     };
 
     export interface Single extends Base {
