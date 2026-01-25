@@ -117,6 +117,8 @@ export default class LocationsService extends Service {
           termId: LocationUpdateParams.termId,
           logoLight: LocationUpdateParams.logoLight,
           logoDark: LocationUpdateParams.logoDark,
+          iconLight: LocationUpdateParams.iconLight,
+          iconDark: LocationUpdateParams.iconDark,
         },
         authenticationNotOptional: true,
       },

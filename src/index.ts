@@ -2992,6 +2992,8 @@ export namespace JUHUU {
       readonly object: "location";
       logoLight: string | null;
       logoDark: string | null;
+      iconLight: string | null;
+      iconDark: string | null;
       location: GeoPoint | null;
       invalidAt: Date | null; // timestamp this location is no longer valid and can be deleted from the database
       purposeArray: Purpose[];
@@ -3122,6 +3124,18 @@ export namespace JUHUU {
          * Set to null to remove the image
          */
         logoDark?: string | null;
+
+        /**
+         * Base64 encoded image
+         * Set to null to remove the image
+         */
+        iconLight?: string | null;
+
+        /**
+         * Base64 encoded image
+         * Set to null to remove the image
+         */
+        iconDark?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;
