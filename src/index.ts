@@ -2585,7 +2585,8 @@ export namespace JUHUU {
         propertyId: string;
         referenceObject: "location" | "panel";
         referenceObjectId?: string | null;
-        location: GeoPoint;
+        latitude?: number | null;
+        longitude?: number | null;
         altitudeRange?: [number, number];
         purposeArray?: Purpose[];
         iconLight?: string | null;
