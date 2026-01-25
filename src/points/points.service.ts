@@ -8,7 +8,7 @@ export default class PointsService extends Service {
 
   async map(
     PointListParams: JUHUU.Point.Map.Params,
-    PointListOptions?: JUHUU.Point.Map.Options
+    PointListOptions?: JUHUU.Point.Map.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Point.Map.Response>> {
     const queryArray: string[] = [
       "modalityArray=" + PointListParams.modalityArray.join(","),
@@ -27,13 +27,13 @@ export default class PointsService extends Service {
         body: undefined,
         authenticationNotOptional: false,
       },
-      PointListOptions
+      PointListOptions,
     );
   }
 
   async list(
     PointListParams: JUHUU.Point.List.Params,
-    PointListOptions?: JUHUU.Point.List.Options
+    PointListOptions?: JUHUU.Point.List.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Point.List.Response>> {
     const queryArray: string[] = [];
 
@@ -64,13 +64,13 @@ export default class PointsService extends Service {
         body: undefined,
         authenticationNotOptional: false,
       },
-      PointListOptions
+      PointListOptions,
     );
   }
 
   async create(
     PointCreateParams: JUHUU.Point.Create.Params,
-    PointCreateOptions?: JUHUU.Point.Create.Options
+    PointCreateOptions?: JUHUU.Point.Create.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Point.Create.Response>> {
     return await super.sendRequest<JUHUU.Point.Create.Response>(
       {
@@ -80,7 +80,8 @@ export default class PointsService extends Service {
           propertyId: PointCreateParams.propertyId,
           referenceObject: PointCreateParams.referenceObject,
           referenceObjectId: PointCreateParams.referenceObjectId,
-          location: PointCreateParams.location,
+          longitude: PointCreateParams.longitude,
+          latitude: PointCreateParams.latitude,
           altitudeRange: PointCreateParams.altitudeRange,
           purposeArray: PointCreateParams.purposeArray,
           iconLight: PointCreateParams.iconLight,
@@ -89,13 +90,13 @@ export default class PointsService extends Service {
         },
         authenticationNotOptional: true,
       },
-      PointCreateOptions
+      PointCreateOptions,
     );
   }
 
   async retrieve(
     PointRetrieveParams: JUHUU.Point.Retrieve.Params,
-    PointRetrieveOptions?: JUHUU.Point.Retrieve.Options
+    PointRetrieveOptions?: JUHUU.Point.Retrieve.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Point.Retrieve.Response>> {
     return await super.sendRequest<JUHUU.Point.Retrieve.Response>(
       {
@@ -104,13 +105,13 @@ export default class PointsService extends Service {
         body: undefined,
         authenticationNotOptional: false,
       },
-      PointRetrieveOptions
+      PointRetrieveOptions,
     );
   }
 
   async update(
     PointUpdateParams: JUHUU.Point.Update.Params,
-    PointUpdateOptions?: JUHUU.Point.Update.Options
+    PointUpdateOptions?: JUHUU.Point.Update.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Point.Update.Response>> {
     return await super.sendRequest<JUHUU.Point.Update.Response>(
       {
@@ -127,13 +128,13 @@ export default class PointsService extends Service {
         },
         authenticationNotOptional: true,
       },
-      PointUpdateOptions
+      PointUpdateOptions,
     );
   }
 
   async delete(
     PointDeleteParams: JUHUU.Point.Delete.Params,
-    PointDeleteOptions?: JUHUU.Point.Delete.Options
+    PointDeleteOptions?: JUHUU.Point.Delete.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Point.Delete.Response>> {
     return await super.sendRequest<JUHUU.Point.Delete.Response>(
       {
@@ -142,7 +143,7 @@ export default class PointsService extends Service {
         body: undefined,
         authenticationNotOptional: true,
       },
-      PointDeleteOptions
+      PointDeleteOptions,
     );
   }
 
@@ -169,14 +170,14 @@ export default class PointsService extends Service {
     topLeftLat: number,
     topLeftLon: number,
     bottomRightLat: number,
-    bottomRightLon: number
+    bottomRightLon: number,
   ) {
     // Calculate the diagonal distance across the viewport
     var diagonalDistance = this.calculateDistance(
       topLeftLat,
       topLeftLon,
       bottomRightLat,
-      bottomRightLon
+      bottomRightLon,
     );
     // For a top-down view, the altitude can be approximated as half the diagonal distance
     // This is a simplification and might need adjustment based on the actual map projection and scale
