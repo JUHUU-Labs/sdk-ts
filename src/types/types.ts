@@ -2834,6 +2834,16 @@ export type PanelDisplay = "modal" | "dialog" | "screen";
 
 export type AppStatus = "active" | "disabled";
 
+export type AppVersionStatus =
+  | "waitingForSigninToBuild"
+  | "waitingForBuildToFinish"
+  | "waitingForSigninToSubmit"
+  | "waitingForReview"
+  | "waitingForDistribution"
+  | "active"
+  | "soonDeprecated"
+  | "deprecated";
+
 export interface AdditionalSubscriptionItem {
   stripePriceId: string;
   quantity: number;

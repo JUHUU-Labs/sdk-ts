@@ -71,6 +71,7 @@ import {
   PropertyAgreement,
   AdditionalSubscriptionItem,
   AppStatus,
+  AppVersionStatus,
   PlotData,
   SessionStatus,
   AuthMethodType,
@@ -111,6 +112,7 @@ import KitsService from "./kits/kits.service";
 import PanelsService from "./panels/panels.service";
 import PricesService from "./prices/prices.service";
 import ApplicationsService from "./applications/applications.service";
+import ApplicationVersionsService from "./applicationVersions/applicationVersions.service";
 
 export * from "./types/types";
 
@@ -170,6 +172,7 @@ export class Juhuu {
     this.panels = new PanelsService(config);
     this.prices = new PricesService(config);
     this.applications = new ApplicationsService(config);
+    this.applicationVersions = new ApplicationVersionsService(config);
   }
 
   /**
@@ -226,6 +229,7 @@ export class Juhuu {
   readonly panels: PanelsService;
   readonly prices: PricesService;
   readonly applications: ApplicationsService;
+  readonly applicationVersions: ApplicationVersionsService;
 }
 
 export namespace JUHUU {
@@ -6398,6 +6402,42 @@ export namespace JUHUU {
       export type Options = JUHUU.RequestOptions;
       export type Response = {
         application: JUHUU.Application.Object;
+      };
+    }
+  }
+
+  export namespace ApplicationVersion {
+    export type Object = {
+      id: string;
+      version: number;
+      readonly object: "applicationVersion";
+      readonly objectType: "dto";
+      applicationId: string;
+      propertyId: string;
+      status: AppVersionStatus;
+    };
+
+    export namespace Retrieve {
+      export type Params = {
+        applicationVersionId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        applicationVersion: JUHUU.ApplicationVersion.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        applicationId: string;
+      };
+      export type Options = {
+        limit?: number;
+      } & JUHUU.RequestOptions;
+      export type Response = {
+        applicationVersionArray: JUHUU.ApplicationVersion.Object[];
+        count: number;
+        hasMore: boolean;
       };
     }
   }
