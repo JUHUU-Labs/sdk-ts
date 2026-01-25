@@ -41,20 +41,20 @@ export default class PointsService extends Service {
       queryArray.push("propertyId=" + PointListParams.propertyId);
     }
 
-    if (PointListParams?.invalidAt !== undefined) {
-      if (PointListParams.invalidAt === null) {
-        queryArray.push("invalidAt=");
-      } else {
-        queryArray.push("invalidAt=" + PointListParams.invalidAt.toISOString());
-      }
-    }
-
     if (PointListParams?.referenceObject !== undefined) {
       queryArray.push("referenceObject=" + PointListParams.referenceObject);
     }
 
     if (PointListParams?.referenceObjectId !== undefined) {
       queryArray.push("referenceObjectId=" + PointListParams.referenceObjectId);
+    }
+
+    if (PointListParams?.pointClusterId !== undefined) {
+      if (PointListParams.pointClusterId === null) {
+        queryArray.push("pointClusterId=null");
+      } else {
+        queryArray.push("pointClusterId=" + PointListParams.pointClusterId);
+      }
     }
 
     return await super.sendRequest<JUHUU.Point.List.Response>(

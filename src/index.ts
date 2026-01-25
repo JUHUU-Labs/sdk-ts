@@ -6,6 +6,7 @@ import UsersService from "./users/users.service";
 import PaymentsService from "./payments/payments.service";
 import PropertiesService from "./properties/properties.service";
 import PointsService from "./points/points.service";
+import PointClustersService from "./pointClusters/pointClusters.service";
 import DevicesService from "./devices/devices.service";
 import DeviceTemplatesService from "./deviceTemplates/deviceTemplates.service";
 import LocationsService from "./locations/locations.service";
@@ -124,6 +125,7 @@ export class Juhuu {
     this.paymentRefunds = new PaymentRefundsService(config);
     this.properties = new PropertiesService(config);
     this.points = new PointsService(config);
+    this.pointClusters = new PointClustersService(config);
     this.devices = new DevicesService(config);
     this.deviceTemplates = new DeviceTemplatesService(config);
     this.locations = new LocationsService(config);
@@ -182,6 +184,7 @@ export class Juhuu {
   readonly paymentRefunds: PaymentRefundsService;
   readonly properties: PropertiesService;
   readonly points: PointsService;
+  readonly pointClusters: PointClustersService;
   readonly devices: DevicesService;
   readonly deviceTemplates: DeviceTemplatesService;
   readonly locations: LocationsService;
@@ -1434,6 +1437,83 @@ export namespace JUHUU {
     }
   }
 
+  export namespace PointCluster {
+    export type Object = {
+      id: string;
+      readonly object: "pointCluster";
+      version: number;
+      propertyId: string;
+      name: string;
+      description: string | null;
+      purposeArray: Purpose[];
+    };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        name: string;
+        description: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        pointCluster: JUHUU.PointCluster.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = JUHUU.PointCluster.Object[];
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        pointClusterId: string;
+      };
+
+      export type Options = {
+        expand?: Array<"property">;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        pointCluster: JUHUU.PointCluster.Object;
+        property?: JUHUU.Property.Object;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        pointClusterId: string;
+        name?: string;
+        description?: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        pointCluster: JUHUU.PointCluster.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        pointClusterId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        pointCluster: JUHUU.PointCluster.Object;
+      };
+    }
+  }
+
   export namespace ApiKey {
     export type Object = {
       id: string;
@@ -2485,9 +2565,9 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
-        invalidAt?: Date | null;
         referenceObject?: "location" | "panel";
         referenceObjectId?: string;
+        pointClusterId?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;
