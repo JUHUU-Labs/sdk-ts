@@ -6319,6 +6319,11 @@ export namespace JUHUU {
       colorScheme: ColorScheme | null;
       appIconLight: string | null;
       appIconDark: string | null;
+      splashScreenImageLight: string | null;
+      splashScreenImageDark: string | null;
+      pointClusterId: string | null;
+      mapboxStyleUrlLight: string | null;
+      mapboxStyleUrlDark: string | null;
       status: AppStatus;
     };
 
@@ -6374,6 +6379,11 @@ export namespace JUHUU {
         colorScheme?: ColorScheme | null;
         appIconLight?: string | null;
         appIconDark?: string | null;
+        splashScreenImageLight?: string | null;
+        splashScreenImageDark?: string | null;
+        pointClusterId?: string | null;
+        mapboxStyleUrlLight?: string | null;
+        mapboxStyleUrlDark?: string | null;
         status?: AppStatus;
       };
       export type Options = JUHUU.RequestOptions;

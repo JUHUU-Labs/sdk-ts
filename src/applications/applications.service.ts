@@ -80,6 +80,12 @@ export default class ApplicationsService extends Service {
           colorScheme: ApplicationUpdateParams.colorScheme,
           appIconLight: ApplicationUpdateParams.appIconLight,
           appIconDark: ApplicationUpdateParams.appIconDark,
+          splashScreenImageLight:
+            ApplicationUpdateParams.splashScreenImageLight,
+          splashScreenImageDark: ApplicationUpdateParams.splashScreenImageDark,
+          pointClusterId: ApplicationUpdateParams.pointClusterId,
+          mapboxStyleUrlLight: ApplicationUpdateParams.mapboxStyleUrlLight,
+          mapboxStyleUrlDark: ApplicationUpdateParams.mapboxStyleUrlDark,
           status: ApplicationUpdateParams.status,
         },
         authenticationNotOptional: true,
