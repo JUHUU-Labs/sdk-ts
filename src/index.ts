@@ -2592,6 +2592,7 @@ export namespace JUHUU {
         iconLight?: string | null;
         iconDark?: string | null;
         visualPriority?: VisualPriority;
+        pointClusterId?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;

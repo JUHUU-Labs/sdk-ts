@@ -87,6 +87,7 @@ export default class PointsService extends Service {
           iconLight: PointCreateParams.iconLight,
           iconDark: PointCreateParams.iconDark,
           visualPriority: PointCreateParams.visualPriority,
+          pointClusterId: PointCreateParams.pointClusterId,
         },
         authenticationNotOptional: true,
       },
