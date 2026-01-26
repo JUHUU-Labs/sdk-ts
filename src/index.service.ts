@@ -14,6 +14,8 @@ export default class Service {
       config.getRefreshToken ?? (() => Promise.resolve(null));
     this.logger = config.logger ?? (() => {});
     this.clientVersion = config.clientVersion;
+    this.applicationId = config.applicationId ?? null;
+    this.applicationVersionId = config.applicationVersionId ?? null;
     this.apiKey = config.apiKey ?? null;
     this.defaultRequestOptions = config.defaultRequestOptions ?? {};
     this.authenticationMode = config.authenticationMode ?? "jwt";
@@ -43,6 +45,8 @@ export default class Service {
   readonly httpBaseUrl: string;
   readonly wssBaseUrl: string;
   readonly clientVersion: string;
+  readonly applicationId: string | null;
+  readonly applicationVersionId: string | null;
   readonly apiKey: string | null;
   readonly defaultRequestOptions: JUHUU.RequestOptions;
   readonly authenticationMode: "jwt" | "apiKey";
@@ -363,6 +367,14 @@ export default class Service {
       headers["X-API-KEY"] = apiKey;
     }
 
+    if (this.applicationId !== null) {
+      headers["X-Application-Id"] = this.applicationId;
+    }
+
+    if (this.applicationVersionId !== null) {
+      headers["X-Application-Version-Id"] = this.applicationVersionId;
+    }
+
     return await fetch(uri, {
       method: "GET",
       headers,
@@ -391,6 +403,14 @@ export default class Service {
 
     if (apiKey !== null) {
       headers["X-API-KEY"] = apiKey;
+    }
+
+    if (this.applicationId !== null) {
+      headers["X-Application-Id"] = this.applicationId;
+    }
+
+    if (this.applicationVersionId !== null) {
+      headers["X-Application-Version-Id"] = this.applicationVersionId;
     }
 
     return await fetch(uri, {
@@ -424,6 +444,14 @@ export default class Service {
       headers["X-API-KEY"] = apiKey;
     }
 
+    if (this.applicationId !== null) {
+      headers["X-Application-Id"] = this.applicationId;
+    }
+
+    if (this.applicationVersionId !== null) {
+      headers["X-Application-Version-Id"] = this.applicationVersionId;
+    }
+
     return await fetch(uri, {
       method: "PATCH",
       headers,
@@ -451,6 +479,14 @@ export default class Service {
 
     if (apiKey !== null) {
       headers["X-API-KEY"] = apiKey;
+    }
+
+    if (this.applicationId !== null) {
+      headers["X-Application-Id"] = this.applicationId;
+    }
+
+    if (this.applicationVersionId !== null) {
+      headers["X-Application-Version-Id"] = this.applicationVersionId;
     }
 
     return await fetch(uri, {

@@ -399,6 +399,8 @@ export namespace JUHUU {
     setRefreshToken?: (refreshToken: string) => Promise<void>;
     logger?: (message: string, ...args: any[]) => void;
     clientVersion: string;
+    applicationId?: string;
+    applicationVersionId?: string;
     apiKey?: string;
     defaultRequestOptions?: JUHUU.RequestOptions;
     authenticationMode?: "jwt" | "apiKey";
