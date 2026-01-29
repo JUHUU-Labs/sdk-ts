@@ -78,6 +78,7 @@ export default class PointsService extends Service {
         url: "points",
         body: {
           propertyId: PointCreateParams.propertyId,
+          name: PointCreateParams.name,
           referenceObject: PointCreateParams.referenceObject,
           referenceObjectId: PointCreateParams.referenceObjectId,
           longitude: PointCreateParams.longitude,
@@ -119,6 +120,7 @@ export default class PointsService extends Service {
         method: "PATCH",
         url: "points/" + PointUpdateParams.pointId,
         body: {
+          name: PointUpdateParams.name,
           latitude: PointUpdateParams.latitude,
           longitude: PointUpdateParams.longitude,
           altitudeRange: PointUpdateParams.altitudeRange,

@@ -16,6 +16,7 @@ export default class ApplicationsService extends Service {
         url: "applications",
         body: {
           propertyId: ApplicationCreateParams.propertyId,
+          name: ApplicationCreateParams.name,
           colorScheme: ApplicationCreateParams.colorScheme,
           appIconLight: ApplicationCreateParams.appIconLight,
           appIconDark: ApplicationCreateParams.appIconDark,
@@ -77,6 +78,7 @@ export default class ApplicationsService extends Service {
         method: "PATCH",
         url: "applications/" + ApplicationUpdateParams.applicationId,
         body: {
+          name: ApplicationUpdateParams.name,
           colorScheme: ApplicationUpdateParams.colorScheme,
           appIconLight: ApplicationUpdateParams.appIconLight,
           appIconDark: ApplicationUpdateParams.appIconDark,

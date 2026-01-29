@@ -2530,6 +2530,7 @@ export namespace JUHUU {
     type Base = {
       id: string;
       readonly object: "point";
+      name: string | null;
       location: GeoPoint;
       altitudeRange: [number, number]; // from, to
       invalidAt: Date | null;
@@ -2589,6 +2590,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
+        name?: string | null;
         referenceObject: "location" | "panel";
         referenceObjectId?: string | null;
         latitude?: number | null;
@@ -2623,6 +2625,7 @@ export namespace JUHUU {
     export namespace Update {
       export type Params = {
         pointId: string;
+        name?: string | null;
         latitude?: number;
         longitude?: number;
         altitudeRange?: [number, number];
@@ -6321,6 +6324,7 @@ export namespace JUHUU {
       version: number;
       readonly object: "application";
       readonly objectType: "dto";
+      name: string;
       propertyId: string;
       colorScheme: ColorScheme | null;
       appIconLight: string | null;
@@ -6330,6 +6334,8 @@ export namespace JUHUU {
       pointClusterId: string | null;
       mapboxStyleUrlLight: string | null;
       mapboxStyleUrlDark: string | null;
+      fontUrlTitle: string | null;
+      fontUrlBody: string | null;
       status: AppStatus;
     };
 
@@ -6346,6 +6352,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
+        name: string;
         colorScheme?: ColorScheme | null;
         appIconLight?: string | null;
         appIconDark?: string | null;
@@ -6382,6 +6389,7 @@ export namespace JUHUU {
     export namespace Update {
       export type Params = {
         applicationId: string;
+        name?: string;
         colorScheme?: ColorScheme | null;
         appIconLight?: string | null;
         appIconDark?: string | null;
