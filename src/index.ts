@@ -2634,6 +2634,9 @@ export namespace JUHUU {
         iconDark?: string | null;
         visualPriority?: VisualPriority;
         invalidAt?: Date | null;
+        referenceObject?: "location" | "panel";
+        referenceObjectId?: string | null;
+        pointClusterId?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;
