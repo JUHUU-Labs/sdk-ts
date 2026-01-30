@@ -288,6 +288,11 @@ export type License =
 
 export type ApiKeyScope = "device:parameter:update";
 
+export type TimePeriod = {
+    startAt: Date;
+    endAt: Date;
+};
+
 export type Capability =
   | {
       type: "predictiveMaintenance";

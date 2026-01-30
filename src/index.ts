@@ -76,6 +76,7 @@ import {
   SessionStatus,
   AuthMethodType,
   PhoneCountryCode,
+  TimePeriod
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -744,7 +745,9 @@ export namespace JUHUU {
 
       export type Response = {
         available: boolean;
-        conflictingSessions: JUHUU.Session.Object[];
+        conflictingSessionIdArray : string[];
+        blockedTimePeriodArray : TimePeriod[];
+        // conflictingSessions: JUHUU.Session.Object[];
       };
     }
   }
