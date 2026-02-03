@@ -18,6 +18,7 @@ export default class PointsService extends Service {
       "latitudeTopLeft=" + PointListParams.latitudeTopLeft,
       "longitudeBottomRight=" + PointListParams.longitudeBottomRight,
       "latitudeBottomRight=" + PointListParams.latitudeBottomRight,
+      "pointClusterId=" + (PointListParams.pointClusterId ?? undefined),
     ];
 
     return await super.sendRequest<JUHUU.Point.Map.Response>(

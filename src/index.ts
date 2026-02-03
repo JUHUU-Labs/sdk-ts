@@ -75,7 +75,7 @@ import {
   SessionStatus,
   AuthMethodType,
   PhoneCountryCode,
-  TimePeriod
+  TimePeriod,
 } from "./types/types";
 import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
@@ -741,8 +741,8 @@ export namespace JUHUU {
 
       export type Response = {
         available: boolean;
-        conflictingSessionIdArray : string[];
-        blockedTimePeriodArray : TimePeriod[];
+        conflictingSessionIdArray: string[];
+        blockedTimePeriodArray: TimePeriod[];
         // conflictingSessions: JUHUU.Session.Object[];
       };
     }
@@ -2453,6 +2453,7 @@ export namespace JUHUU {
         latitudeTopLeft: number;
         longitudeBottomRight: number;
         latitudeBottomRight: number;
+        pointClusterId?: string | null;
       };
 
       export type Options = JUHUU.RequestOptions;
