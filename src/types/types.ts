@@ -263,29 +263,6 @@ export type ApiKeyStatus = "enabled" | "disabled";
 
 export type FlowStatus = "error" | "ready";
 
-export type License =
-  | {
-      type: "url";
-      validUntil: Date | null; // if null, the license is valid forever
-      licenseTemplateId: string;
-    }
-  | {
-      type: "regex";
-      validUntil: Date | null; // if null, the license is valid forever
-      licenseTemplateId: string;
-    }
-  | {
-      type: "card";
-      validUntil: Date | null; // if null, the license is valid forever
-      licenseTemplateId: string;
-      cardId: string;
-    }
-  | {
-      type: "automatic";
-      validUntil: Date | null; // if null, the license is valid forever
-      licenseTemplateId: string;
-    };
-
 export type ApiKeyScope = "device:parameter:update";
 
 export type TimePeriod = {
@@ -315,16 +292,6 @@ export type Capability =
 
 export interface Offer {
   tariffId: string;
-  licenseTemplateIdArray?: string[];
-
-  /**
-   * Array of arrays of licenseTemplateIds
-   * The first array is and "or" and the second array is an "and" condition.
-   * Example: [["licenseTemplateId1", "licenseTemplateId2"], ["licenseTemplateId3", "licenseTemplateId4"]]
-   * This would mean that the offer is only valid if the user has either (licenseTemplateId1 and licenseTemplateId2) or (licenseTemplateId3 and licenseTemplateId4)
-   * If the user does not own a license the app will guide the user to acquire the necessary licenses in the order of the array.
-   */
-  licenseTemplateCascadeArray?: string[][];
   offerTime: OfferTime;
 
   flowId?: string | null;
@@ -560,8 +527,7 @@ export type PermissionTypes =
   | "PaymentManagement"
   | "LocationManagement"
   | "LinkManagement"
-  | "TermsManagement"
-  | "LicenseManagement";
+  | "TermsManagement";
 
 export interface CustomClaims {
   UserManagement: boolean;
@@ -573,7 +539,6 @@ export interface CustomClaims {
   PaymentManagement: boolean;
   LocationManagement: boolean;
   LinkManagement: boolean;
-  LicenseManagement: boolean;
   TermsManagement: boolean;
 }
 
@@ -583,11 +548,6 @@ export interface Address {
   postalCode: string;
   country: CountryCode;
   city: string;
-}
-
-export interface LicenseTariffIdMap {
-  tarifId: string;
-  licenseId: string;
 }
 
 export interface PostingRow {
@@ -1774,7 +1734,6 @@ export interface UserCreateBlock extends BaseBlock {
   in: {
     name: DataEdgeConnection;
     type: DataEdgeConnection;
-    licenseArray: DataEdgeConnection;
   };
   out: {
     user: DataEdgeConnection;
@@ -1782,14 +1741,12 @@ export interface UserCreateBlock extends BaseBlock {
   data: {
     name?: string | null;
     type?: "standard" | "management" | null;
-    licenseArray?: any[] | null;
   };
 }
 
 export interface UserCreateBlockInputs {
   name?: string | null;
   type: "standard" | "management";
-  licenseArray?: any[] | null;
 }
 
 export interface IncidentRetrieveBlock extends BaseBlock {

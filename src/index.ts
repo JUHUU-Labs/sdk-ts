@@ -35,7 +35,6 @@ import {
   LanguageCode,
   Layout,
   LayoutBlock,
-  License,
   Offer,
   Party,
   PaymentMethod,
@@ -82,7 +81,6 @@ import SettingsService from "./settings/settings.service";
 import AccountingAreasService from "./accountingAreas/accountingAreas.service";
 import PayoutsService from "./payouts/payouts.service";
 import SimsService from "./sims/sims.service";
-import LicenseTemplatesService from "./licenseTemplates/licenseTemplates.service";
 import ArticlesService from "./articles/articles.service";
 import ChatsService from "./chats/chats.service";
 import ChatMessagesService from "./chatMessages/chatMessages.service";
@@ -140,7 +138,6 @@ export class Juhuu {
     this.accountingAreas = new AccountingAreasService(config);
     this.payouts = new PayoutsService(config);
     this.sims = new SimsService(config);
-    this.licenseTemplates = new LicenseTemplatesService(config);
     this.articles = new ArticlesService(config);
     this.chats = new ChatsService(config);
     this.chatMessages = new ChatMessagesService(config);
@@ -200,7 +197,6 @@ export class Juhuu {
   readonly accountingAreas: AccountingAreasService;
   readonly payouts: PayoutsService;
   readonly sims: SimsService;
-  readonly licenseTemplates: LicenseTemplatesService;
   readonly articles: ArticlesService;
   readonly chats: ChatsService;
   readonly chatMessages: ChatMessagesService;
@@ -764,7 +760,6 @@ export namespace JUHUU {
       name: string | null;
       stripeCustomerId: string;
       acceptedTermIdArray: string[];
-      licenseArray: License[];
       languageCode: LanguageCode | null;
       billingAddress: DeepNullable<Address>;
       billingEmail: string | null; // primary email that must never be empty
@@ -811,7 +806,6 @@ export namespace JUHUU {
         type: JUHUU.User.Object["type"];
         name?: string;
         createdByPropertyId: string;
-        licenseArray?: License[];
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -826,9 +820,6 @@ export namespace JUHUU {
         managementUserId?: string;
         createdByPropertyId?: string;
         customerOfPropertyId?: string;
-        license?: {
-          cardId?: string;
-        };
       };
 
       export type Options = {
@@ -2194,114 +2185,6 @@ export namespace JUHUU {
       propertyId: string;
       sessionId: string;
     };
-  }
-
-  export namespace LicenseTemplate {
-    type Base = {
-      id: string;
-      readonly object: "licenseTemplate";
-      name: LocaleString;
-      description: LocaleString;
-      obtainDescription: LocaleString;
-    };
-
-    export interface RegexLicenseTemplate extends Base {
-      type: "regex";
-      regex: string;
-      propertyId: string | null;
-    }
-
-    export interface AutomaticLicenseTemplate extends Base {
-      type: "automatic";
-    }
-
-    export interface UrlLicenseTemplate extends Base {
-      type: "url";
-      url: PlatformString;
-      propertyId: string | null; // if the propertyId is null, the licenseTemplate is managed by the system and can be used by everyone
-      attachRedirectUrl: boolean; // if true, the app or web app will attach a redirect url parameter to the url
-      contentWarning: boolean; // if true, the app displays an alert that the user will be forwarded to a third-party website
-      attachUserId: boolean; // if true, the app attaches the userId to the url
-      attachPropertyId: boolean; // if true, the app attaches the propertyId to the url
-      linkText: LocaleString;
-    }
-
-    export interface StripeIdentityLicenseTemplate extends Base {
-      type: "stripeIdentity";
-      url: string;
-    }
-
-    export type Object =
-      | AutomaticLicenseTemplate
-      | RegexLicenseTemplate
-      | UrlLicenseTemplate
-      | StripeIdentityLicenseTemplate;
-
-    export namespace Create {
-      export type Params = {
-        propertyId: string;
-        name?: LocaleString;
-        type: JUHUU.LicenseTemplate.Object["type"];
-        regex?: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        licenseTemplate: JUHUU.LicenseTemplate.Object;
-      };
-    }
-
-    export namespace Retrieve {
-      export type Params = {
-        licenseTemplateId: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        licenseTemplate: JUHUU.LicenseTemplate.Object;
-        property: JUHUU.Property.Object;
-      };
-    }
-
-    export namespace List {
-      export type Params = {
-        limit?: number;
-        skip?: number;
-        propertyId?: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        licenseTemplateArray: JUHUU.LicenseTemplate.Object[];
-      };
-    }
-
-    export namespace RegexValidate {
-      export type Params = {
-        userId: string;
-        licenseTemplateId: string;
-        text: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = {
-        licenseTemplate: JUHUU.LicenseTemplate.Object;
-      };
-    }
-
-    export namespace Delete {
-      export type Params = {
-        licenseTemplateId: string;
-      };
-
-      export type Options = JUHUU.RequestOptions;
-
-      export type Response = JUHUU.LicenseTemplate.Object;
-    }
   }
 
   export namespace Property {

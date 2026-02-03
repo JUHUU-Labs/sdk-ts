@@ -18,7 +18,6 @@ export default class UsersService extends Service {
           name: UserCreateParams.name,
           type: UserCreateParams.type,
           createdByPropertyId: UserCreateParams.createdByPropertyId,
-          licenseArray: UserCreateParams.licenseArray,
         },
         authenticationNotOptional: true,
       },
@@ -87,10 +86,6 @@ export default class UsersService extends Service {
       queryArray.push(
         "customerOfPropertyId=" + UserListParams.customerOfPropertyId,
       );
-    }
-
-    if (UserListParams?.license?.cardId !== undefined) {
-      queryArray.push("license[cardId]=" + UserListParams?.license?.cardId);
     }
 
     if (UserListOptions?.skip !== undefined) {
