@@ -687,6 +687,9 @@ export interface MapFilter {
 
 export type SessionType = "rent" | "reservation";
 
+export type ModbusFunctionCode = 1 | 2 | 3 | 4; // Read functions
+export type ModbusWriteFunctionCode = 5 | 6 | 15 | 16; // Write functions
+
 export type DeviceType =
   | "BikeBox"
   | "VeloCleanPro"
@@ -1623,6 +1626,18 @@ export interface StartParameterUpdateBlock extends BaseBlock {
   };
 }
 
+export interface StartCronBlock extends BaseBlock {
+  type: "start.cron";
+  in: Record<string, never>;
+  out: {
+    cronExpression: DataEdgeConnection;
+    triggeredAt: DataEdgeConnection;
+  };
+  data: {
+    cronExpression: string;
+  };
+}
+
 // parameter blocks
 export interface ParameterRetrieveBlock extends BaseBlock {
   type: "parameter.retrieve";
@@ -1693,6 +1708,47 @@ export interface SessionRetrieveBlock extends BaseBlock {
 
 export interface SessionRetrieveBlockInputs {
   sessionId: string;
+}
+
+export interface SessionCreateBlock extends BaseBlock {
+  type: "session.create";
+  in: {
+    locationId: DataEdgeConnection;
+    tariffId: DataEdgeConnection;
+    autoRenew: DataEdgeConnection;
+    sessionType: DataEdgeConnection;
+    isOffSession: DataEdgeConnection;
+    userId: DataEdgeConnection;
+    propertyId: DataEdgeConnection;
+    scheduledReadyAt: DataEdgeConnection;
+    metadata: DataEdgeConnection;
+  };
+  out: {
+    session: DataEdgeConnection;
+  };
+  data: {
+    locationId?: string;
+    tariffId?: string;
+    autoRenew?: boolean;
+    sessionType?: SessionType;
+    isOffSession?: boolean;
+    userId?: string;
+    propertyId?: string;
+    scheduledReadyAt?: Date | null;
+    metadata?: Record<string, any>;
+  };
+}
+
+export interface SessionCreateBlockInputs {
+  locationId: string;
+  tariffId: string;
+  autoRenew?: boolean;
+  sessionType?: SessionType;
+  isOffSession?: boolean;
+  userId: string;
+  propertyId?: string;
+  scheduledReadyAt?: Date;
+  metadata?: Record<string, any>;
 }
 
 export interface DeviceRetrieveBlock extends BaseBlock {
@@ -2504,6 +2560,120 @@ export interface MqttSendBlockInputs {
   connectUrl: string;
 }
 
+// RS485 Send
+export interface Rs485SendBlock extends BaseBlock {
+  type: "rs485.send";
+  in: {
+    port: DataEdgeConnection;
+    message: DataEdgeConnection;
+    baudRate: DataEdgeConnection;
+  };
+  out: {
+    success: DataEdgeConnection;
+    response: DataEdgeConnection;
+  };
+  data: {
+    port?: string;
+    message?: string;
+    baudRate?: number;
+  };
+}
+
+export interface Rs485SendBlockInputs {
+  port: string;
+  message: string;
+  baudRate?: number;
+}
+
+// RS485 Buffer
+export interface Rs485BufferBlock extends BaseBlock {
+  type: "rs485.buffer";
+  in: {
+    port: DataEdgeConnection;
+    timeout: DataEdgeConnection;
+  };
+  out: {
+    buffer: DataEdgeConnection;
+    length: DataEdgeConnection;
+  };
+  data: {
+    port?: string;
+    timeout?: number;
+  };
+}
+
+export interface Rs485BufferBlockInputs {
+  port: string;
+  timeout?: number;
+}
+
+// Modbus Read
+export interface ModbusReadBlock extends BaseBlock {
+  type: "modbus.read";
+  in: {
+    port: DataEdgeConnection;
+    slaveAddress: DataEdgeConnection;
+    registerAddress: DataEdgeConnection;
+    count: DataEdgeConnection;
+    functionCode: DataEdgeConnection;
+    baudRate: DataEdgeConnection;
+  };
+  out: {
+    data: DataEdgeConnection;
+    success: DataEdgeConnection;
+  };
+  data: {
+    port?: string;
+    slaveAddress?: number;
+    registerAddress?: number;
+    count?: number;
+    functionCode?: ModbusFunctionCode;
+    baudRate?: number;
+  };
+}
+
+export interface ModbusReadBlockInputs {
+  port: string;
+  slaveAddress: number;
+  registerAddress: number;
+  count: number;
+  functionCode?: ModbusFunctionCode;
+  baudRate?: number;
+}
+
+// Modbus Write
+export interface ModbusWriteBlock extends BaseBlock {
+  type: "modbus.write";
+  in: {
+    port: DataEdgeConnection;
+    slaveAddress: DataEdgeConnection;
+    registerAddress: DataEdgeConnection;
+    values: DataEdgeConnection;
+    functionCode: DataEdgeConnection;
+    baudRate: DataEdgeConnection;
+  };
+  out: {
+    success: DataEdgeConnection;
+  };
+  data: {
+    port?: string;
+    slaveAddress?: number;
+    registerAddress?: number;
+    values?: number[];
+    functionCode?: ModbusWriteFunctionCode;
+    baudRate?: number;
+  };
+}
+
+export interface ModbusWriteBlockInputs {
+  port: string;
+  slaveAddress: number;
+  registerAddress: number;
+  values: number[];
+  functionCode?: ModbusWriteFunctionCode;
+  baudRate?: number;
+}
+
 export interface FlowExecuteBlock extends BaseBlock {
   type: "flow.execute";
   in: {
@@ -2633,6 +2803,7 @@ export type FlowBlock =
   | StartSessionUpdateBlock
   | StartLocationUpdateBlock
   | StartParameterUpdateBlock
+  | StartCronBlock
   | ConstNumberBlock
   | ConstTextBlock
   | ConstBooleanBlock
@@ -2648,6 +2819,7 @@ export type FlowBlock =
   | PropertyRetrieveBlock
   | LocationRetrieveBlock
   | SessionRetrieveBlock
+  | SessionCreateBlock
   | DeviceRetrieveBlock
   | UserRetrieveBlock
   | UserCreateBlock
@@ -2674,6 +2846,10 @@ export type FlowBlock =
   | HttpDeleteBlock
   | HttpPutBlock
   | MqttSendBlock
+  | Rs485SendBlock
+  | Rs485BufferBlock
+  | ModbusReadBlock
+  | ModbusWriteBlock
   | FlowExecuteBlock
   | VariableSetBlock
   | VariableGetBlock
@@ -2690,6 +2866,7 @@ export type FlowBlockInput =
   | PropertyRetrieveBlockInputs
   | LocationRetrieveBlockInputs
   | SessionRetrieveBlockInputs
+  | SessionCreateBlockInputs
   | DeviceRetrieveBlockInputs
   | UserRetrieveBlockInputs
   | UserCreateBlockInputs
@@ -2714,6 +2891,10 @@ export type FlowBlockInput =
   | HttpDeleteBlockInputs
   | HttpPutBlockInputs
   | MqttSendBlockInputs
+  | Rs485SendBlockInputs
+  | Rs485BufferBlockInputs
+  | ModbusReadBlockInputs
+  | ModbusWriteBlockInputs
   | FlowExecuteBlockInputs
   | MapDestructureBlockInputs
   | MapConstructBlockInputs

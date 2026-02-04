@@ -5,6 +5,7 @@ import {
   FlowBlock,
   FlowEdge,
   StartCustomBlock,
+  StartCronBlock,
   IfBlock,
   EndCustomBlock,
   FlowExecuteBlock,
@@ -27,6 +28,11 @@ import {
   MathMultiplyBlock,
   MathDivideBlock,
   BlockExecutor,
+  SessionCreateBlock,
+  Rs485SendBlock,
+  Rs485BufferBlock,
+  ModbusReadBlock,
+  ModbusWriteBlock,
 } from "../types/types";
 
 export default class FlowsService extends Service {
@@ -229,6 +235,16 @@ export default class FlowsService extends Service {
 
       return {
         output: outputs,
+      };
+    },
+
+    "start.cron": async (_inputs, block) => {
+      const fb = block as StartCronBlock;
+      return {
+        output: {
+          cronExpression: fb.data.cronExpression,
+          triggeredAt: new Date().toISOString(),
+        },
       };
     },
 
