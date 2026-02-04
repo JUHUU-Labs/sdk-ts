@@ -8,7 +8,7 @@ export default class TariffsService extends Service {
 
   async create(
     TariffCreateParams: JUHUU.Tariff.Create.Params,
-    TariffCreateOptions?: JUHUU.Tariff.Create.Options
+    TariffCreateOptions?: JUHUU.Tariff.Create.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.Create.Response>> {
     return await super.sendRequest<JUHUU.Tariff.Create.Response>(
       {
@@ -21,16 +21,19 @@ export default class TariffsService extends Service {
           amount: TariffCreateParams.amount,
           continue: TariffCreateParams.continue,
           name: TariffCreateParams.name,
+          secondsToPay: TariffCreateParams.secondsToPay,
+          maximumScheduledReadyAtSeconds:
+            TariffCreateParams.maximumScheduledReadyAtSeconds,
         },
         authenticationNotOptional: true,
       },
-      TariffCreateOptions
+      TariffCreateOptions,
     );
   }
 
   async retrieve(
     TariffRetrieveParams: JUHUU.Tariff.Retrieve.Params,
-    TariffRetrieveOptions?: JUHUU.Tariff.Retrieve.Options
+    TariffRetrieveOptions?: JUHUU.Tariff.Retrieve.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.Retrieve.Response>> {
     const queryArray: string[] = [];
 
@@ -49,13 +52,13 @@ export default class TariffsService extends Service {
         body: undefined,
         authenticationNotOptional: false,
       },
-      TariffRetrieveOptions
+      TariffRetrieveOptions,
     );
   }
 
   async list(
     TariffListParams: JUHUU.Tariff.List.Params,
-    TariffListOptions?: JUHUU.Tariff.List.Options
+    TariffListOptions?: JUHUU.Tariff.List.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.List.Response>> {
     const queryArray: string[] = [];
 
@@ -70,13 +73,13 @@ export default class TariffsService extends Service {
         body: undefined,
         authenticationNotOptional: false,
       },
-      TariffListOptions
+      TariffListOptions,
     );
   }
 
   async update(
     TariffUpdateParams: JUHUU.Tariff.Update.Params,
-    TariffUpdateOptions?: JUHUU.Tariff.Update.Options
+    TariffUpdateOptions?: JUHUU.Tariff.Update.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.Update.Response>> {
     return await super.sendRequest<JUHUU.Tariff.Update.Response>(
       {
@@ -98,7 +101,7 @@ export default class TariffsService extends Service {
         },
         authenticationNotOptional: true,
       },
-      TariffUpdateOptions
+      TariffUpdateOptions,
     );
   }
 
@@ -140,7 +143,7 @@ export default class TariffsService extends Service {
    */
   calculateAmount(
     tariff: JUHUU.Tariff.Object,
-    rentTimeSeconds: number
+    rentTimeSeconds: number,
   ): number {
     if (this.isFree(tariff) === true) {
       return 0;
@@ -201,7 +204,7 @@ export default class TariffsService extends Service {
 
   async delete(
     TariffDeleteParams: JUHUU.Tariff.Delete.Params,
-    TariffDeleteOptions?: JUHUU.Tariff.Delete.Options
+    TariffDeleteOptions?: JUHUU.Tariff.Delete.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Tariff.Delete.Response>> {
     return await super.sendRequest<JUHUU.Tariff.Delete.Response>(
       {
@@ -210,7 +213,7 @@ export default class TariffsService extends Service {
         authenticationNotOptional: true,
         body: undefined,
       },
-      TariffDeleteOptions
+      TariffDeleteOptions,
     );
   }
 }
