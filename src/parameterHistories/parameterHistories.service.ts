@@ -20,12 +20,36 @@ export default class ParameterHistoriesService extends Service {
       queryArray.push("parameterId=" + ParameterHistoryListParams.parameterId);
     }
 
-    if (ParameterHistoryListOptions?.limit !== undefined) {
-      queryArray.push("limit=" + ParameterHistoryListOptions.limit);
+    if (ParameterHistoryListParams?.cursor !== undefined) {
+      queryArray.push("cursor=" + ParameterHistoryListParams.cursor);
     }
 
-    if (ParameterHistoryListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + ParameterHistoryListOptions.skip);
+    if (ParameterHistoryListParams?.createdAt?.gte !== undefined) {
+      queryArray.push(
+        "createdAt[gte]=" + ParameterHistoryListParams.createdAt.gte
+      );
+    }
+
+    if (ParameterHistoryListParams?.createdAt?.lte !== undefined) {
+      queryArray.push(
+        "createdAt[lte]=" + ParameterHistoryListParams.createdAt.lte
+      );
+    }
+
+    if (ParameterHistoryListParams?.createdAt?.gt !== undefined) {
+      queryArray.push(
+        "createdAt[gt]=" + ParameterHistoryListParams.createdAt.gt
+      );
+    }
+
+    if (ParameterHistoryListParams?.createdAt?.lt !== undefined) {
+      queryArray.push(
+        "createdAt[lt]=" + ParameterHistoryListParams.createdAt.lt
+      );
+    }
+
+    if (ParameterHistoryListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + ParameterHistoryListOptions.limit);
     }
 
     return await super.sendRequest<JUHUU.ParameterHistory.List.Response>(

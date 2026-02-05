@@ -4162,10 +4162,16 @@ export namespace JUHUU {
       export type Params = {
         propertyId?: string;
         parameterId?: string;
+        cursor?: string;
+        createdAt?: {
+          gte?: number;
+          lte?: number;
+          gt?: number;
+          lt?: number;
+        };
       };
 
       export type Options = {
-        skip?: number;
         limit?: number;
       } & JUHUU.RequestOptions;
 
@@ -4173,6 +4179,7 @@ export namespace JUHUU {
         parameterHistoryArray: JUHUU.ParameterHistory.Object[];
         count: number;
         hasMore: boolean;
+        nextCursor: string | null;
       };
     }
   }
