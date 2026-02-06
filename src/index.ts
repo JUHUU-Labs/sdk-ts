@@ -2094,6 +2094,9 @@ export namespace JUHUU {
       serviceFeeMax: number; // maximum amount of the serviceFee
       shortDescription: LocaleString | null;
       longDescription: LocaleString | null;
+      secondsToPay: number; // timeframe in which the user will be required to pay for the tariff
+      defaultPaymentMethodConfigurationId : string; // Stripe payment configuration ID associated with the tariff from (env specific)
+      maximumScheduledReadyAtSeconds : number; // maximum number of seconds in the future that scheduledReadyAt can be set to during session creation
     };
 
     export namespace Create {
@@ -2104,6 +2107,8 @@ export namespace JUHUU {
         amount?: number[];
         continue?: number;
         currencyCode?: string;
+        secondsToPay?: number;
+        maximumScheduledReadyAtSeconds?: number;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -2673,6 +2678,7 @@ export namespace JUHUU {
         | "userRequest"
         | null;
       postingRowArray: PostingRow[]; // text displayed on the users invoice
+      confirmationDeadlineAt: Date; // deadline date for the payment
     };
 
     export namespace Retrieve {
@@ -2700,6 +2706,8 @@ export namespace JUHUU {
         salesTaxPercentage: number;
         userId: string;
         postingRowArray: PostingRow[];
+        secondsToPay: number;
+        defaultPaymentMethodConfigurationId : string;
       };
 
       export type Options = JUHUU.RequestOptions;

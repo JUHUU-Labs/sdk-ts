@@ -8,7 +8,7 @@ export default class PaymentsService extends Service {
 
   async create(
     PaymentCreateParams: JUHUU.Payment.Create.Params,
-    PaymentCreateOptions?: JUHUU.Payment.Create.Options
+    PaymentCreateOptions?: JUHUU.Payment.Create.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Payment.Create.Response>> {
     return await super.sendRequest<JUHUU.Payment.Create.Response>(
       {
@@ -23,16 +23,19 @@ export default class PaymentsService extends Service {
           salesTaxPercentage: PaymentCreateParams.salesTaxPercentage,
           userId: PaymentCreateParams.userId,
           postingRowArray: PaymentCreateParams.postingRowArray,
+          secondsToPay: PaymentCreateParams.secondsToPay,
+          defaultPaymentMethodConfigurationId:
+            PaymentCreateParams.defaultPaymentMethodConfigurationId,
         },
         authenticationNotOptional: true,
       },
-      PaymentCreateOptions
+      PaymentCreateOptions,
     );
   }
 
   async list(
     PaymentListParams: JUHUU.Payment.List.Params,
-    PaymentListOptions?: JUHUU.Payment.List.Options
+    PaymentListOptions?: JUHUU.Payment.List.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Payment.List.Response>> {
     const queryArray: string[] = [];
 
@@ -71,13 +74,13 @@ export default class PaymentsService extends Service {
         body: undefined,
         authenticationNotOptional: true,
       },
-      PaymentListOptions
+      PaymentListOptions,
     );
   }
 
   async retrieve(
     PaymentRetrieveParams: JUHUU.Payment.Retrieve.Params,
-    PaymentRetrieveOptions?: JUHUU.Payment.Retrieve.Options
+    PaymentRetrieveOptions?: JUHUU.Payment.Retrieve.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Payment.Retrieve.Response>> {
     const queryArray: string[] = [];
 
@@ -99,13 +102,13 @@ export default class PaymentsService extends Service {
 
   async search(
     PaymentSearchParams: JUHUU.Payment.Search.Params,
-    PaymentSearchOptions?: JUHUU.Payment.Search.Options
+    PaymentSearchOptions?: JUHUU.Payment.Search.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Payment.Search.Response>> {
     const queryArray: string[] = [];
 
     if (PaymentSearchParams.providerPaymentId !== undefined) {
       queryArray.push(
-        "providerPaymentId=" + PaymentSearchParams.providerPaymentId
+        "providerPaymentId=" + PaymentSearchParams.providerPaymentId,
       );
     }
 
@@ -116,13 +119,13 @@ export default class PaymentsService extends Service {
         body: undefined,
         authenticationNotOptional: true,
       },
-      PaymentSearchOptions
+      PaymentSearchOptions,
     );
   }
 
   async tokens(
     PaymentTokensParams: JUHUU.Payment.Tokens.Params,
-    PaymentTokensOptions?: JUHUU.Payment.Tokens.Options
+    PaymentTokensOptions?: JUHUU.Payment.Tokens.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Payment.Tokens.Response>> {
     return await super.sendRequest<JUHUU.Payment.Tokens.Response>(
       {
@@ -131,13 +134,13 @@ export default class PaymentsService extends Service {
         body: undefined,
         authenticationNotOptional: true,
       },
-      PaymentTokensOptions
+      PaymentTokensOptions,
     );
   }
 
   async retrieveInvoiceUrl(
     PaymentRetrieveInvoiceUrlParams: JUHUU.Payment.RetrieveInvoiceUrl.Params,
-    PaymentRetrieveInvoiceUrlOptions?: JUHUU.Payment.RetrieveInvoiceUrl.Options
+    PaymentRetrieveInvoiceUrlOptions?: JUHUU.Payment.RetrieveInvoiceUrl.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Payment.RetrieveInvoiceUrl.Response>> {
     const queryArray: string[] = [];
 
@@ -151,13 +154,13 @@ export default class PaymentsService extends Service {
         body: undefined,
         authenticationNotOptional: true,
       },
-      PaymentRetrieveInvoiceUrlOptions
+      PaymentRetrieveInvoiceUrlOptions,
     );
   }
 
   async capture(
     PaymentCaptureParams: JUHUU.Payment.Capture.Params,
-    PaymentCaptureOptions?: JUHUU.Payment.Capture.Options
+    PaymentCaptureOptions?: JUHUU.Payment.Capture.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Payment.Capture.Response>> {
     return await super.sendRequest<JUHUU.Payment.Capture.Response>(
       {
@@ -169,13 +172,13 @@ export default class PaymentsService extends Service {
         },
         authenticationNotOptional: true,
       },
-      PaymentCaptureOptions
+      PaymentCaptureOptions,
     );
   }
 
   async cancel(
     PaymentCancelParams: JUHUU.Payment.Cancel.Params,
-    PaymentCancelOptions?: JUHUU.Payment.Cancel.Options
+    PaymentCancelOptions?: JUHUU.Payment.Cancel.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Payment.Cancel.Response>> {
     return await super.sendRequest<JUHUU.Payment.Cancel.Response>(
       {
@@ -184,7 +187,7 @@ export default class PaymentsService extends Service {
         body: undefined,
         authenticationNotOptional: true,
       },
-      PaymentCancelOptions
+      PaymentCancelOptions,
     );
   }
 }
