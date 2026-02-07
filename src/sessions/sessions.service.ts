@@ -17,7 +17,6 @@ export default class SessionService extends Service {
         body: {
           locationId: SessionCreateParams.locationId,
           tariffId: SessionCreateParams.tariffId,
-          autoRenew: SessionCreateParams.autoRenew,
           type: SessionCreateParams.sessionType,
           isOffSession: SessionCreateParams.isOffSession,
           userId: SessionCreateParams.userId,
@@ -154,7 +153,7 @@ export default class SessionService extends Service {
         method: "PATCH",
         url: "sessions/" + SessionUpdateParams.sessionId,
         body: {
-          autoRenew: SessionUpdateParams?.autoRenew,
+          metadata: SessionUpdateParams?.metadata,
         },
         authenticationNotOptional: true,
       },
@@ -275,7 +274,6 @@ export default class SessionService extends Service {
 
     queryArray.push("locationId=" + SessionCheckAvailabilityParams.locationId);
     queryArray.push("tariffId=" + SessionCheckAvailabilityParams.tariffId);
-    queryArray.push("autoRenew=" + SessionCheckAvailabilityParams.autoRenew);
 
     if (SessionCheckAvailabilityParams.scheduledReadyAt !== undefined) {
       queryArray.push(

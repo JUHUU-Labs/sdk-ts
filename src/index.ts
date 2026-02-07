@@ -18,7 +18,6 @@ import {
   Address,
   ApiKeyScope,
   ApiKeyStatus,
-  AutoRenewMode,
   Capability,
   Circumstance,
   ColorScheme,
@@ -522,13 +521,10 @@ export namespace JUHUU {
       reminderHandler: "cloudFunction" | "cloudTask" | null; // handler which will remind the user
       reminderExecuted: boolean; // session can be terminated automatically (true) or only by the user (false)}
       timeZone: TimeZone; // timeZone of the device that was rented
-      autoRenewManualEnabled: boolean; // if true; the user can enable autoRenew manually
       manualTerminationEnabled: boolean; // if true; the user can terminate the session manually
       version: number; // new session documents have version number 2.0.0
       isOffSession: boolean; // true if the session was created without the user being online
       tariff: JUHUU.Tariff.Object; // dto of the tariff that was selected on session creation
-      previousAutoRenewSessionId: string | null; // if of the session that had autoRenew enabled before this session
-      autoRenew: boolean; // if true, the session will be autoRenew once it is being termianted
       locationId: string | null; // locationId of the RentableDeviceLocation
       locationName: string | null; // name of the RentableDeviceLocation
       locationGroupId: string | null; // id of the RentableDeviceLocationGroup
@@ -542,8 +538,6 @@ export namespace JUHUU {
       type: "rent";
       managementUserId: string | null;
       deviceIdArray: string[];
-      autoRenew: boolean;
-      previousAutoRenewSessionId: string | null;
       surveyId: string | null;
       surveyEnabled: boolean;
     }
@@ -558,7 +552,6 @@ export namespace JUHUU {
       export type Params = {
         locationId: string;
         tariffId: string;
-        autoRenew: boolean;
         sessionType: Object["type"];
         isOffSession: boolean;
         userId: string;
@@ -636,7 +629,7 @@ export namespace JUHUU {
     export namespace Update {
       export type Params = {
         sessionId: string;
-        autoRenew: boolean;
+        metadata?: Record<string, any>;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -733,7 +726,6 @@ export namespace JUHUU {
       export type Params = {
         locationId: string;
         tariffId: string;
-        autoRenew: boolean;
         scheduledReadyAt?: Date;
       };
 
@@ -2084,9 +2076,7 @@ export namespace JUHUU {
       continue: number;
       interval: number; // in seconds
       duration: number; // number of seconds the session can be active. After this time; the session will be forcefully terminated
-      autoRenewMode: AutoRenewMode; // autoRenewMode has to be the same for all tarifs of the same link
       roundToMidnight: boolean; // if true; the session will be rounded to the next midnight; previously "timeReference"
-      autoRenewManualEnabled: boolean; // if true; the user can enable autoRenew manually
       manualTerminationEnabled: boolean; // if true; the user can terminate the session manually
       salesTaxPercentage: number;
       serviceFeePercentage: number; // once the amount for the tariff is calculated the service fee is also calculated and added to the amount yielding the total amount
@@ -2154,9 +2144,7 @@ export namespace JUHUU {
         interval?: number;
         name?: LocaleString;
         duration?: number;
-        autoRenewMode?: AutoRenewMode;
         roundToMidnight?: boolean;
-        autoRenewManualEnabled?: boolean;
         manualTerminationEnabled?: boolean;
         salesTaxPercentage?: number;
         shortDescription?: LocaleString | null;

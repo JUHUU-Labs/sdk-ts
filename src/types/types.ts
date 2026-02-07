@@ -463,7 +463,6 @@ export interface PayoutSettings {
 
 export interface SessionSettings {
   enabled: boolean;
-  autoRenewEnabled: boolean;
 }
 
 export interface EnvironmentSettings {}
@@ -492,7 +491,6 @@ export type SessionStatus =
   | "waitingForReady"
   | "ready"
   | "completed";
-export type AutoRenewMode = "off" | "optIn" | "optOut" | "on";
 export type RefundStatus = "inTransitToUser" | "succeeded";
 
 export type SessionTerminatedByType =
@@ -1715,7 +1713,6 @@ export interface SessionCreateBlock extends BaseBlock {
   in: {
     locationId: DataEdgeConnection;
     tariffId: DataEdgeConnection;
-    autoRenew: DataEdgeConnection;
     sessionType: DataEdgeConnection;
     isOffSession: DataEdgeConnection;
     userId: DataEdgeConnection;
@@ -1729,7 +1726,6 @@ export interface SessionCreateBlock extends BaseBlock {
   data: {
     locationId?: string;
     tariffId?: string;
-    autoRenew?: boolean;
     sessionType?: SessionType;
     isOffSession?: boolean;
     userId?: string;
@@ -1742,7 +1738,6 @@ export interface SessionCreateBlock extends BaseBlock {
 export interface SessionCreateBlockInputs {
   locationId: string;
   tariffId: string;
-  autoRenew?: boolean;
   sessionType?: SessionType;
   isOffSession?: boolean;
   userId: string;
@@ -2120,14 +2115,12 @@ export interface SessionTerminateBlock extends BaseBlock {
     sessionId: DataEdgeConnection;
     ignoreFlowErrors: DataEdgeConnection;
     shouldRetry: DataEdgeConnection;
-    autoRenewIfAvailable: DataEdgeConnection;
   };
   out: Record<string, never>;
   data: {
     sessionId?: string;
     ignoreFlowErrors?: boolean;
     shouldRetry?: boolean;
-    autoRenewIfAvailable?: boolean;
   };
 }
 
@@ -2135,7 +2128,6 @@ export interface SessionTerminateBlockInputs {
   sessionId: string;
   ignoreFlowErrors: boolean;
   shouldRetry: boolean;
-  autoRenewIfAvailable: boolean;
 }
 export interface SystemLogBlock extends BaseBlock {
   type: "system.log";
