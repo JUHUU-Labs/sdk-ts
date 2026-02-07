@@ -2695,7 +2695,7 @@ export namespace JUHUU {
         userId: string;
         postingRowArray: PostingRow[];
         secondsToPay: number;
-        defaultPaymentMethodConfigurationId : string;
+        defaultPaymentMethodConfigurationId? : string;
       };
 
       export type Options = JUHUU.RequestOptions;
