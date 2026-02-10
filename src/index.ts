@@ -754,6 +754,7 @@ export namespace JUHUU {
       acceptedTermIdArray: string[];
       languageCode: LanguageCode | null;
       billingAddress: DeepNullable<Address>;
+      billingAddressVerified: boolean;
       billingEmail: string | null; // primary email that must never be empty
       billingEmailVerified: boolean;
       billingPhone: string | null; // phone number for OTP authentication
