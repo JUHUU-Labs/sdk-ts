@@ -1636,6 +1636,17 @@ export interface StartCronBlock extends BaseBlock {
   };
 }
 
+export interface StartMqttReceiveBlock extends BaseBlock {
+  type: "start.mqtt.receive";
+  in: Record<string, never>;
+  out: {
+    message: DataEdgeConnection;
+  };
+  data: {
+    mqttTopicId: string | null;
+  };
+}
+
 // parameter blocks
 export interface ParameterRetrieveBlock extends BaseBlock {
   type: "parameter.retrieve";
@@ -2796,6 +2807,7 @@ export type FlowBlock =
   | StartLocationUpdateBlock
   | StartParameterUpdateBlock
   | StartCronBlock
+  | StartMqttReceiveBlock
   | ConstNumberBlock
   | ConstTextBlock
   | ConstBooleanBlock
