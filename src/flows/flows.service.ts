@@ -1,6 +1,8 @@
 import { JUHUU } from "..";
 import Service from "../index.service";
 import jsonLogic from "json-logic-js";
+jsonLogic.add_operation("isNull", (value: any) => value === null || value === undefined);
+jsonLogic.add_operation("isNotNull", (value: any) => value !== null && value !== undefined);
 import {
   FlowBlock,
   FlowEdge,
