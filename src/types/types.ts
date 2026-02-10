@@ -261,13 +261,17 @@ export type FlowExecutionEnvironment =
   | "controlKit";
 export type ApiKeyStatus = "enabled" | "disabled";
 
-export type FlowStatus = "error" | "ready";
+export type FlowStatus =
+  | "error"
+  | "ready"
+  | "disabledByPropertyAdmin"
+  | "disabledBySystem";
 
 export type ApiKeyScope = "device:parameter:update";
 
 export type TimePeriod = {
-    startAt: Date;
-    endAt: Date;
+  startAt: Date;
+  endAt: Date;
 };
 
 export type Capability =
@@ -344,7 +348,7 @@ export type ViewportPolygon = [
   [number, number], // top right
   [number, number], // bottom right
   [number, number], // bottom left
-  [number, number] // top left
+  [number, number], // top left
 ];
 
 export const LanguageCodeArray = [
@@ -2953,7 +2957,7 @@ export type FlowLog = {
 export type BlockExecutor = (
   inputs: FlowBlockInput,
   block: FlowBlock,
-  context: Record<string, any>
+  context: Record<string, any>,
 ) => Promise<{
   output: Record<string, any>;
   logArray?: FlowLog[];
