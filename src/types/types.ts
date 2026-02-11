@@ -2987,15 +2987,23 @@ export type PanelDisplay = "modal" | "dialog" | "screen";
 
 export type AppStatus = "active" | "disabled";
 
+export interface ApplicationIcon {
+  ios: string;
+  android: string;
+  web: string;
+}
+
 export type AppVersionStatus =
-  | "waitingForSigninToBuild"
+  | "waitingForBuildToStart"
   | "waitingForBuildToFinish"
-  | "waitingForSigninToSubmit"
-  | "waitingForReview"
+  | "waitingForSubmitToStart"
+  | "waitingForSubmitToFinish"
   | "waitingForDistribution"
   | "active"
   | "soonDeprecated"
   | "deprecated";
+
+export type AppVersionType = "ios" | "android" | "web";
 
 export interface AdditionalSubscriptionItem {
   stripePriceId: string;

@@ -69,7 +69,9 @@ import {
   PropertyAgreement,
   AdditionalSubscriptionItem,
   AppStatus,
+  ApplicationIcon,
   AppVersionStatus,
+  AppVersionType,
   PlotData,
   SessionStatus,
   AuthMethodType,
@@ -6213,16 +6215,16 @@ export namespace JUHUU {
   }
 
   export namespace Application {
-    export type Base = {
+    export type Object = {
       id: string;
       version: number;
       readonly object: "application";
       readonly objectType: "dto";
+      createdAt: Date;
       name: string;
       propertyId: string;
       colorScheme: ColorScheme | null;
-      appIconLight: string | null;
-      appIconDark: string | null;
+      icon: ApplicationIcon;
       splashScreenImageLight: string | null;
       splashScreenImageDark: string | null;
       pointClusterId: string | null;
@@ -6231,25 +6233,26 @@ export namespace JUHUU {
       fontUrlTitle: string | null;
       fontUrlBody: string | null;
       status: AppStatus;
+      iosBundleIdentifier: string;
+      webTitle: string;
+      androidPackage: string;
+      expoProjectId: string;
+      homescreenName: string;
+      slug: string;
     };
-
-    export interface Android extends Base {
-      type: "android";
-    }
-
-    export interface Ios extends Base {
-      type: "ios";
-    }
-
-    export type Object = Android | Ios;
 
     export namespace Create {
       export type Params = {
         propertyId: string;
         name: string;
         colorScheme?: ColorScheme | null;
-        appIconLight?: string | null;
-        appIconDark?: string | null;
+        icon?: Partial<ApplicationIcon>;
+        iosBundleIdentifier?: string;
+        webTitle?: string;
+        androidPackage?: string;
+        expoProjectId?: string;
+        homescreenName?: string;
+        slug?: string;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -6285,14 +6288,19 @@ export namespace JUHUU {
         applicationId: string;
         name?: string;
         colorScheme?: ColorScheme | null;
-        appIconLight?: string | null;
-        appIconDark?: string | null;
+        icon?: Partial<ApplicationIcon>;
         splashScreenImageLight?: string | null;
         splashScreenImageDark?: string | null;
         pointClusterId?: string | null;
         mapboxStyleUrlLight?: string | null;
         mapboxStyleUrlDark?: string | null;
         status?: AppStatus;
+        iosBundleIdentifier?: string;
+        webTitle?: string;
+        androidPackage?: string;
+        expoProjectId?: string;
+        homescreenName?: string;
+        slug?: string;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -6311,15 +6319,43 @@ export namespace JUHUU {
   }
 
   export namespace ApplicationVersion {
-    export type Object = {
+    export type Base = {
       id: string;
       version: number;
       readonly object: "applicationVersion";
       readonly objectType: "dto";
+      createdAt: Date;
       applicationId: string;
       propertyId: string;
       status: AppVersionStatus;
+      versionCode: string;
     };
+
+    export interface Ios extends Base {
+      type: "ios";
+    }
+
+    export interface Android extends Base {
+      type: "android";
+    }
+
+    export interface Web extends Base {
+      type: "web";
+    }
+
+    export type Object = Ios | Android | Web;
+
+    export namespace Create {
+      export type Params = {
+        applicationId: string;
+        propertyId: string;
+        type: AppVersionType;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        applicationVersion: JUHUU.ApplicationVersion.Object;
+      };
+    }
 
     export namespace Retrieve {
       export type Params = {
@@ -6342,6 +6378,28 @@ export namespace JUHUU {
         applicationVersionArray: JUHUU.ApplicationVersion.Object[];
         count: number;
         hasMore: boolean;
+      };
+    }
+
+    export namespace Update {
+      export type Params = {
+        applicationVersionId: string;
+        status?: AppVersionStatus;
+        versionCode?: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        applicationVersion: JUHUU.ApplicationVersion.Object;
+      };
+    }
+
+    export namespace Delete {
+      export type Params = {
+        applicationVersionId: string;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type Response = {
+        applicationVersion: JUHUU.ApplicationVersion.Object;
       };
     }
   }
