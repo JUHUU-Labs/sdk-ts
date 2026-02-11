@@ -1113,6 +1113,7 @@ export interface PlotData {
     series: Array<{
       groupId: string;
       isOutlier: boolean;
+      featureName: string;
       points: Array<{
         timestamp: string;
         value: number;
@@ -1136,6 +1137,7 @@ export interface PlotData {
     series: Array<{
       groupId: string;
       groupName: string;
+      featureName: string;
       color: string;
       lineWidth: number;
       dataPoints: Array<[number, number]>; // [timestamp_ms, value]
@@ -1171,7 +1173,7 @@ export interface PlotData {
   } | null;
 
   // Time-series only - null for cross-sectional
-  shapValues: {
+  temporalFeatures: {
     groups: Array<{
       groupId: string;
       isOutlier: boolean;
@@ -1179,7 +1181,7 @@ export interface PlotData {
         featureName: string;
         slope: number;
         maxDrop: number;
-        derivative: number;
+        avg_std: number;
       }>;
     }>;
   } | null;
