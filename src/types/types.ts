@@ -2920,6 +2920,24 @@ export interface NotificationCreateBlockInputs {
   message: LocaleString;
 }
 
+// payment.retrieve block
+export interface PaymentRetrieveBlock extends BaseBlock {
+  type: "payment.retrieve";
+  in: {
+    paymentId: DataEdgeConnection;
+  };
+  out: {
+    payment: DataEdgeConnection;
+  };
+  data: {
+    paymentId?: string;
+  };
+}
+
+export interface PaymentRetrieveBlockInputs {
+  paymentId: string;
+}
+
 // payment.list block
 export interface PaymentListBlock extends BaseBlock {
   type: "payment.list";
@@ -3073,6 +3091,7 @@ export type FlowBlock =
   | DelaySleepBlock
   | EndCustomBlock
   | PaymentCreateBlock
+  | PaymentRetrieveBlock
   | PaymentListBlock
   | NotificationCreateBlock
   | TapkeyUnlockBlock
@@ -3131,6 +3150,7 @@ export type FlowBlockInput =
   | DelaySleepBlockInputs
   | Record<string, unknown>
   | PaymentCreateBlockInputs
+  | PaymentRetrieveBlockInputs
   | PaymentListBlockInputs
   | NotificationCreateBlockInputs
   | TapkeyUnlockBlockInputs
