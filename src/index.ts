@@ -5147,6 +5147,7 @@ export namespace JUHUU {
       reference: string | null;
       text: string | null;
       metadata: Record<string, any>;
+      invalidAt: Date | null;
     };
     export namespace Create {
       export type Params = {
@@ -5199,6 +5200,7 @@ export namespace JUHUU {
         reference?: string | null;
         text?: string | null;
         metadata?: Record<string, any>;
+        invalidAt?: Date | null;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {

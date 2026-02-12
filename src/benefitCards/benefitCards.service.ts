@@ -98,6 +98,7 @@ export default class BenefitCardsService extends Service {
           reference: params.reference,
           text: params.text,
           metadata: params.metadata,
+          invalidAt: params.invalidAt,
         },
         authenticationNotOptional: true,
       },

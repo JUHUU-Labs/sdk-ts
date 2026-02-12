@@ -1908,6 +1908,7 @@ export interface BenefitCardUpdateBlock extends BaseBlock {
     reference: DataEdgeConnection;
     text: DataEdgeConnection;
     metadata: DataEdgeConnection;
+    invalidAt: DataEdgeConnection;
   };
   out: {
     beforeBenefitCard: DataEdgeConnection;
@@ -1921,6 +1922,7 @@ export interface BenefitCardUpdateBlock extends BaseBlock {
     reference?: string | null;
     text?: string | null;
     metadata?: Record<string, any>;
+    invalidAt?: Date | null;
   };
 }
 
@@ -1931,6 +1933,7 @@ export interface BenefitCardUpdateBlockInputs {
   reference?: string | null;
   text?: string | null;
   metadata?: Record<string, any>;
+  invalidAt?: Date | null;
 }
 
 export interface TextMatchBlock extends BaseBlock {
@@ -2805,6 +2808,225 @@ export interface PaymentCreateBlockInputs {
   postingRowArray?: PostingRow[] | null;
 }
 
+// Frontend/device-only blocks (throw BadRequestException on backend)
+export interface TapkeyUnlockBlock extends BaseBlock {
+  type: "tapkey.unlock";
+  in: {
+    deviceId: DataEdgeConnection;
+  };
+  out: {
+    result: DataEdgeConnection;
+  };
+  data: {
+    deviceId?: string;
+  };
+}
+
+export interface TapkeyUnlockBlockInputs {
+  deviceId: string;
+}
+
+export interface EmzUnlockBlock extends BaseBlock {
+  type: "emz.unlock";
+  in: {
+    deviceId: DataEdgeConnection;
+  };
+  out: {
+    result: DataEdgeConnection;
+  };
+  data: {
+    deviceId?: string;
+  };
+}
+
+export interface EmzUnlockBlockInputs {
+  deviceId: string;
+}
+
+export interface UiAlertBlock extends BaseBlock {
+  type: "ui.alert";
+  in: {
+    title: DataEdgeConnection;
+    message: DataEdgeConnection;
+    buttonArray: DataEdgeConnection;
+  };
+  out: {
+    result: DataEdgeConnection;
+  };
+  data: {
+    title?: string;
+    message?: string;
+    buttonArray?: string[];
+  };
+}
+
+export interface UiAlertBlockInputs {
+  title: string;
+  message: string;
+  buttonArray: string[];
+}
+
+export interface UiBrowserOpenBlock extends BaseBlock {
+  type: "ui.browser.open";
+  in: {
+    url: DataEdgeConnection;
+  };
+  out: Record<string, never>;
+  data: {
+    url?: string;
+  };
+}
+
+export interface UiBrowserOpenBlockInputs {
+  url: string;
+}
+
+export interface UiPhoneOpenBlock extends BaseBlock {
+  type: "ui.phone.open";
+  in: {
+    phone: DataEdgeConnection;
+  };
+  out: Record<string, never>;
+  data: {
+    phone?: string;
+  };
+}
+
+export interface UiPhoneOpenBlockInputs {
+  phone: string;
+}
+
+// notification.create block
+export interface NotificationCreateBlock extends BaseBlock {
+  type: "notification.create";
+  in: {
+    userId: DataEdgeConnection;
+    subject: DataEdgeConnection;
+    message: DataEdgeConnection;
+  };
+  out: {
+    notification: DataEdgeConnection;
+  };
+  data: {
+    userId?: string;
+    subject?: LocaleString;
+    message?: LocaleString;
+  };
+}
+
+export interface NotificationCreateBlockInputs {
+  userId: string;
+  subject: LocaleString;
+  message: LocaleString;
+}
+
+// payment.retrieve block
+export interface PaymentRetrieveBlock extends BaseBlock {
+  type: "payment.retrieve";
+  in: {
+    paymentId: DataEdgeConnection;
+  };
+  out: {
+    payment: DataEdgeConnection;
+  };
+  data: {
+    paymentId?: string;
+  };
+}
+
+export interface PaymentRetrieveBlockInputs {
+  paymentId: string;
+}
+
+// payment.list block
+export interface PaymentListBlock extends BaseBlock {
+  type: "payment.list";
+  in: {
+    userId: DataEdgeConnection;
+    limit: DataEdgeConnection;
+    skip: DataEdgeConnection;
+  };
+  out: {
+    paymentArray: DataEdgeConnection;
+    count: DataEdgeConnection;
+    hasMore: DataEdgeConnection;
+  };
+  data: {
+    userId?: string;
+    limit?: number;
+    skip?: number;
+  };
+}
+
+export interface PaymentListBlockInputs {
+  userId?: string;
+  limit?: number;
+  skip?: number;
+}
+
+// start.payment.update block
+export interface StartPaymentUpdateBlock extends BaseBlock {
+  type: "start.payment.update";
+  in: Record<string, never>;
+  out: {
+    before: DataEdgeConnection;
+    after: DataEdgeConnection;
+    changedFields: DataEdgeConnection;
+  };
+}
+
+// user.list block
+export interface UserListBlock extends BaseBlock {
+  type: "user.list";
+  in: {
+    limit: DataEdgeConnection;
+    skip: DataEdgeConnection;
+  };
+  out: {
+    userArray: DataEdgeConnection;
+    count: DataEdgeConnection;
+    hasMore: DataEdgeConnection;
+  };
+  data: {
+    limit?: number;
+    skip?: number;
+  };
+}
+
+export interface UserListBlockInputs {
+  limit?: number;
+  skip?: number;
+}
+
+// session.list block
+export interface SessionListBlock extends BaseBlock {
+  type: "session.list";
+  in: {
+    userId: DataEdgeConnection;
+    locationId: DataEdgeConnection;
+    limit: DataEdgeConnection;
+    skip: DataEdgeConnection;
+  };
+  out: {
+    sessionArray: DataEdgeConnection;
+    count: DataEdgeConnection;
+    hasMore: DataEdgeConnection;
+  };
+  data: {
+    userId?: string;
+    locationId?: string;
+    limit?: number;
+    skip?: number;
+  };
+}
+
+export interface SessionListBlockInputs {
+  userId?: string;
+  locationId?: string;
+  limit?: number;
+  skip?: number;
+}
+
 // The union of all block types:
 export type FlowBlock =
   | StartCustomBlock
@@ -2814,6 +3036,7 @@ export type FlowBlock =
   | StartParameterUpdateBlock
   | StartCronBlock
   | StartMqttReceiveBlock
+  | StartPaymentUpdateBlock
   | ConstNumberBlock
   | ConstTextBlock
   | ConstBooleanBlock
@@ -2830,9 +3053,11 @@ export type FlowBlock =
   | LocationRetrieveBlock
   | SessionRetrieveBlock
   | SessionCreateBlock
+  | SessionListBlock
   | DeviceRetrieveBlock
   | UserRetrieveBlock
   | UserCreateBlock
+  | UserListBlock
   | IncidentRetrieveBlock
   | BenefitCardRetrieveBlock
   | BenefitCardListBlock
@@ -2865,7 +3090,15 @@ export type FlowBlock =
   | VariableGetBlock
   | DelaySleepBlock
   | EndCustomBlock
-  | PaymentCreateBlock;
+  | PaymentCreateBlock
+  | PaymentRetrieveBlock
+  | PaymentListBlock
+  | NotificationCreateBlock
+  | TapkeyUnlockBlock
+  | EmzUnlockBlock
+  | UiAlertBlock
+  | UiBrowserOpenBlock
+  | UiPhoneOpenBlock;
 
 export type FlowBlockInput =
   | MathAddBlockInputs
@@ -2877,9 +3110,11 @@ export type FlowBlockInput =
   | LocationRetrieveBlockInputs
   | SessionRetrieveBlockInputs
   | SessionCreateBlockInputs
+  | SessionListBlockInputs
   | DeviceRetrieveBlockInputs
   | UserRetrieveBlockInputs
   | UserCreateBlockInputs
+  | UserListBlockInputs
   | IncidentRetrieveBlockInputs
   | BenefitCardRetrieveBlockInputs
   | BenefitCardListBlockInputs
@@ -2914,7 +3149,15 @@ export type FlowBlockInput =
   | VariableGetBlockInputs
   | DelaySleepBlockInputs
   | Record<string, unknown>
-  | PaymentCreateBlockInputs;
+  | PaymentCreateBlockInputs
+  | PaymentRetrieveBlockInputs
+  | PaymentListBlockInputs
+  | NotificationCreateBlockInputs
+  | TapkeyUnlockBlockInputs
+  | EmzUnlockBlockInputs
+  | UiAlertBlockInputs
+  | UiBrowserOpenBlockInputs
+  | UiPhoneOpenBlockInputs;
 
 export interface FlowDataEdge {
   id: string;
