@@ -2980,6 +2980,35 @@ export interface UserListBlockInputs {
   skip?: number;
 }
 
+// session.list block
+export interface SessionListBlock extends BaseBlock {
+  type: "session.list";
+  in: {
+    userId: DataEdgeConnection;
+    locationId: DataEdgeConnection;
+    limit: DataEdgeConnection;
+    skip: DataEdgeConnection;
+  };
+  out: {
+    sessionArray: DataEdgeConnection;
+    count: DataEdgeConnection;
+    hasMore: DataEdgeConnection;
+  };
+  data: {
+    userId?: string;
+    locationId?: string;
+    limit?: number;
+    skip?: number;
+  };
+}
+
+export interface SessionListBlockInputs {
+  userId?: string;
+  locationId?: string;
+  limit?: number;
+  skip?: number;
+}
+
 // The union of all block types:
 export type FlowBlock =
   | StartCustomBlock
@@ -3006,6 +3035,7 @@ export type FlowBlock =
   | LocationRetrieveBlock
   | SessionRetrieveBlock
   | SessionCreateBlock
+  | SessionListBlock
   | DeviceRetrieveBlock
   | UserRetrieveBlock
   | UserCreateBlock
@@ -3061,6 +3091,7 @@ export type FlowBlockInput =
   | LocationRetrieveBlockInputs
   | SessionRetrieveBlockInputs
   | SessionCreateBlockInputs
+  | SessionListBlockInputs
   | DeviceRetrieveBlockInputs
   | UserRetrieveBlockInputs
   | UserCreateBlockInputs
