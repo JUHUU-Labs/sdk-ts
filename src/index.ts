@@ -2089,6 +2089,7 @@ export namespace JUHUU {
       longDescription: LocaleString | null;
       secondsToPay: number; // timeframe in which the user will be required to pay for the tariff
       defaultPaymentMethodConfigurationId : string; // Stripe payment configuration ID associated with the tariff from (env specific)
+      delayedPaymentMethodConfigurationId: string; // Stripe delayed payment configuration ID associated with the tariff from (env specific) when confirmationDeadlineAt>=30 days
       maximumScheduledReadyAtSeconds : number; // maximum number of seconds in the future that scheduledReadyAt can be set to during session creation
     };
 
@@ -2697,8 +2698,9 @@ export namespace JUHUU {
         salesTaxPercentage: number;
         userId: string;
         postingRowArray: PostingRow[];
-        secondsToPay: number;
+        confirmationDeadlineAt: Date;
         defaultPaymentMethodConfigurationId? : string;
+        delayedPaymentMethodConfigurationId?:string;
       };
 
       export type Options = JUHUU.RequestOptions;

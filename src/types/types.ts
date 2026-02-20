@@ -2781,6 +2781,9 @@ export interface PaymentCreateBlock extends BaseBlock {
     isOffSession: DataEdgeConnection;
     salesTaxPercentage: DataEdgeConnection;
     postingRowArray: DataEdgeConnection;
+    confirmationDeadlineAt: DataEdgeConnection;
+    defaultPaymentMethodConfigurationId: DataEdgeConnection;
+    delayedPaymentMethodConfigurationId: DataEdgeConnection;
   };
   out: {
     payment: DataEdgeConnection;
@@ -2794,6 +2797,9 @@ export interface PaymentCreateBlock extends BaseBlock {
     isOffSession?: boolean | null;
     salesTaxPercentage?: number | null;
     postingRowArray?: PostingRow[] | null;
+    confirmationDeadlineAt?: Date | null;
+    defaultPaymentMethodConfigurationId?: string | null;
+    delayedPaymentMethodConfigurationId?: string | null;
   };
 }
 

@@ -23,9 +23,10 @@ export default class PaymentsService extends Service {
           salesTaxPercentage: PaymentCreateParams.salesTaxPercentage,
           userId: PaymentCreateParams.userId,
           postingRowArray: PaymentCreateParams.postingRowArray,
-          secondsToPay: PaymentCreateParams.secondsToPay,
+          confirmationDeadlineAt: PaymentCreateParams.confirmationDeadlineAt,
           defaultPaymentMethodConfigurationId:
             PaymentCreateParams.defaultPaymentMethodConfigurationId,
+          delayedPaymentMethodConfigurationId: PaymentCreateParams.delayedPaymentMethodConfigurationId,
         },
         authenticationNotOptional: true,
       },
