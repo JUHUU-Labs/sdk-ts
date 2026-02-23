@@ -3032,6 +3032,9 @@ export interface SessionListBlock extends BaseBlock {
   in: {
     userId: DataEdgeConnection;
     locationId: DataEdgeConnection;
+    statusArray: DataEdgeConnection;
+    locationGroupId: DataEdgeConnection;
+    paymentId: DataEdgeConnection;
     limit: DataEdgeConnection;
     skip: DataEdgeConnection;
   };
@@ -3043,6 +3046,9 @@ export interface SessionListBlock extends BaseBlock {
   data: {
     userId?: string;
     locationId?: string;
+    statusArray?: string;
+    locationGroupId?: string;
+    paymentId?: string;
     limit?: number;
     skip?: number;
   };
@@ -3051,6 +3057,9 @@ export interface SessionListBlock extends BaseBlock {
 export interface SessionListBlockInputs {
   userId?: string;
   locationId?: string;
+  statusArray?: string;
+  locationGroupId?: string;
+  paymentId?: string;
   limit?: number;
   skip?: number;
 }
