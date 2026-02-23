@@ -2784,6 +2784,7 @@ export interface PaymentCreateBlock extends BaseBlock {
     confirmationDeadlineAt: DataEdgeConnection;
     defaultPaymentMethodConfigurationId: DataEdgeConnection;
     delayedPaymentMethodConfigurationId: DataEdgeConnection;
+    secondsToPay: DataEdgeConnection;
   };
   out: {
     payment: DataEdgeConnection;
@@ -2800,6 +2801,7 @@ export interface PaymentCreateBlock extends BaseBlock {
     confirmationDeadlineAt?: Date | null;
     defaultPaymentMethodConfigurationId?: string | null;
     delayedPaymentMethodConfigurationId?: string | null;
+    secondsToPay?: number | null;
   };
 }
 
