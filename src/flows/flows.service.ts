@@ -162,7 +162,8 @@ export default class FlowsService extends Service {
   private resolveInputs(
     block: FlowBlock,
     outputStore: Record<string, Record<string, any>>,
-    edgeArray: FlowEdge[]
+    edgeArray: FlowEdge[],
+    logArray: FlowLog[]
   ): Record<string, any> {
     const inputs: Record<string, any> = {};
 
@@ -187,9 +188,15 @@ export default class FlowsService extends Service {
         srcOutputs === undefined ||
         edge.from.output in srcOutputs === false
       ) {
-        throw new Error(
-          `Missing output '${edge.from.output}' from block '${edge.from.blockId}'`
-        );
+        const msg = `Missing output '${edge.from.output}' from block '${edge.from.blockId}', defaulting to undefined`;
+        console.warn(msg);
+        logArray.push({
+          createdAt: new Date(),
+          message: msg,
+          severity: "warning",
+        });
+        inputs[inputName] = undefined;
+        continue;
       }
 
       inputs[inputName] = srcOutputs[edge.from.output];
@@ -567,7 +574,7 @@ export default class FlowsService extends Service {
           severity: "info",
         });
 
-        const inputs = this.resolveInputs(block, outputStore, edgeArray);
+        const inputs = this.resolveInputs(block, outputStore, edgeArray, logArray);
         const executor = mergedBlockExecutors[block.type];
         if (executor === undefined || executor === null) {
           throw new Error(
