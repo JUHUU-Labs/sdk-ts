@@ -1763,6 +1763,26 @@ export interface SessionCreateBlockInputs {
   metadata?: Record<string, any>;
 }
 
+export interface SessionUpdateBlock extends BaseBlock {
+  type: "session.update";
+  in: {
+    sessionId: DataEdgeConnection;
+    metadata: DataEdgeConnection;
+  };
+  out: {
+    session: DataEdgeConnection;
+  };
+  data: {
+    sessionId?: string;
+    metadata?: Record<string, any>;
+  };
+}
+
+export interface SessionUpdateBlockInputs {
+  sessionId: string;
+  metadata: Record<string, any>;
+}
+
 export interface DeviceRetrieveBlock extends BaseBlock {
   type: "device.retrieve";
   in: {
@@ -3061,6 +3081,7 @@ export type FlowBlock =
   | LocationRetrieveBlock
   | SessionRetrieveBlock
   | SessionCreateBlock
+  | SessionUpdateBlock
   | SessionListBlock
   | DeviceRetrieveBlock
   | UserRetrieveBlock
@@ -3118,6 +3139,7 @@ export type FlowBlockInput =
   | LocationRetrieveBlockInputs
   | SessionRetrieveBlockInputs
   | SessionCreateBlockInputs
+  | SessionUpdateBlockInputs
   | SessionListBlockInputs
   | DeviceRetrieveBlockInputs
   | UserRetrieveBlockInputs

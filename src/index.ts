@@ -5878,6 +5878,7 @@ export namespace JUHUU {
       display: PanelDisplay;
       permissionArray: DevicePermission[];
       proximityStrategyArray: ProximityStrategy[];
+      mountFlowId: string | null;
     };
 
     export namespace Create {
@@ -5890,6 +5891,7 @@ export namespace JUHUU {
         display?: PanelDisplay;
         permissionArray?: DevicePermission[];
         proximityStrategyArray?: ProximityStrategy[];
+        mountFlowId?: string | null;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -5930,6 +5932,7 @@ export namespace JUHUU {
         display?: PanelDisplay;
         permissionArray?: DevicePermission[];
         proximityStrategyArray?: ProximityStrategy[];
+        mountFlowId?: string | null;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
