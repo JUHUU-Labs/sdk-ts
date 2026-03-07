@@ -3035,6 +3035,7 @@ export interface SessionListBlock extends BaseBlock {
     statusArray: DataEdgeConnection;
     locationGroupId: DataEdgeConnection;
     paymentId: DataEdgeConnection;
+    deviceId: DataEdgeConnection;
     limit: DataEdgeConnection;
     skip: DataEdgeConnection;
   };
@@ -3049,6 +3050,7 @@ export interface SessionListBlock extends BaseBlock {
     statusArray?: string;
     locationGroupId?: string;
     paymentId?: string;
+    deviceId?: string;
     limit?: number;
     skip?: number;
   };
@@ -3060,6 +3062,7 @@ export interface SessionListBlockInputs {
   statusArray?: string;
   locationGroupId?: string;
   paymentId?: string;
+  deviceId?: string;
   limit?: number;
   skip?: number;
 }
