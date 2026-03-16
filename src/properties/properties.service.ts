@@ -87,6 +87,8 @@ export default class PropertiesService extends Service {
           colorScheme: PropertyUpdateParams.colorScheme,
           contactUrl: PropertyUpdateParams.contactUrl,
           stripeEmail: PropertyUpdateParams.stripeEmail,
+          payoutCurrencyCode : PropertyUpdateParams.payoutCurrencyCode,
+          invoiceNumberPrefix : PropertyUpdateParams.invoiceNumberPrefix,
         },
         authenticationNotOptional: true,
       },
