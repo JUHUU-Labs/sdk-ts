@@ -78,8 +78,8 @@ export default class DevicesService extends Service {
       queryArray.push("limit=" + DeviceListOptions.limit);
     }
 
-    if (DeviceListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + DeviceListOptions.skip);
+    if (DeviceListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + DeviceListOptions.cursor);
     }
 
     return await super.sendRequest<JUHUU.Device.List.Response>(

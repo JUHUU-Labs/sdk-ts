@@ -65,8 +65,8 @@ export default class PayoutsService extends Service {
       queryArray.push("limit=" + PayoutListOptions.limit);
     }
 
-    if (PayoutListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + PayoutListOptions.skip);
+    if (PayoutListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + PayoutListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -86,6 +86,7 @@ export default class PayoutsService extends Service {
         payoutArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

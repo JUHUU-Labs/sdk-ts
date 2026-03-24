@@ -60,12 +60,12 @@ export default class PaymentsService extends Service {
       queryArray.push("createdAt[lte]=" + PaymentListParams.createdAt.lte);
     }
 
-    if (PaymentListParams.limit !== undefined) {
-      queryArray.push("limit=" + PaymentListParams.limit);
+    if (PaymentListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + PaymentListOptions.limit);
     }
 
-    if (PaymentListParams.skip !== undefined) {
-      queryArray.push("skip=" + PaymentListParams.skip);
+    if (PaymentListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + PaymentListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -85,6 +85,7 @@ export default class PaymentsService extends Service {
         paymentArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

@@ -65,8 +65,8 @@ export default class AccountingAreasService extends Service {
       queryArray.push("limit=" + AccountingAreaListOptions.limit);
     }
 
-    if (AccountingAreaListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + AccountingAreaListOptions.skip);
+    if (AccountingAreaListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + AccountingAreaListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -86,6 +86,7 @@ export default class AccountingAreasService extends Service {
         accountingAreaArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

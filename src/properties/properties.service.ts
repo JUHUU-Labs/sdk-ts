@@ -61,8 +61,8 @@ export default class PropertiesService extends Service {
       queryArray.push("limit=" + PropertyListOptions.limit);
     }
 
-    if (PropertyListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + PropertyListOptions.skip);
+    if (PropertyListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + PropertyListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -82,6 +82,7 @@ export default class PropertiesService extends Service {
         propertyArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

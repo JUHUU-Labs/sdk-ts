@@ -79,8 +79,8 @@ export default class LocationsService extends Service {
       queryArray.push("limit=" + LocationListOptions.limit);
     }
 
-    if (LocationListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + LocationListOptions.skip);
+    if (LocationListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + LocationListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -100,6 +100,7 @@ export default class LocationsService extends Service {
         locationArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

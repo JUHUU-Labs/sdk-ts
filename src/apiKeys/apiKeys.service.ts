@@ -41,8 +41,8 @@ export default class ApiKeysService extends Service {
       queryArray.push("statusArray=" + ApiKeyListParams.statusArray.join(","));
     }
 
-    if (ApiKeyListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + ApiKeyListOptions.skip);
+    if (ApiKeyListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ApiKeyListOptions.cursor);
     }
 
     return await super.sendRequest<JUHUU.ApiKey.List.Response>(

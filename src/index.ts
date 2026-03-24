@@ -346,12 +346,13 @@ export namespace JUHUU {
       };
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
       export type Response = {
         achievementArray: JUHUU.Achievement.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
     export namespace Update {
@@ -622,13 +623,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         sessionArray: JUHUU.Session.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -823,13 +825,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         userArray: JUHUU.User.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -1317,13 +1320,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         termArray: JUHUU.Term.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -1414,13 +1418,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         accountingAreaArray: JUHUU.AccountingArea.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -1486,6 +1491,7 @@ export namespace JUHUU {
         pointClusterArray: JUHUU.PointCluster.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -1581,13 +1587,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         apiKeyArray: JUHUU.ApiKey.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -1637,13 +1644,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         articleEmbeddingArray: JUHUU.ArticleEmbedding.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
   }
@@ -1715,13 +1723,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         articleArray: JUHUU.Article.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -1845,13 +1854,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         articleGroupArray: JUHUU.ArticleGroup.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -1921,13 +1931,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         chatArray: JUHUU.Chat.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -2043,21 +2054,20 @@ export namespace JUHUU {
 
     export namespace List {
       export type Params = {
-        limit?: number;
-        skip?: number;
         userId?: string;
         chatId?: string;
       };
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         chatMessageArray: JUHUU.ChatMessage.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -2154,13 +2164,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         tariffArray: JUHUU.Tariff.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -2316,13 +2327,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         propertyArray: JUHUU.Property.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -2502,13 +2514,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         pointArray: JUHUU.Point.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -2656,13 +2669,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         payoutArray: JUHUU.Payout.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
   }
@@ -2779,16 +2793,18 @@ export namespace JUHUU {
           gte?: number;
           lte?: number;
         };
-        limit?: number;
-        skip?: number;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        cursor?: string;
+      } & JUHUU.RequestOptions;
 
       export type Response = {
         paymentArray: JUHUU.Payment.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -2915,17 +2931,19 @@ export namespace JUHUU {
           gte?: number;
           lte?: number;
         };
-        limit?: number;
-        skip?: number;
         paymentId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        cursor?: string;
+      } & JUHUU.RequestOptions;
 
       export type Response = {
         paymentRefundArray: JUHUU.PaymentRefund.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -3042,13 +3060,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         locationArray: JUHUU.Location.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -3197,13 +3216,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         productArray: Product.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -3298,6 +3318,7 @@ export namespace JUHUU {
         linkArray: JUHUU.Link.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -3310,13 +3331,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         linkArray: JUHUU.Link.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -3413,13 +3435,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         deviceArray: JUHUU.Device.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -3544,6 +3567,7 @@ export namespace JUHUU {
         eventArray: JUHUU.Event.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
   }
@@ -3635,13 +3659,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         incidentArray: JUHUU.Incident.Object[];
         hasMore: boolean;
         count: number;
+        cursor: string | null;
       };
     }
 
@@ -3725,13 +3750,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         incidentTemplateArray: JUHUU.IncidentTemplate.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -3867,14 +3893,15 @@ export namespace JUHUU {
       };
 
       export type Options = {
-        skip?: number;
         limit?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         parameterArray: JUHUU.Parameter.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -3970,14 +3997,15 @@ export namespace JUHUU {
       };
 
       export type Options = {
-        skip?: number;
         limit?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         parameterAnomalyGroupArray: JUHUU.ParameterAnomalyGroup.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -4057,14 +4085,15 @@ export namespace JUHUU {
       };
 
       export type Options = {
-        skip?: number;
         limit?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         parameterAnomalyGroupTrackerArray: JUHUU.ParameterAnomalyGroupTracker.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -4147,14 +4176,15 @@ export namespace JUHUU {
       };
 
       export type Options = {
-        skip?: number;
         limit?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         parameterAnomalyGroupTrackerTraceArray: JUHUU.ParameterAnomalyGroupTrackerTrace.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -4240,7 +4270,6 @@ export namespace JUHUU {
       export type Params = {
         propertyId?: string;
         parameterId?: string;
-        cursor?: string;
         createdAt?: {
           gte?: number;
           lte?: number;
@@ -4251,13 +4280,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         parameterHistoryArray: JUHUU.ParameterHistory.Object[];
         count: number;
         hasMore: boolean;
-        nextCursor: string | null;
+        cursor: string | null;
       };
     }
   }
@@ -4311,13 +4341,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         flowArray: JUHUU.Flow.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -4415,14 +4446,15 @@ export namespace JUHUU {
       };
 
       export type Options = {
-        skip?: number;
         limit?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         flowTraceArray: JUHUU.FlowTrace.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
   }
@@ -4480,13 +4512,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         deviceTemplateArray: JUHUU.DeviceTemplate.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -4558,6 +4591,7 @@ export namespace JUHUU {
         simArray: JUHUU.Sim.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -4642,13 +4676,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         mqttTopicArray: JUHUU.MqttTopic.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -4729,13 +4764,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         licensePlateArray: JUHUU.LicensePlate.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -4926,13 +4962,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         vehicleArray: JUHUU.Vehicle.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -5064,13 +5101,14 @@ export namespace JUHUU {
 
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         orderArray: JUHUU.Order.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 
@@ -5179,12 +5217,13 @@ export namespace JUHUU {
       };
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
       export type Response = {
         basketArray: JUHUU.Basket.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
     export namespace Update {
@@ -5268,12 +5307,13 @@ export namespace JUHUU {
       };
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
       export type Response = {
         benefitCardArray: JUHUU.BenefitCard.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
     export namespace Update {
@@ -5475,11 +5515,13 @@ export namespace JUHUU {
       };
       export type Options = {
         limit?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
       export type Response = {
         catalogArray: JUHUU.Catalog.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
     export namespace Update {
@@ -5752,11 +5794,13 @@ export namespace JUHUU {
       };
       export type Options = {
         limit?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
       export type Response = {
         offerArray: JUHUU.Offer.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
     export namespace Update {
@@ -5901,12 +5945,14 @@ export namespace JUHUU {
       };
       export type Options = {
         limit?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         kitArray: JUHUU.Kit.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
     export namespace Update {
@@ -6000,12 +6046,13 @@ export namespace JUHUU {
       };
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
       export type Response = {
         panelArray: JUHUU.Panel.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
     export namespace Update {
@@ -6166,12 +6213,13 @@ export namespace JUHUU {
       };
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
       export type Response = {
         priceArray: JUHUU.Price.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
     export namespace Update {
@@ -6368,12 +6416,13 @@ export namespace JUHUU {
       };
       export type Options = {
         limit?: number;
-        skip?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
       export type Response = {
         applicationArray: JUHUU.Application.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
     export namespace Update {
@@ -6466,11 +6515,13 @@ export namespace JUHUU {
       };
       export type Options = {
         limit?: number;
+        cursor?: string;
       } & JUHUU.RequestOptions;
       export type Response = {
         applicationVersionArray: JUHUU.ApplicationVersion.Object[];
         count: number;
         hasMore: boolean;
+        cursor: string | null;
       };
     }
 

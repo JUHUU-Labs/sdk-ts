@@ -24,8 +24,8 @@ export default class ParameterAnomalyGroupTrackerTracesService extends Service {
       queryArray.push("limit=" + ParameterAnomalyGroupTrackerTraceListOptions.limit);
     }
 
-    if (ParameterAnomalyGroupTrackerTraceListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + ParameterAnomalyGroupTrackerTraceListOptions.skip);
+    if (ParameterAnomalyGroupTrackerTraceListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ParameterAnomalyGroupTrackerTraceListOptions.cursor);
     }
 
     return await super.sendRequest<JUHUU.ParameterAnomalyGroupTrackerTrace.List.Response>(

@@ -35,12 +35,12 @@ export default class ChatMessagesService extends Service {
       queryArray.push("chatId=" + ChatMessageListParams.chatId);
     }
 
-    if (ChatMessageListParams.limit !== undefined) {
-      queryArray.push("limit=" + ChatMessageListParams.limit);
+    if (ChatMessageListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + ChatMessageListOptions.limit);
     }
 
-    if (ChatMessageListParams.skip !== undefined) {
-      queryArray.push("skip=" + ChatMessageListParams.skip);
+    if (ChatMessageListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ChatMessageListOptions.cursor);
     }
 
     return await super.sendRequest<JUHUU.ChatMessage.List.Response>(

@@ -44,8 +44,8 @@ export default class PanelsService extends Service {
       queryArray.push("limit=" + options.limit);
     }
 
-    if (options?.skip !== undefined) {
-      queryArray.push("skip=" + options.skip);
+    if (options?.cursor !== undefined) {
+      queryArray.push("cursor=" + options.cursor);
     }
 
     return await super.sendRequest<JUHUU.Panel.List.Response>(

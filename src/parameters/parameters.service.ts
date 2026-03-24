@@ -45,8 +45,8 @@ export default class ParametersService extends Service {
       queryArray.push("propertyId=" + ParameterListParams.propertyId);
     }
 
-    if (ParameterListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + ParameterListOptions.skip);
+    if (ParameterListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ParameterListOptions.cursor);
     }
 
     if (ParameterListOptions?.limit !== undefined) {

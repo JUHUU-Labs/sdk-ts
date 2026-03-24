@@ -59,8 +59,8 @@ export default class TermsService extends Service {
       queryArray.push("limit=" + TermListOptions.limit);
     }
 
-    if (TermListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + TermListOptions.skip);
+    if (TermListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + TermListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -80,6 +80,7 @@ export default class TermsService extends Service {
         termArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

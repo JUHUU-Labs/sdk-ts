@@ -20,8 +20,8 @@ export default class ParameterHistoriesService extends Service {
       queryArray.push("parameterId=" + ParameterHistoryListParams.parameterId);
     }
 
-    if (ParameterHistoryListParams?.cursor !== undefined) {
-      queryArray.push("cursor=" + ParameterHistoryListParams.cursor);
+    if (ParameterHistoryListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ParameterHistoryListOptions.cursor);
     }
 
     if (ParameterHistoryListParams?.createdAt?.gte !== undefined) {

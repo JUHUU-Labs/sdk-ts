@@ -70,8 +70,8 @@ export default class TariffsService extends Service {
       queryArray.push("limit=" + TariffListOptions.limit);
     }
 
-    if (TariffListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + TariffListOptions.skip);
+    if (TariffListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + TariffListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -91,6 +91,7 @@ export default class TariffsService extends Service {
         tariffArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

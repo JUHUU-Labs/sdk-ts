@@ -60,8 +60,8 @@ export default class ProductService extends Service {
       queryArray.push("limit=" + ProductListOptions.limit);
     }
 
-    if (ProductListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + ProductListOptions.skip);
+    if (ProductListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ProductListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -81,6 +81,7 @@ export default class ProductService extends Service {
         productArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

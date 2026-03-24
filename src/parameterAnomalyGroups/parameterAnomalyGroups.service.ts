@@ -54,8 +54,8 @@ export default class ParameterAnomalyGroupsService extends Service {
       );
     }
 
-    if (ParameterAnomalyGroupListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + ParameterAnomalyGroupListOptions.skip);
+    if (ParameterAnomalyGroupListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ParameterAnomalyGroupListOptions.cursor);
     }
 
     return await super.sendRequest<JUHUU.ParameterAnomalyGroup.List.Response>(

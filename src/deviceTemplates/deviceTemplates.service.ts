@@ -63,8 +63,8 @@ export default class DeviceTemplatesService extends Service {
       queryArray.push("limit=" + DeviceTemplateListOptions.limit);
     }
 
-    if (DeviceTemplateListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + DeviceTemplateListOptions.skip);
+    if (DeviceTemplateListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + DeviceTemplateListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -84,6 +84,7 @@ export default class DeviceTemplatesService extends Service {
         deviceTemplateArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

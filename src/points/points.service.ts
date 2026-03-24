@@ -62,8 +62,8 @@ export default class PointsService extends Service {
       queryArray.push("limit=" + PointListOptions.limit);
     }
 
-    if (PointListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + PointListOptions.skip);
+    if (PointListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + PointListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -83,6 +83,7 @@ export default class PointsService extends Service {
         pointArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

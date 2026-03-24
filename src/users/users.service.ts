@@ -88,8 +88,8 @@ export default class UsersService extends Service {
       );
     }
 
-    if (UserListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + UserListOptions.skip);
+    if (UserListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + UserListOptions.cursor);
     }
 
     if (UserListOptions?.limit !== undefined) {

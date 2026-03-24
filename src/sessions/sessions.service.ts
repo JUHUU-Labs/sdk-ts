@@ -108,8 +108,8 @@ export default class SessionService extends Service {
       queryArray.push("limit=" + SessionListOptions.limit);
     }
 
-    if (SessionListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + SessionListOptions.skip);
+    if (SessionListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + SessionListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -129,6 +129,7 @@ export default class SessionService extends Service {
         sessionArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

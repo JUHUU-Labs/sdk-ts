@@ -57,12 +57,12 @@ export default class PaymentRefundsService extends Service {
       );
     }
 
-    if (PaymentRefundListParams.limit !== undefined) {
-      queryArray.push("limit=" + PaymentRefundListParams.limit);
+    if (PaymentRefundListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + PaymentRefundListOptions.limit);
     }
 
-    if (PaymentRefundListParams.skip !== undefined) {
-      queryArray.push("skip=" + PaymentRefundListParams.skip);
+    if (PaymentRefundListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + PaymentRefundListOptions.cursor);
     }
 
     if (PaymentRefundListParams.paymentId !== undefined) {
@@ -86,6 +86,7 @@ export default class PaymentRefundsService extends Service {
         paymentRefundArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 

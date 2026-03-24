@@ -87,8 +87,8 @@ export default class LinkService extends Service {
       queryArray.push("limit=" + LinkListOptions.limit);
     }
 
-    if (LinkListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + LinkListOptions.skip);
+    if (LinkListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + LinkListOptions.cursor);
     }
 
     const response = await super.sendRequest<
@@ -108,6 +108,7 @@ export default class LinkService extends Service {
         linkArray: response.data,
         count: response.data.length,
         hasMore: false,
+        cursor: null,
       };
     }
 
