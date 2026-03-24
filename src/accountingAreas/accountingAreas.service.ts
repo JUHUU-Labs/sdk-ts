@@ -61,7 +61,17 @@ export default class AccountingAreasService extends Service {
       queryArray.push("propertyId=" + AccountingAreaListParams.propertyId);
     }
 
-    return await super.sendRequest<JUHUU.AccountingArea.List.Response>(
+    if (AccountingAreaListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + AccountingAreaListOptions.limit);
+    }
+
+    if (AccountingAreaListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + AccountingAreaListOptions.skip);
+    }
+
+    const response = await super.sendRequest<
+      JUHUU.AccountingArea.List.Response | JUHUU.AccountingArea.Object[]
+    >(
       {
         method: "GET",
         url: "accountingAreas?" + queryArray.join("&"),
@@ -70,6 +80,16 @@ export default class AccountingAreasService extends Service {
       },
       AccountingAreaListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        accountingAreaArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.AccountingArea.List.Response>;
   }
 
   async update(

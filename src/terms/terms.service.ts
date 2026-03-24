@@ -55,7 +55,17 @@ export default class TermsService extends Service {
       queryArray.push("propertyId=" + TermListParams.propertyId);
     }
 
-    return await super.sendRequest<JUHUU.Term.List.Response>(
+    if (TermListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + TermListOptions.limit);
+    }
+
+    if (TermListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + TermListOptions.skip);
+    }
+
+    const response = await super.sendRequest<
+      JUHUU.Term.List.Response | JUHUU.Term.Object[]
+    >(
       {
         method: "GET",
         url: "terms?" + queryArray.join("&"),
@@ -64,6 +74,16 @@ export default class TermsService extends Service {
       },
       TermListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        termArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.Term.List.Response>;
   }
 
   async update(

@@ -112,7 +112,9 @@ export default class SessionService extends Service {
       queryArray.push("skip=" + SessionListOptions.skip);
     }
 
-    return await super.sendRequest<JUHUU.Session.List.Response>(
+    const response = await super.sendRequest<
+      JUHUU.Session.List.Response | JUHUU.Session.Object[]
+    >(
       {
         method: "GET",
         url: "sessions?" + queryArray.join("&"),
@@ -121,6 +123,16 @@ export default class SessionService extends Service {
       },
       SessionListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        sessionArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.Session.List.Response>;
   }
 
   async search(

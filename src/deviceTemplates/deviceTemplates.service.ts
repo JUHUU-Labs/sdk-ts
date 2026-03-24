@@ -59,7 +59,17 @@ export default class DeviceTemplatesService extends Service {
       queryArray.push("propertyId=" + DeviceTemplateListParams.propertyId);
     }
 
-    return await super.sendRequest<JUHUU.DeviceTemplate.List.Response>(
+    if (DeviceTemplateListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + DeviceTemplateListOptions.limit);
+    }
+
+    if (DeviceTemplateListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + DeviceTemplateListOptions.skip);
+    }
+
+    const response = await super.sendRequest<
+      JUHUU.DeviceTemplate.List.Response | JUHUU.DeviceTemplate.Object[]
+    >(
       {
         method: "GET",
         url: "deviceTemplates?" + queryArray.join("&"),
@@ -68,6 +78,16 @@ export default class DeviceTemplatesService extends Service {
       },
       DeviceTemplateListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        deviceTemplateArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.DeviceTemplate.List.Response>;
   }
 
   async delete(

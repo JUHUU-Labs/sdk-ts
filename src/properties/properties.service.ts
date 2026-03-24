@@ -57,7 +57,17 @@ export default class PropertiesService extends Service {
       queryArray.push("userId=" + PropertyListParams.userId);
     }
 
-    return await super.sendRequest<JUHUU.Property.List.Response>(
+    if (PropertyListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + PropertyListOptions.limit);
+    }
+
+    if (PropertyListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + PropertyListOptions.skip);
+    }
+
+    const response = await super.sendRequest<
+      JUHUU.Property.List.Response | JUHUU.Property.Object[]
+    >(
       {
         method: "GET",
         url: "properties?" + queryArray.join("&"),
@@ -66,6 +76,16 @@ export default class PropertiesService extends Service {
       },
       PropertyListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        propertyArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.Property.List.Response>;
   }
 
   async update(

@@ -625,7 +625,11 @@ export namespace JUHUU {
         skip?: number;
       } & JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Session.Object[];
+      export type Response = {
+        sessionArray: JUHUU.Session.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Update {
@@ -1311,9 +1315,16 @@ export namespace JUHUU {
         propertyId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Term.Object[];
+      export type Response = {
+        termArray: JUHUU.Term.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Update {
@@ -1401,9 +1412,16 @@ export namespace JUHUU {
         propertyId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
-      export type Response = JUHUU.AccountingArea.Object[];
+      export type Response = {
+        accountingAreaArray: JUHUU.AccountingArea.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Update {
@@ -2038,6 +2056,8 @@ export namespace JUHUU {
 
       export type Response = {
         chatMessageArray: JUHUU.ChatMessage.Object[];
+        count: number;
+        hasMore: boolean;
       };
     }
 
@@ -2132,9 +2152,16 @@ export namespace JUHUU {
         propertyId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Tariff.Object[];
+      export type Response = {
+        tariffArray: JUHUU.Tariff.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Update {
@@ -2287,9 +2314,16 @@ export namespace JUHUU {
         userId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Property.Object[];
+      export type Response = {
+        propertyArray: JUHUU.Property.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace RetrieveStripeConnectPortalUrl {
@@ -2466,9 +2500,16 @@ export namespace JUHUU {
         pointClusterId?: string | null;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Point.Object[];
+      export type Response = {
+        pointArray: JUHUU.Point.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Create {
@@ -2613,9 +2654,16 @@ export namespace JUHUU {
         propertyId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Payout.Object[];
+      export type Response = {
+        payoutArray: JUHUU.Payout.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
   }
 
@@ -2737,7 +2785,11 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Payment.Object[];
+      export type Response = {
+        paymentArray: JUHUU.Payment.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace RetrieveInvoiceUrl {
@@ -2870,7 +2922,11 @@ export namespace JUHUU {
 
       export type Options = JUHUU.RequestOptions;
 
-      export type Response = JUHUU.PaymentRefund.Object[];
+      export type Response = {
+        paymentRefundArray: JUHUU.PaymentRefund.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace RetrieveInvoiceUrl {
@@ -2984,9 +3040,16 @@ export namespace JUHUU {
         visible?: boolean;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Location.Object[];
+      export type Response = {
+        locationArray: JUHUU.Location.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Update {
@@ -3132,9 +3195,16 @@ export namespace JUHUU {
         technologyArray?: Technology[];
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
-      export type Response = Product.Object[];
+      export type Response = {
+        productArray: Product.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Update {
@@ -3238,9 +3308,16 @@ export namespace JUHUU {
         referenceObjectId?: string | null; // id of the object that the link is assigned to
       };
 
-      export type Options = {};
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
-      export type Response = JUHUU.Link.Object[];
+      export type Response = {
+        linkArray: JUHUU.Link.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Update {
@@ -4401,9 +4478,16 @@ export namespace JUHUU {
         propertyId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        skip?: number;
+      } & JUHUU.RequestOptions;
 
-      export type Response = JUHUU.DeviceTemplate.Object[];
+      export type Response = {
+        deviceTemplateArray: JUHUU.DeviceTemplate.Object[];
+        count: number;
+        hasMore: boolean;
+      };
     }
 
     export namespace Delete {
@@ -5920,6 +6004,8 @@ export namespace JUHUU {
       } & JUHUU.RequestOptions;
       export type Response = {
         panelArray: JUHUU.Panel.Object[];
+        count: number;
+        hasMore: boolean;
       };
     }
     export namespace Update {

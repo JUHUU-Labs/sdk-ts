@@ -61,7 +61,17 @@ export default class PayoutsService extends Service {
       queryArray.push("propertyId=" + PayoutListParams.propertyId);
     }
 
-    return await super.sendRequest<JUHUU.Payout.List.Response>(
+    if (PayoutListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + PayoutListOptions.limit);
+    }
+
+    if (PayoutListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + PayoutListOptions.skip);
+    }
+
+    const response = await super.sendRequest<
+      JUHUU.Payout.List.Response | JUHUU.Payout.Object[]
+    >(
       {
         method: "GET",
         url: "payouts?" + queryArray.join("&"),
@@ -70,5 +80,15 @@ export default class PayoutsService extends Service {
       },
       PayoutListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        payoutArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.Payout.List.Response>;
   }
 }

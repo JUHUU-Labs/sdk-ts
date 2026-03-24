@@ -83,7 +83,17 @@ export default class LinkService extends Service {
       queryArray.push("referenceObjectId=" + LinkListParams.referenceObjectId);
     }
 
-    return await super.sendRequest<JUHUU.Link.List.Response>(
+    if (LinkListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + LinkListOptions.limit);
+    }
+
+    if (LinkListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + LinkListOptions.skip);
+    }
+
+    const response = await super.sendRequest<
+      JUHUU.Link.List.Response | JUHUU.Link.Object[]
+    >(
       {
         method: "GET",
         url: "links?" + queryArray.join("&"),
@@ -92,6 +102,16 @@ export default class LinkService extends Service {
       },
       LinkListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        linkArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.Link.List.Response>;
   }
 
   async update(

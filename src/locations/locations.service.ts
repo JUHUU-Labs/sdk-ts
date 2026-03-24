@@ -75,7 +75,17 @@ export default class LocationsService extends Service {
       queryArray.push("visible=" + LocationListParams.visible);
     }
 
-    return await super.sendRequest<JUHUU.Location.List.Response>(
+    if (LocationListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + LocationListOptions.limit);
+    }
+
+    if (LocationListOptions?.skip !== undefined) {
+      queryArray.push("skip=" + LocationListOptions.skip);
+    }
+
+    const response = await super.sendRequest<
+      JUHUU.Location.List.Response | JUHUU.Location.Object[]
+    >(
       {
         method: "GET",
         url: "locations?" + queryArray.join("&"),
@@ -84,6 +94,16 @@ export default class LocationsService extends Service {
       },
       LocationListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        locationArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.Location.List.Response>;
   }
 
   async update(

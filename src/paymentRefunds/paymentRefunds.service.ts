@@ -69,7 +69,9 @@ export default class PaymentRefundsService extends Service {
       queryArray.push("paymentId=" + PaymentRefundListParams.paymentId);
     }
 
-    return await super.sendRequest<JUHUU.PaymentRefund.List.Response>(
+    const response = await super.sendRequest<
+      JUHUU.PaymentRefund.List.Response | JUHUU.PaymentRefund.Object[]
+    >(
       {
         method: "GET",
         url: "paymentRefunds?" + queryArray.join("&"),
@@ -78,6 +80,16 @@ export default class PaymentRefundsService extends Service {
       },
       PaymentRefundListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        paymentRefundArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.PaymentRefund.List.Response>;
   }
 
   async retrieve(
