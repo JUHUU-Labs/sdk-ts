@@ -77,8 +77,8 @@ export default class FlowsService extends Service {
       queryArray.push("limit=" + FlowListOptions.limit);
     }
 
-    if (FlowListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + FlowListOptions.skip);
+    if (FlowListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + FlowListOptions.cursor);
     }
 
     return await super.sendRequest<JUHUU.Flow.List.Response>(

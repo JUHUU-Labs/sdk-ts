@@ -108,11 +108,13 @@ export default class SessionService extends Service {
       queryArray.push("limit=" + SessionListOptions.limit);
     }
 
-    if (SessionListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + SessionListOptions.skip);
+    if (SessionListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + SessionListOptions.cursor);
     }
 
-    return await super.sendRequest<JUHUU.Session.List.Response>(
+    const response = await super.sendRequest<
+      JUHUU.Session.List.Response | JUHUU.Session.Object[]
+    >(
       {
         method: "GET",
         url: "sessions?" + queryArray.join("&"),
@@ -121,6 +123,17 @@ export default class SessionService extends Service {
       },
       SessionListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        sessionArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+        cursor: null,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.Session.List.Response>;
   }
 
   async search(

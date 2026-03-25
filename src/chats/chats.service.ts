@@ -37,8 +37,8 @@ export default class ChatsService extends Service {
       queryArray.push("userId=" + ChatListParams.userId);
     }
 
-    if (ChatListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + ChatListOptions.skip);
+    if (ChatListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ChatListOptions.cursor);
     }
 
     return await super.sendRequest<JUHUU.Chat.List.Response>(

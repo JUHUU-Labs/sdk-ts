@@ -37,8 +37,8 @@ export default class IncidentTemplatesService extends Service {
       queryArray.push("propertyId=" + IncidentTemplateListParams.propertyId);
     }
 
-    if (IncidentTemplateListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + IncidentTemplateListOptions.skip);
+    if (IncidentTemplateListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + IncidentTemplateListOptions.cursor);
     }
 
     if (IncidentTemplateListOptions?.limit !== undefined) {

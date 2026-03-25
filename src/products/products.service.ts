@@ -56,7 +56,17 @@ export default class ProductService extends Service {
       queryArray.push("propertyId=" + ProductListParams.propertyId);
     }
 
-    return await super.sendRequest<JUHUU.Product.List.Response>(
+    if (ProductListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + ProductListOptions.limit);
+    }
+
+    if (ProductListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ProductListOptions.cursor);
+    }
+
+    const response = await super.sendRequest<
+      JUHUU.Product.List.Response | JUHUU.Product.Object[]
+    >(
       {
         method: "GET",
         url: "products?" + queryArray.join("&"),
@@ -65,6 +75,17 @@ export default class ProductService extends Service {
       },
       ProductListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        productArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+        cursor: null,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.Product.List.Response>;
   }
 
   async retrieve(

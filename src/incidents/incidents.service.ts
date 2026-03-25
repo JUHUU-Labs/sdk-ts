@@ -48,8 +48,8 @@ export default class IncidentsService extends Service {
       );
     }
 
-    if (IncidentListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + IncidentListOptions.skip);
+    if (IncidentListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + IncidentListOptions.cursor);
     }
 
     if (IncidentListOptions?.limit !== undefined) {

@@ -84,8 +84,8 @@ export default class AchievementsService extends Service {
       queryArray.push("limit=" + options.limit);
     }
 
-    if (options?.skip !== undefined) {
-      queryArray.push("skip=" + options.skip);
+    if (options?.cursor !== undefined) {
+      queryArray.push("cursor=" + options.cursor);
     }
 
     return await super.sendRequest<JUHUU.Achievement.List.Response>(

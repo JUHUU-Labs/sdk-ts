@@ -58,7 +58,17 @@ export default class PointsService extends Service {
       }
     }
 
-    return await super.sendRequest<JUHUU.Point.List.Response>(
+    if (PointListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + PointListOptions.limit);
+    }
+
+    if (PointListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + PointListOptions.cursor);
+    }
+
+    const response = await super.sendRequest<
+      JUHUU.Point.List.Response | JUHUU.Point.Object[]
+    >(
       {
         method: "GET",
         url: "points?" + queryArray.join("&"),
@@ -67,6 +77,17 @@ export default class PointsService extends Service {
       },
       PointListOptions,
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        pointArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+        cursor: null,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.Point.List.Response>;
   }
 
   async create(

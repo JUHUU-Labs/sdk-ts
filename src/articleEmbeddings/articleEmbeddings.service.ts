@@ -20,8 +20,8 @@ export default class ArticleEmbeddingsService extends Service {
       queryArray.push("articleId=" + ArticleEmbeddingListParams.articleId);
     }
 
-    if (ArticleEmbeddingListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + ArticleEmbeddingListOptions.skip);
+    if (ArticleEmbeddingListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ArticleEmbeddingListOptions.cursor);
     }
 
     return await super.sendRequest<JUHUU.ArticleEmbedding.List.Response>(

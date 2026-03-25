@@ -52,8 +52,8 @@ export default class ArticlesService extends Service {
       queryArray.push("statusArray=" + ArticleListParams.statusArray.join(","));
     }
 
-    if (ArticleListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + ArticleListOptions.skip);
+    if (ArticleListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ArticleListOptions.cursor);
     }
 
     if (ArticleListOptions?.limit !== undefined) {

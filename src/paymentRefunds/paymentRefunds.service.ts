@@ -57,19 +57,21 @@ export default class PaymentRefundsService extends Service {
       );
     }
 
-    if (PaymentRefundListParams.limit !== undefined) {
-      queryArray.push("limit=" + PaymentRefundListParams.limit);
+    if (PaymentRefundListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + PaymentRefundListOptions.limit);
     }
 
-    if (PaymentRefundListParams.skip !== undefined) {
-      queryArray.push("skip=" + PaymentRefundListParams.skip);
+    if (PaymentRefundListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + PaymentRefundListOptions.cursor);
     }
 
     if (PaymentRefundListParams.paymentId !== undefined) {
       queryArray.push("paymentId=" + PaymentRefundListParams.paymentId);
     }
 
-    return await super.sendRequest<JUHUU.PaymentRefund.List.Response>(
+    const response = await super.sendRequest<
+      JUHUU.PaymentRefund.List.Response | JUHUU.PaymentRefund.Object[]
+    >(
       {
         method: "GET",
         url: "paymentRefunds?" + queryArray.join("&"),
@@ -78,6 +80,17 @@ export default class PaymentRefundsService extends Service {
       },
       PaymentRefundListOptions
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        paymentRefundArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+        cursor: null,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.PaymentRefund.List.Response>;
   }
 
   async retrieve(

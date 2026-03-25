@@ -24,8 +24,8 @@ export default class FlowTracesService extends Service {
       queryArray.push("limit=" + FlowTraceListOptions.limit);
     }
 
-    if (FlowTraceListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + FlowTraceListOptions.skip);
+    if (FlowTraceListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + FlowTraceListOptions.cursor);
     }
 
     return await super.sendRequest<JUHUU.FlowTrace.List.Response>(

@@ -43,8 +43,8 @@ export default class ArticleGroupGroupsService extends Service {
       queryArray.push("limit=" + ArticleGroupListOptions.limit);
     }
 
-    if (ArticleGroupListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + ArticleGroupListOptions.skip);
+    if (ArticleGroupListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ArticleGroupListOptions.cursor);
     }
 
     return await super.sendRequest<JUHUU.ArticleGroup.List.Response>(

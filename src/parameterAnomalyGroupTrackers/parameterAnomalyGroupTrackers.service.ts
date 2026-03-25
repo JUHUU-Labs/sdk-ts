@@ -44,8 +44,8 @@ export default class ParameterAnomalyGroupTrackersService extends Service {
       );
     }
 
-    if (ParameterAnomalyGroupTrackerListOptions?.skip !== undefined) {
-      queryArray.push("skip=" + ParameterAnomalyGroupTrackerListOptions.skip);
+    if (ParameterAnomalyGroupTrackerListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + ParameterAnomalyGroupTrackerListOptions.cursor);
     }
 
     return await super.sendRequest<JUHUU.ParameterAnomalyGroupTracker.List.Response>(

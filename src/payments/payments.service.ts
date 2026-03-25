@@ -60,15 +60,17 @@ export default class PaymentsService extends Service {
       queryArray.push("createdAt[lte]=" + PaymentListParams.createdAt.lte);
     }
 
-    if (PaymentListParams.limit !== undefined) {
-      queryArray.push("limit=" + PaymentListParams.limit);
+    if (PaymentListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + PaymentListOptions.limit);
     }
 
-    if (PaymentListParams.skip !== undefined) {
-      queryArray.push("skip=" + PaymentListParams.skip);
+    if (PaymentListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + PaymentListOptions.cursor);
     }
 
-    return await super.sendRequest<JUHUU.Payment.List.Response>(
+    const response = await super.sendRequest<
+      JUHUU.Payment.List.Response | JUHUU.Payment.Object[]
+    >(
       {
         method: "GET",
         url: "payments?" + queryArray.join("&"),
@@ -77,6 +79,17 @@ export default class PaymentsService extends Service {
       },
       PaymentListOptions,
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        paymentArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+        cursor: null,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.Payment.List.Response>;
   }
 
   async retrieve(

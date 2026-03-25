@@ -66,7 +66,17 @@ export default class TariffsService extends Service {
       queryArray.push("propertyId=" + TariffListParams.propertyId);
     }
 
-    return await super.sendRequest<JUHUU.Tariff.List.Response>(
+    if (TariffListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + TariffListOptions.limit);
+    }
+
+    if (TariffListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + TariffListOptions.cursor);
+    }
+
+    const response = await super.sendRequest<
+      JUHUU.Tariff.List.Response | JUHUU.Tariff.Object[]
+    >(
       {
         method: "GET",
         url: "tariffs?" + queryArray.join("&"),
@@ -75,6 +85,17 @@ export default class TariffsService extends Service {
       },
       TariffListOptions,
     );
+
+    if (Array.isArray(response.data)) {
+      response.data = {
+        tariffArray: response.data,
+        count: response.data.length,
+        hasMore: false,
+        cursor: null,
+      };
+    }
+
+    return response as JUHUU.HttpResponse<JUHUU.Tariff.List.Response>;
   }
 
   async update(
