@@ -50,6 +50,14 @@ export default class SimsService extends Service {
       queryArray.push("propertyId=" + SimListParams.propertyId);
     }
 
+    if (SimListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + SimListOptions.limit);
+    }
+
+    if (SimListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + SimListOptions.cursor);
+    }
+
     return await super.sendRequest<JUHUU.Sim.List.Response>(
       {
         method: "GET",

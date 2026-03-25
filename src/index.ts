@@ -1485,7 +1485,10 @@ export namespace JUHUU {
         propertyId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        cursor?: string;
+      } & JUHUU.RequestOptions;
 
       export type Response = {
         pointClusterArray: JUHUU.PointCluster.Object[];
@@ -3561,7 +3564,10 @@ export namespace JUHUU {
         paymentId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        cursor?: string;
+      } & JUHUU.RequestOptions;
 
       export type Response = {
         eventArray: JUHUU.Event.Object[];
@@ -4585,7 +4591,10 @@ export namespace JUHUU {
         propertyId?: string;
       };
 
-      export type Options = JUHUU.RequestOptions;
+      export type Options = {
+        limit?: number;
+        cursor?: string;
+      } & JUHUU.RequestOptions;
 
       export type Response = {
         simArray: JUHUU.Sim.Object[];

@@ -35,6 +35,14 @@ export default class PointClustersService extends Service {
       queryArray.push("propertyId=" + PointClusterListParams.propertyId);
     }
 
+    if (PointClusterListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + PointClusterListOptions.limit);
+    }
+
+    if (PointClusterListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + PointClusterListOptions.cursor);
+    }
+
     return await super.sendRequest<JUHUU.PointCluster.List.Response>(
       {
         method: "GET",
