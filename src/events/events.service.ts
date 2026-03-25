@@ -42,6 +42,14 @@ export default class EventsService extends Service {
       queryArray.push("paymentId=" + EventListParams.paymentId);
     }
 
+    if (EventListOptions?.limit !== undefined) {
+      queryArray.push("limit=" + EventListOptions.limit);
+    }
+
+    if (EventListOptions?.cursor !== undefined) {
+      queryArray.push("cursor=" + EventListOptions.cursor);
+    }
+
     return await super.sendRequest<JUHUU.Event.List.Response>(
       {
         method: "GET",
