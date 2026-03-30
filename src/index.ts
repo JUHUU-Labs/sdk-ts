@@ -6031,6 +6031,7 @@ export namespace JUHUU {
         permissionArray?: DevicePermission[];
         proximityStrategyArray?: ProximityStrategy[];
         mountFlowId?: string | null;
+        starred : boolean;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
@@ -6052,6 +6053,7 @@ export namespace JUHUU {
     export namespace List {
       export type Params = {
         propertyId?: string;
+        starred?: boolean;
       };
       export type Options = {
         limit?: number;

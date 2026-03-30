@@ -8,7 +8,7 @@ export default class PanelsService extends Service {
 
   async create(
     params: JUHUU.Panel.Create.Params,
-    options?: JUHUU.Panel.Create.Options
+    options?: JUHUU.Panel.Create.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Panel.Create.Response>> {
     return await super.sendRequest<JUHUU.Panel.Create.Response>(
       {
@@ -26,18 +26,22 @@ export default class PanelsService extends Service {
         },
         authenticationNotOptional: true,
       },
-      options
+      options,
     );
   }
 
   async list(
     params: JUHUU.Panel.List.Params,
-    options?: JUHUU.Panel.List.Options
+    options?: JUHUU.Panel.List.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Panel.List.Response>> {
     const queryArray: string[] = [];
 
     if (params?.propertyId !== undefined) {
       queryArray.push("propertyId=" + params.propertyId);
+    }
+
+    if (params?.starred !== undefined) {
+      queryArray.push("starred=" + params.starred);
     }
 
     if (options?.limit !== undefined) {
@@ -55,13 +59,13 @@ export default class PanelsService extends Service {
         body: undefined,
         authenticationNotOptional: false,
       },
-      options
+      options,
     );
   }
 
   async retrieve(
     params: JUHUU.Panel.Retrieve.Params,
-    options?: JUHUU.Panel.Retrieve.Options
+    options?: JUHUU.Panel.Retrieve.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Panel.Retrieve.Response>> {
     const queryArray: string[] = [];
 
@@ -76,13 +80,13 @@ export default class PanelsService extends Service {
         body: undefined,
         authenticationNotOptional: false,
       },
-      options
+      options,
     );
   }
 
   async update(
     params: JUHUU.Panel.Update.Params,
-    options?: JUHUU.Panel.Update.Options
+    options?: JUHUU.Panel.Update.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Panel.Update.Response>> {
     return await super.sendRequest<JUHUU.Panel.Update.Response>(
       {
@@ -96,16 +100,17 @@ export default class PanelsService extends Service {
           display: params.display,
           permissionArray: params.permissionArray,
           proximityStrategyArray: params.proximityStrategyArray,
+          starred: params.starred,
         },
         authenticationNotOptional: true,
       },
-      options
+      options,
     );
   }
 
   async delete(
     params: JUHUU.Panel.Delete.Params,
-    options?: JUHUU.Panel.Delete.Options
+    options?: JUHUU.Panel.Delete.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.Panel.Delete.Response>> {
     return await super.sendRequest<JUHUU.Panel.Delete.Response>(
       {
@@ -114,7 +119,7 @@ export default class PanelsService extends Service {
         authenticationNotOptional: true,
         body: undefined,
       },
-      options
+      options,
     );
   }
 }
