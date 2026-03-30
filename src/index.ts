@@ -6077,6 +6077,7 @@ export namespace JUHUU {
         permissionArray?: DevicePermission[];
         proximityStrategyArray?: ProximityStrategy[];
         mountFlowId?: string | null;
+        starred?: boolean;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
