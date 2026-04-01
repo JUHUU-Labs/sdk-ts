@@ -1992,6 +1992,69 @@ export interface TextTemplateBlockInputs {
   [key: string]: any;
 }
 
+export interface TextLengthBlock extends BaseBlock {
+  type: "text.length";
+  in: {
+    text: DataEdgeConnection;
+  };
+  out: {
+    length: DataEdgeConnection;
+  };
+  data: {
+    text?: string;
+  };
+}
+
+export interface TextLengthBlockInputs {
+  text?: string;
+}
+
+export interface TextPadStartBlock extends BaseBlock {
+  type: "text.padStart";
+  in: {
+    text: DataEdgeConnection;
+    maxLength: DataEdgeConnection;
+    fillString: DataEdgeConnection;
+  };
+  out: {
+    text: DataEdgeConnection;
+  };
+  data: {
+    text?: string;
+    maxLength?: number;
+    fillString?: string;
+  };
+}
+
+export interface TextPadStartBlockInputs {
+  text?: string;
+  maxLength?: number;
+  fillString?: string;
+}
+
+export interface TextPadEndBlock extends BaseBlock {
+  type: "text.padEnd";
+  in: {
+    text: DataEdgeConnection;
+    maxLength: DataEdgeConnection;
+    fillString: DataEdgeConnection;
+  };
+  out: {
+    text: DataEdgeConnection;
+  };
+  data: {
+    text?: string;
+    maxLength?: number;
+    fillString?: string;
+  };
+}
+
+export interface TextPadEndBlockInputs {
+  text?: string;
+  maxLength?: number;
+  fillString?: string;
+}
+
 export interface ParameterUpdateBlock extends BaseBlock {
   type: "parameter.update";
   in: {
@@ -3106,6 +3169,9 @@ export type FlowBlock =
   | BenefitCardUpdateBlock
   | TextMatchBlock
   | TextTemplateBlock
+  | TextLengthBlock
+  | TextPadStartBlock
+  | TextPadEndBlock
   | ParameterUpdateBlock
   | DeviceUpdateBlock
   | LocationUpdateBlock
@@ -3164,6 +3230,9 @@ export type FlowBlockInput =
   | BenefitCardUpdateBlockInputs
   | TextMatchBlockInputs
   | TextTemplateBlockInputs
+  | TextLengthBlockInputs
+  | TextPadStartBlockInputs
+  | TextPadEndBlockInputs
   | ParameterUpdateBlockInputs
   | DeviceUpdateBlockInputs
   | LocationUpdateBlockInputs
