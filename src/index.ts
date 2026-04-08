@@ -2296,6 +2296,8 @@ export namespace JUHUU {
       capabilityArray: Capability[];
 
       agreement: PropertyAgreement;
+
+      quickActionArray: QuickAction[];
     };
 
     export namespace Create {
@@ -2422,6 +2424,7 @@ export namespace JUHUU {
         languageCode?: LanguageCode;
         emailSignature?: string;
         taxCodeArray?: TaxCode[];
+        quickActionArray?: QuickAction[];
       };
 
       export type Options = JUHUU.RequestOptions;
