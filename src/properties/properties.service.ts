@@ -110,6 +110,7 @@ export default class PropertiesService extends Service {
           stripeEmail: PropertyUpdateParams.stripeEmail,
           payoutCurrencyCode : PropertyUpdateParams.payoutCurrencyCode,
           invoiceNumberPrefix : PropertyUpdateParams.invoiceNumberPrefix,
+          quickActionArray: PropertyUpdateParams.quickActionArray,
         },
         authenticationNotOptional: true,
       },
