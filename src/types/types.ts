@@ -3323,21 +3323,12 @@ export type BlockExecutor = (
 export type DataEdgeConnection = string | null; // null if not connected
 export type ControlEdgeConnection = string | null; // null if not connected
 
-export type QuickAction =
-  | {
-      type: "flow";
-      name: LocaleString;
-      icon: string | null;
-      visibleCondition: Condition | null; // if null the quick action is always visible
-      flowId: string;
-    }
-  | {
-      type: "panel";
-      name: LocaleString;
-      icon: string | null;
-      visibleCondition: Condition | null; // if null the quick action is always visible
-      panelId: string;
-    };
+export type QuickAction = {
+  name: LocaleString;
+  icon: string | null;
+  visibleCondition: Condition | null; // if null the quick action is always visible
+  flowId: string;
+};
 
 export type QuickView = {
   name: LocaleString;
