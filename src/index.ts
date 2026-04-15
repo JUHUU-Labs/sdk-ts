@@ -1381,6 +1381,7 @@ export namespace JUHUU {
       BKTXT: string | null;
       SGTXT: string | null;
       ZUONR: string | null;
+      additionalDetails: LocaleString | null;
     };
 
     export namespace Create {
@@ -1435,6 +1436,7 @@ export namespace JUHUU {
         name?: string; // title of the article
         paymentPostingRowDescription?: string; // subtitle of the article
         orderNumber?: string; // id of the higher order article in the tree of articles
+        additionalDetails?: LocaleString | null;
       };
 
       export type Options = JUHUU.RequestOptions;
