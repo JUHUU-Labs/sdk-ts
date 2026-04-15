@@ -106,6 +106,7 @@ export default class AccountingAreasService extends Service {
           paymentPostingRowDescription:
             AccountingAreaUpdateParams.paymentPostingRowDescription,
           orderNumber: AccountingAreaUpdateParams.orderNumber,
+          additionalDetails : AccountingAreaUpdateParams.additionalDetails,
         },
         authenticationNotOptional: true,
       },
