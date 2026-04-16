@@ -52,13 +52,20 @@ export default class UsersService extends Service {
     UserPaymentMethodTokensParams: JUHUU.User.PaymentMethodTokens.Params,
     UserPaymentMethodTokensOptions?: JUHUU.User.PaymentMethodTokens.Options,
   ): Promise<JUHUU.HttpResponse<JUHUU.User.PaymentMethodTokens.Response>> {
+    const queryArray: string[] = [];
+
+    if (UserPaymentMethodTokensParams?.tariffId !== undefined) {
+      queryArray.push("tariffId=" + UserPaymentMethodTokensParams.tariffId);
+    }
+
     return await super.sendRequest<JUHUU.User.PaymentMethodTokens.Response>(
       {
         method: "GET",
         url:
           "users/" +
           UserPaymentMethodTokensParams.userId +
-          "/paymentMethodTokens",
+          "/paymentMethodTokens?" +
+          queryArray.join("&"),
         body: undefined,
         authenticationNotOptional: true,
       },

@@ -886,6 +886,7 @@ export namespace JUHUU {
     export namespace PaymentMethodTokens {
       export type Params = {
         userId: string;
+        tariffId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
