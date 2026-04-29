@@ -6398,6 +6398,8 @@ export namespace JUHUU {
       expoProjectId: string;
       homescreenName: string;
       slug: string;
+      termsUrl: string | null;
+      copyright: string | null;
     };
 
     export namespace Create {
@@ -6461,6 +6463,8 @@ export namespace JUHUU {
         expoProjectId?: string;
         homescreenName?: string;
         slug?: string;
+        termsUrl?: string | null;
+        copyright?: string | null;
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
