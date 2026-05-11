@@ -6399,6 +6399,7 @@ export namespace JUHUU {
       homescreenName: string;
       slug: string;
       termsUrl: string | null;
+      imprintUrl: string | null;
       copyright: string | null;
     };
 
@@ -6464,6 +6465,7 @@ export namespace JUHUU {
         homescreenName?: string;
         slug?: string;
         termsUrl?: string | null;
+        imprintUrl?: string | null;
         copyright?: string | null;
       };
       export type Options = JUHUU.RequestOptions;
