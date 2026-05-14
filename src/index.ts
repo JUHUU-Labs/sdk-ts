@@ -6400,6 +6400,7 @@ export namespace JUHUU {
       slug: string;
       termsUrl: string | null;
       imprintUrl: string | null;
+      privacyUrl: string | null;
       copyright: string | null;
     };
 
@@ -6466,6 +6467,7 @@ export namespace JUHUU {
         slug?: string;
         termsUrl?: string | null;
         imprintUrl?: string | null;
+        privacyUrl?: string | null;
         copyright?: string | null;
       };
       export type Options = JUHUU.RequestOptions;
