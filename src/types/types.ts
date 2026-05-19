@@ -2514,18 +2514,27 @@ export interface SwitchBlock extends BaseBlock {
   };
 }
 
-export interface TryCatchFinallyBlock extends BaseBlock {
-  type: "control.tryCatchFinally";
+export interface CatchBlock extends BaseBlock {
+  type: "control.catch";
   in: Record<string, DataEdgeConnection>;
   out: {
     try: ControlEdgeConnection;
     catch: ControlEdgeConnection;
     // `finally` is reached via an edge marked `continuation: true`
     finally: ControlEdgeConnection;
-    errorMessage: DataEdgeConnection; // caught message on `catch`, null on `try`
+    name: DataEdgeConnection; // name of the caught throw on `catch`, null on `try`
   };
+  data: Record<string, never>;
+}
+
+export interface ThrowBlock extends BaseBlock {
+  type: "control.throw";
+  in: {
+    name: DataEdgeConnection; // optional override for data.name
+  };
+  out: Record<string, never>; // never returns; execution diverts to nearest catch
   data: {
-    expression: JsonLogic; // evaluated inside try/catch
+    name: string; // identifier of the thrown exception
   };
 }
 
@@ -3197,7 +3206,8 @@ export type FlowBlock =
   | IncidentCreateBlock
   | IfBlock
   | SwitchBlock
-  | TryCatchFinallyBlock
+  | CatchBlock
+  | ThrowBlock
   | HttpPatchBlock
   | HttpGetBlock
   | HttpPostBlock
