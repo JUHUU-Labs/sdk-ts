@@ -821,6 +821,7 @@ export namespace JUHUU {
         managementUserId?: string;
         createdByPropertyId?: string;
         customerOfPropertyId?: string;
+        search?: string;
       };
 
       export type Options = {
