@@ -95,6 +95,10 @@ export default class UsersService extends Service {
       );
     }
 
+    if (UserListParams.search !== undefined) {
+      queryArray.push("search=" + encodeURIComponent(UserListParams.search));
+    }
+
     if (UserListOptions?.cursor !== undefined) {
       queryArray.push("cursor=" + UserListOptions.cursor);
     }
