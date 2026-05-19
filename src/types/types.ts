@@ -2514,6 +2514,21 @@ export interface SwitchBlock extends BaseBlock {
   };
 }
 
+export interface TryCatchFinallyBlock extends BaseBlock {
+  type: "control.tryCatchFinally";
+  in: Record<string, DataEdgeConnection>;
+  out: {
+    try: ControlEdgeConnection;
+    catch: ControlEdgeConnection;
+    // `finally` is reached via an edge marked `continuation: true`
+    finally: ControlEdgeConnection;
+    errorMessage: DataEdgeConnection; // caught message on `catch`, null on `try`
+  };
+  data: {
+    expression: JsonLogic; // evaluated inside try/catch
+  };
+}
+
 export interface HttpPatchBlock extends BaseBlock {
   type: "http.patch";
   in: {
@@ -3182,6 +3197,7 @@ export type FlowBlock =
   | IncidentCreateBlock
   | IfBlock
   | SwitchBlock
+  | TryCatchFinallyBlock
   | HttpPatchBlock
   | HttpGetBlock
   | HttpPostBlock
@@ -3285,6 +3301,9 @@ export interface FlowControlEdge {
     output: string | null; // e.g. "true" or "false" for an if‑block
   };
   to: { blockId: string };
+  // When true, this edge runs after the chosen-branch's chain finishes,
+  // regardless of `from.output`. Enables merge-after-if and try/catch/finally.
+  continuation?: boolean;
 }
 
 export type FlowEdge = FlowDataEdge | FlowControlEdge;
