@@ -906,6 +906,7 @@ export namespace JUHUU {
       export type Params = {
         password: string;
         email: string;
+        propertyId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1007,6 +1008,7 @@ export namespace JUHUU {
         countryCode: PhoneCountryCode;
         nationalNumber: string;
         purpose: "login" | "register" | "verify";
+        propertyId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1129,6 +1131,7 @@ export namespace JUHUU {
     export namespace ChangeEmailRequest {
       export type Params = {
         email: string;
+        propertyId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
