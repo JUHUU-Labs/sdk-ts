@@ -17,6 +17,7 @@ export default class AuthService extends Service {
         body: {
           email: AuthRegisterEmailPasswordParams.email,
           password: AuthRegisterEmailPasswordParams.password,
+          propertyId: AuthRegisterEmailPasswordParams.propertyId,
         },
         authenticationNotOptional: false,
       },
@@ -90,6 +91,7 @@ export default class AuthService extends Service {
           countryCode: AuthOtpRequestParams.countryCode,
           nationalNumber: AuthOtpRequestParams.nationalNumber,
           purpose: AuthOtpRequestParams.purpose,
+          propertyId: AuthOtpRequestParams.propertyId,
         },
         authenticationNotOptional: false,
       },
@@ -248,6 +250,7 @@ export default class AuthService extends Service {
         url: "auth/email/change",
         body: {
           email: AuthChangeEmailRequestParams.email,
+          propertyId: AuthChangeEmailRequestParams.propertyId,
         },
         authenticationNotOptional: true,
       },
