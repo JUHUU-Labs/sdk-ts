@@ -167,6 +167,8 @@ export default class SessionService extends Service {
         url: "sessions/" + SessionUpdateParams.sessionId,
         body: {
           metadata: SessionUpdateParams?.metadata,
+          scheduledReadyAt: SessionUpdateParams?.scheduledReadyAt,
+          scheduledTerminationAt: SessionUpdateParams?.scheduledTerminationAt,
         },
         authenticationNotOptional: true,
       },

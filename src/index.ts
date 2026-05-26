@@ -638,6 +638,8 @@ export namespace JUHUU {
       export type Params = {
         sessionId: string;
         metadata?: Record<string, any>;
+        scheduledReadyAt?: string;
+        scheduledTerminationAt?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
