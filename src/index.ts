@@ -638,6 +638,8 @@ export namespace JUHUU {
       export type Params = {
         sessionId: string;
         metadata?: Record<string, any>;
+        scheduledReadyAt?: string;
+        scheduledTerminationAt?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -821,6 +823,7 @@ export namespace JUHUU {
         managementUserId?: string;
         createdByPropertyId?: string;
         customerOfPropertyId?: string;
+        search?: string;
       };
 
       export type Options = {
@@ -905,6 +908,8 @@ export namespace JUHUU {
       export type Params = {
         password: string;
         email: string;
+        propertyId?: string;
+        languageCode?: LanguageCode;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1006,6 +1011,8 @@ export namespace JUHUU {
         countryCode: PhoneCountryCode;
         nationalNumber: string;
         purpose: "login" | "register" | "verify";
+        propertyId?: string;
+        languageCode?: LanguageCode;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1128,6 +1135,7 @@ export namespace JUHUU {
     export namespace ChangeEmailRequest {
       export type Params = {
         email: string;
+        propertyId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;

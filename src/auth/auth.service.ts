@@ -1,9 +1,30 @@
 import { JUHUU } from "..";
 import Service from "../index.service";
+import { LanguageCode, LanguageCodeArray } from "../types/types";
 
 export default class AuthService extends Service {
   constructor(config: JUHUU.SetupConfig) {
     super(config);
+  }
+
+  //Resolves the language code for an auth flow
+  private resolveLanguageCode(
+    explicit?: LanguageCode,
+  ): LanguageCode | undefined {
+    if (explicit !== undefined) {
+      return explicit;
+    }
+
+    const nav =
+      typeof navigator !== "undefined" ? navigator.language : undefined;
+    if (nav === undefined) {
+      return undefined;
+    }
+
+    const primary = nav.split("-")[0]?.toLowerCase();
+    return (LanguageCodeArray as readonly string[]).includes(primary ?? "")
+      ? (primary as LanguageCode)
+      : undefined;
   }
 
   async registerEmailPassword(
@@ -17,6 +38,10 @@ export default class AuthService extends Service {
         body: {
           email: AuthRegisterEmailPasswordParams.email,
           password: AuthRegisterEmailPasswordParams.password,
+          propertyId: AuthRegisterEmailPasswordParams.propertyId,
+          languageCode: this.resolveLanguageCode(
+            AuthRegisterEmailPasswordParams.languageCode,
+          ),
         },
         authenticationNotOptional: false,
       },
@@ -90,6 +115,10 @@ export default class AuthService extends Service {
           countryCode: AuthOtpRequestParams.countryCode,
           nationalNumber: AuthOtpRequestParams.nationalNumber,
           purpose: AuthOtpRequestParams.purpose,
+          propertyId: AuthOtpRequestParams.propertyId,
+          languageCode: this.resolveLanguageCode(
+            AuthOtpRequestParams.languageCode,
+          ),
         },
         authenticationNotOptional: false,
       },
@@ -248,6 +277,7 @@ export default class AuthService extends Service {
         url: "auth/email/change",
         body: {
           email: AuthChangeEmailRequestParams.email,
+          propertyId: AuthChangeEmailRequestParams.propertyId,
         },
         authenticationNotOptional: true,
       },
