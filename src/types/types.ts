@@ -1291,6 +1291,7 @@ export namespace Layout {
       text: LocaleString;
       buttonName: string;
       flowId: string | null | undefined;
+      requiresProximity?: boolean;
     }
 
     export interface Small extends General {
