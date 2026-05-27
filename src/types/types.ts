@@ -1339,6 +1339,7 @@ export namespace Layout {
           elementArray: Array<CardElement>;
           buttonName: string | null; // if null, card element is not clickable
           flowId: string | null | undefined;
+          requiresProximity?: boolean;
         }
 
         export type CardElement = {
