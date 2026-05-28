@@ -92,6 +92,8 @@ export default class ApplicationsService extends Service {
           pointClusterId: ApplicationUpdateParams.pointClusterId,
           mapboxStyleUrlLight: ApplicationUpdateParams.mapboxStyleUrlLight,
           mapboxStyleUrlDark: ApplicationUpdateParams.mapboxStyleUrlDark,
+          mapMarkerIconsLight: ApplicationUpdateParams.mapMarkerIconsLight,
+          mapMarkerIconsDark: ApplicationUpdateParams.mapMarkerIconsDark,
           status: ApplicationUpdateParams.status,
           iosBundleIdentifier: ApplicationUpdateParams.iosBundleIdentifier,
           webTitle: ApplicationUpdateParams.webTitle,

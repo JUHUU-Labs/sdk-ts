@@ -6382,6 +6382,20 @@ export namespace JUHUU {
   }
 
   export namespace Application {
+    export type MapMarkerIcons = {
+      singleBlank: string;
+      aggregationBlank: string;
+      categoryBike: string;
+      categoryMoped: string;
+      categoryCar: string;
+      categoryBoat: string;
+      categoryScooter: string;
+      modalityCharge: string;
+      modalityWash: string;
+      modalityStore: string;
+      modalityShare: string;
+    };
+
     export type Object = {
       id: string;
       version: number;
@@ -6397,6 +6411,8 @@ export namespace JUHUU {
       pointClusterId: string | null;
       mapboxStyleUrlLight: string | null;
       mapboxStyleUrlDark: string | null;
+      mapMarkerIconsLight: MapMarkerIcons | null;
+      mapMarkerIconsDark: MapMarkerIcons | null;
       fontUrlTitle: string | null;
       fontUrlBody: string | null;
       status: AppStatus;
@@ -6466,6 +6482,8 @@ export namespace JUHUU {
         pointClusterId?: string | null;
         mapboxStyleUrlLight?: string | null;
         mapboxStyleUrlDark?: string | null;
+        mapMarkerIconsLight?: MapMarkerIcons | null;
+        mapMarkerIconsDark?: MapMarkerIcons | null;
         status?: AppStatus;
         iosBundleIdentifier?: string;
         webTitle?: string;
