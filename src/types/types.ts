@@ -10,6 +10,10 @@ export type ProximityStrategy =
       linkId: string | null;
     }
   | {
+      type: "linkIdArray";
+      linkIdArray: string[];
+    }
+  | {
       type: "location";
       radius: number | null;
     };
@@ -2925,6 +2929,23 @@ export interface PaymentCreateBlockInputs {
   postingRowArray?: PostingRow[] | null;
 }
 
+export interface PaymentMethodOffSessionCountBlock extends BaseBlock {
+  type: "paymentMethod.offSession.count";
+  in: {
+    userId: DataEdgeConnection;
+  };
+  out: {
+    count: DataEdgeConnection;
+  };
+  data: {
+    userId?: string;
+  };
+}
+
+export interface PaymentMethodOffSessionCountBlockInputs {
+  userId: string;
+}
+
 // Frontend/device-only blocks (throw BadRequestException on backend)
 export interface TapkeyUnlockBlock extends BaseBlock {
   type: "tapkey.unlock";
@@ -3226,6 +3247,7 @@ export type FlowBlock =
   | DelaySleepBlock
   | EndCustomBlock
   | PaymentCreateBlock
+  | PaymentMethodOffSessionCountBlock
   | PaymentRetrieveBlock
   | PaymentListBlock
   | NotificationCreateBlock
@@ -3289,6 +3311,7 @@ export type FlowBlockInput =
   | DelaySleepBlockInputs
   | Record<string, unknown>
   | PaymentCreateBlockInputs
+  | PaymentMethodOffSessionCountBlockInputs
   | PaymentRetrieveBlockInputs
   | PaymentListBlockInputs
   | NotificationCreateBlockInputs
