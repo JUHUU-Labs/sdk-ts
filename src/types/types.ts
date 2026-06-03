@@ -1714,6 +1714,37 @@ export interface LocationRetrieveBlockInputs {
   locationId: string;
 }
 
+export interface LocationListBlock extends BaseBlock {
+  type: "location.list";
+  in: {
+    rentableDeviceGroupLocationId: DataEdgeConnection;
+    visible: DataEdgeConnection;
+    deviceIdArray: DataEdgeConnection;
+    limit: DataEdgeConnection;
+    skip: DataEdgeConnection;
+  };
+  out: {
+    locationArray: DataEdgeConnection;
+    count: DataEdgeConnection;
+    hasMore: DataEdgeConnection;
+  };
+  data: {
+    rentableDeviceGroupLocationId?: string | null;
+    visible?: boolean;
+    deviceIdArray?: string;
+    limit?: number;
+    skip?: number;
+  };
+}
+
+export interface LocationListBlockInputs {
+  rentableDeviceGroupLocationId?: string | null;
+  visible?: boolean;
+  deviceIdArray?: string;
+  limit?: number;
+  skip?: number;
+}
+
 export interface SessionRetrieveBlock extends BaseBlock {
   type: "session.retrieve";
   in: {
@@ -3201,6 +3232,7 @@ export type FlowBlock =
   | ParameterRetrieveBlock
   | PropertyRetrieveBlock
   | LocationRetrieveBlock
+  | LocationListBlock
   | SessionRetrieveBlock
   | SessionCreateBlock
   | SessionUpdateBlock
@@ -3265,6 +3297,7 @@ export type FlowBlockInput =
   | ParameterRetrieveBlockInputs
   | PropertyRetrieveBlockInputs
   | LocationRetrieveBlockInputs
+  | LocationListBlockInputs
   | SessionRetrieveBlockInputs
   | SessionCreateBlockInputs
   | SessionUpdateBlockInputs
