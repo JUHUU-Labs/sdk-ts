@@ -1719,6 +1719,7 @@ export interface LocationListBlock extends BaseBlock {
   in: {
     rentableDeviceGroupLocationId: DataEdgeConnection;
     visible: DataEdgeConnection;
+    disabled: DataEdgeConnection;
     deviceIdArray: DataEdgeConnection;
     limit: DataEdgeConnection;
     skip: DataEdgeConnection;
@@ -1731,7 +1732,8 @@ export interface LocationListBlock extends BaseBlock {
   data: {
     rentableDeviceGroupLocationId?: string | null;
     visible?: boolean;
-    deviceIdArray?: string;
+    disabled?: boolean;
+    deviceIdArray?: string[];
     limit?: number;
     skip?: number;
   };
@@ -1740,7 +1742,8 @@ export interface LocationListBlock extends BaseBlock {
 export interface LocationListBlockInputs {
   rentableDeviceGroupLocationId?: string | null;
   visible?: boolean;
-  deviceIdArray?: string;
+  disabled?: boolean;
+  deviceIdArray?: string[];
   limit?: number;
   skip?: number;
 }
