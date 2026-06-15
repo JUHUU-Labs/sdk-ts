@@ -70,6 +70,43 @@ export default class SessionService extends Service {
     });
   }
 
+  async timeline(
+    SessionTimelineParams: JUHUU.Session.Timeline.Params,
+    SessionTimelineOptions?: JUHUU.Session.Timeline.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Session.Timeline.Response>> {
+    const queryArray: string[] = [];
+
+    queryArray.push("propertyId=" + SessionTimelineParams.propertyId);
+    queryArray.push(
+      "rangeStartAt=" + encodeURIComponent(SessionTimelineParams.rangeStartAt)
+    );
+    queryArray.push(
+      "rangeEndAt=" + encodeURIComponent(SessionTimelineParams.rangeEndAt)
+    );
+
+    if (SessionTimelineParams.locationGroupId !== undefined) {
+      queryArray.push(
+        "locationGroupId=" + SessionTimelineParams.locationGroupId
+      );
+    }
+
+    if (SessionTimelineParams.includeCompleted !== undefined) {
+      queryArray.push(
+        "includeCompleted=" + String(SessionTimelineParams.includeCompleted)
+      );
+    }
+
+    return await super.sendRequest<JUHUU.Session.Timeline.Response>(
+      {
+        method: "GET",
+        url: "sessions/timeline?" + queryArray.join("&"),
+        body: undefined,
+        authenticationNotOptional: false,
+      },
+      SessionTimelineOptions
+    );
+  }
+
   async list(
     SessionListParams: JUHUU.Session.List.Params,
     SessionListOptions?: JUHUU.Session.List.Options
