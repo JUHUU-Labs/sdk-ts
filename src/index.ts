@@ -634,6 +634,45 @@ export namespace JUHUU {
       };
     }
 
+    export namespace Timeline {
+      export type Params = {
+        propertyId: string;
+        rangeStartAt: string;
+        rangeEndAt: string;
+        locationGroupId?: string;
+        includeCompleted?: boolean;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Location = {
+        id: string;
+        name: string;
+        type: "rentableDevice" | "rentableDeviceGroup" | "useableDevice";
+        rentableDeviceGroupLocationId: string | null;
+      };
+
+      export type Session = {
+        id: string;
+        type: "rent" | "reservation";
+        status: SessionStatus;
+        scheduledReadyAt: string;
+        scheduledTerminationAt: string;
+        locationId: string | null;
+        locationGroupId: string | null;
+        locationName: string | null; 
+        locationGroupName: string | null;
+        tariffName: LocaleString;
+      };
+
+      export type Response = {
+        rangeStartAt: string;
+        rangeEndAt: string;
+        locations: Location[];
+        sessions: Session[];
+      };
+    }
+
     export namespace Update {
       export type Params = {
         sessionId: string;
