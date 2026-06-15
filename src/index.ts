@@ -662,6 +662,7 @@ export namespace JUHUU {
         locationGroupId: string | null;
         locationName: string | null;
         locationGroupName: string | null;
+        isOwnSession: boolean;
       };
 
       export type Response = {
