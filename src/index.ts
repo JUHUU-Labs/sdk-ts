@@ -660,9 +660,8 @@ export namespace JUHUU {
         scheduledTerminationAt: string;
         locationId: string | null;
         locationGroupId: string | null;
-        locationName: string | null; 
+        locationName: string | null;
         locationGroupName: string | null;
-        tariffName: LocaleString;
       };
 
       export type Response = {
