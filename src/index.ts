@@ -650,6 +650,7 @@ export namespace JUHUU {
         name: string;
         type: "rentableDevice" | "rentableDeviceGroup" | "useableDevice";
         rentableDeviceGroupLocationId: string | null;
+        disabled: boolean;
       };
 
       export type Session = {
