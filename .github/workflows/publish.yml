@@ -17,11 +17,12 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install latest npm
-        run: npm install -g npm@latest
+      # Node 24 bundles npm 11.x already, no need to update
+      - name: Check npm version
+        run: npm -v
 
       - run: npm ci
       - run: npm run build
