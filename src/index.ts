@@ -2164,6 +2164,7 @@ export namespace JUHUU {
       interval: number; // in seconds
       duration: number; // number of seconds the session can be active. After this time; the session will be forcefully terminated
       roundToMidnight: boolean; // if true; the session will be rounded to the next midnight; previously "timeReference"
+      roundToMorning: boolean; // if true; the session will be rounded to the next morning
       manualTerminationEnabled: boolean; // if true; the user can terminate the session manually
       salesTaxPercentage: number;
       serviceFeePercentage: number; // once the amount for the tariff is calculated the service fee is also calculated and added to the amount yielding the total amount
@@ -2241,6 +2242,7 @@ export namespace JUHUU {
         name?: LocaleString;
         duration?: number;
         roundToMidnight?: boolean;
+        roundToMorning?: boolean;
         manualTerminationEnabled?: boolean;
         salesTaxPercentage?: number;
         shortDescription?: LocaleString | null;

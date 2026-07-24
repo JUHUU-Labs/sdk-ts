@@ -116,6 +116,7 @@ export default class TariffsService extends Service {
           duration: TariffUpdateParams.duration,
           name: TariffUpdateParams.name,
           roundToMidnight: TariffUpdateParams.roundToMidnight,
+          roundToMorning: TariffUpdateParams.roundToMorning,
           manualTerminationEnabled: TariffUpdateParams.manualTerminationEnabled,
         },
         authenticationNotOptional: true,
