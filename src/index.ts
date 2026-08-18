@@ -74,6 +74,7 @@ import {
   AppVersionType,
   PlotData,
   SessionStatus,
+  SessionTerminationReason,
   AuthMethodType,
   PhoneCountryCode,
   TimePeriod,
@@ -516,6 +517,7 @@ export namespace JUHUU {
       createdAt: Date; // date at which session was created
       terminatedAt: Date | null; // date at which session was terminated
       terminatedBy: string | null;
+      terminationReason: SessionTerminationReason | null; // why the session was terminated; null while the session is still running and on sessions completed before this field shipped
       terminatedByUserId: string | null; // userId of the user who terminated the session
       scheduledTerminationAt: Date; // date at which session will be terminated automatically
       scheduledTerminationHandler: "cloudFunction" | "cloudTask"; // handler which will terminate the session
