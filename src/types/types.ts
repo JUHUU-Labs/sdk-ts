@@ -501,6 +501,13 @@ export type SessionStatus =
   | "completed";
 export type RefundStatus = "inTransitToUser" | "succeeded";
 
+export type SessionTerminationReason =
+  | "scheduledTermination" // session ran its full course; scheduledTerminationAt was reached
+  | "paymentCancelled" // payment was cancelled; session ended before it was used
+  | "manualTermination" // session was ended early by a user, propertyAdmin or apiKey
+  | "flowTermination" // session was ended by a flow or node array
+  | "autoRenewFailed"; // session was due to auto-renew, but creating the successor failed
+
 export type SessionTerminatedByType =
   | "user"
   | "system"
