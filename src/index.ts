@@ -6464,8 +6464,10 @@ export namespace JUHUU {
       mapboxStyleUrlDark: string | null;
       mapMarkerIconsLight: MapMarkerIcons | null;
       mapMarkerIconsDark: MapMarkerIcons | null;
-      fontUrlTitle: string | null;
-      fontUrlBody: string | null;
+      fontUrlTitle: string | null; // native font (.otf) for headings
+      fontUrlBody: string | null; // native font (.otf) for body text
+      fontUrlTitleWeb: string | null; // WOFF2 for headings, web builds only; falls back to fontUrlTitle when null
+      fontUrlBodyWeb: string | null; // WOFF2 for body text, web builds only; falls back to fontUrlBody when null
       status: AppStatus;
       iosBundleIdentifier: string;
       webTitle: string;
