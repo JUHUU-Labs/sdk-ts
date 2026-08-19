@@ -2787,9 +2787,11 @@ export namespace JUHUU {
         | "cleanUpCronJob"
         | "cleanUpSchedulerJob"
         | "userRequest"
+        | "authorizationExpired"
         | null;
       postingRowArray: PostingRow[]; // text displayed on the users invoice
       confirmationDeadlineAt: Date; // deadline date for the payment
+      statementDescriptorSuffix: string | null; // appended to the account's statement descriptor prefix on the customer's bank statement. Card charges only.
     };
 
     export namespace Retrieve {
@@ -2820,6 +2822,11 @@ export namespace JUHUU {
         confirmationDeadlineAt: Date;
         defaultPaymentMethodConfigurationId? : string;
         delayedPaymentMethodConfigurationId?:string;
+        /**
+         * Max 15 characters, no < > ' " * and not digits only. Appended to the
+         * account's prefix, e.g. "JUHUU* OPG Monatsmiete". Card charges only.
+         */
+        statementDescriptorSuffix?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
