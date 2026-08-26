@@ -1075,6 +1075,7 @@ export namespace JUHUU {
         purpose: "login" | "register" | "verify";
         name: string;
         billingAddress: DeepNullable<Address>;
+        propertyId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;

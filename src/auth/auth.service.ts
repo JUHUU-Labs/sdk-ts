@@ -142,6 +142,7 @@ export default class AuthService extends Service {
           name: AuthOtpVerifyParams.name,
           billingAddress: AuthOtpVerifyParams.billingAddress,
           code: AuthOtpVerifyParams.code,
+          propertyId: AuthOtpVerifyParams.propertyId,
         },
         authenticationNotOptional: false,
       },
