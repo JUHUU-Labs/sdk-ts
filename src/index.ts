@@ -537,6 +537,7 @@ export namespace JUHUU {
       scheduledReadyAt: Date; // waiting for session to be ready
       readyAt: Date | null; // when the session became ready
       metadata: Record<string, any>; //meta data for each session
+      quickActionArray: QuickAction[]; // quick actions shown as shortcuts for the session
     };
 
     export interface Rent extends Base {
@@ -682,6 +683,7 @@ export namespace JUHUU {
         metadata?: Record<string, any>;
         scheduledReadyAt?: string;
         scheduledTerminationAt?: string;
+        quickActionArray?: QuickAction[];
       };
 
       export type Options = JUHUU.RequestOptions;
