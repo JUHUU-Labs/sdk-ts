@@ -206,6 +206,7 @@ export default class SessionService extends Service {
           metadata: SessionUpdateParams?.metadata,
           scheduledReadyAt: SessionUpdateParams?.scheduledReadyAt,
           scheduledTerminationAt: SessionUpdateParams?.scheduledTerminationAt,
+          quickActionArray: SessionUpdateParams?.quickActionArray,
         },
         authenticationNotOptional: true,
       },
