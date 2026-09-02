@@ -119,6 +119,7 @@ export default class AuthService extends Service {
           languageCode: this.resolveLanguageCode(
             AuthOtpRequestParams.languageCode,
           ),
+          captchaToken: AuthOtpRequestParams.captchaToken,
         },
         authenticationNotOptional: false,
       },

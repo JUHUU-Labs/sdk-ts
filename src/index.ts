@@ -1055,6 +1055,7 @@ export namespace JUHUU {
         purpose: "login" | "register" | "verify";
         propertyId?: string;
         languageCode?: LanguageCode;
+        captchaToken?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
