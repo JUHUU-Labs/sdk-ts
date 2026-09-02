@@ -1815,6 +1815,7 @@ export interface SessionUpdateBlock extends BaseBlock {
   in: {
     sessionId: DataEdgeConnection;
     metadata: DataEdgeConnection;
+    quickActionArray: DataEdgeConnection;
   };
   out: {
     session: DataEdgeConnection;
@@ -1822,12 +1823,14 @@ export interface SessionUpdateBlock extends BaseBlock {
   data: {
     sessionId?: string;
     metadata?: Record<string, any>;
+    quickActionArray?: QuickAction[];
   };
 }
 
 export interface SessionUpdateBlockInputs {
   sessionId: string;
   metadata: Record<string, any>;
+  quickActionArray: QuickAction[];
 }
 
 export interface DeviceRetrieveBlock extends BaseBlock {
