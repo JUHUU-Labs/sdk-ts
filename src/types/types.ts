@@ -3036,16 +3036,16 @@ export interface UiAlertBlock extends BaseBlock {
     result: DataEdgeConnection;
   };
   data: {
-    title?: string;
-    message?: string;
-    buttonArray?: string[];
+    title?: LocaleString | string;
+    message?: LocaleString | string;
+    buttonArray?: (LocaleString | string)[];
   };
 }
 
 export interface UiAlertBlockInputs {
-  title: string;
-  message: string;
-  buttonArray: string[];
+  title: LocaleString | string;
+  message: LocaleString | string;
+  buttonArray: (LocaleString | string)[];
 }
 
 export interface UiBrowserOpenBlock extends BaseBlock {
