@@ -3025,6 +3025,15 @@ export interface EmzUnlockBlockInputs {
   deviceId: string;
 }
 
+export type UiAlertButton =
+  | string
+  | LocaleString
+  | {
+      text: LocaleString;
+      style?: "default" | "cancel" | "destructive";
+      onPress: string;
+    };
+
 export interface UiAlertBlock extends BaseBlock {
   type: "ui.alert";
   in: {
@@ -3038,14 +3047,14 @@ export interface UiAlertBlock extends BaseBlock {
   data: {
     title?: LocaleString | string;
     message?: LocaleString | string;
-    buttonArray?: (LocaleString | string)[];
+    buttonArray?: UiAlertButton[];
   };
 }
 
 export interface UiAlertBlockInputs {
   title: LocaleString | string;
   message: LocaleString | string;
-  buttonArray: (LocaleString | string)[];
+  buttonArray: UiAlertButton[];
 }
 
 export interface UiBrowserOpenBlock extends BaseBlock {
