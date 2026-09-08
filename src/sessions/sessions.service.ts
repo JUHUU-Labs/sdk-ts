@@ -141,6 +141,14 @@ export default class SessionService extends Service {
       queryArray.push("paymentId=" + SessionListParams.paymentId);
     }
 
+    if (SessionListParams?.createdAt?.gte !== undefined) {
+      queryArray.push("createdAt[gte]=" + SessionListParams.createdAt.gte);
+    }
+
+    if (SessionListParams?.createdAt?.lte !== undefined) {
+      queryArray.push("createdAt[lte]=" + SessionListParams.createdAt.lte);
+    }
+
     if (SessionListOptions?.limit !== undefined) {
       queryArray.push("limit=" + SessionListOptions.limit);
     }

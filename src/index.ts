@@ -622,6 +622,10 @@ export namespace JUHUU {
         locationId?: string;
         locationGroupId?: string;
         paymentId?: string;
+        createdAt?: {
+          gte?: number; // Unix SECONDS, inclusive
+          lte?: number; // Unix SECONDS, inclusive
+        };
       };
 
       export type Options = {
