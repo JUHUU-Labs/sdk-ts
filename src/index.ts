@@ -2406,6 +2406,40 @@ export namespace JUHUU {
       };
     }
 
+    export namespace Dashboard {
+      export type Params = {
+        propertyId: string;
+        /** Current window, Unix SECONDS, both bounds inclusive. */
+        createdAt: {
+          gte: number;
+          lte: number;
+        };
+        /** Comparison window, Unix SECONDS, both bounds inclusive. */
+        previousCreatedAt: {
+          gte: number;
+          lte: number;
+        };
+        /** IANA timezone for the daily chart buckets, e.g. "Europe/Vienna". */
+        timeZone?: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        stats: {
+          current: { revenue: number; rentalCount: number };
+          previous: { revenue: number; rentalCount: number };
+          revenueChange: number;
+          rentalCountChange: number;
+        };
+        revenueSeries: { date: string; total: number }[];
+        sessionSeries: { date: string; count: number }[];
+        recentSessionArray: JUHUU.Session.Object[];
+        deviceArray: JUHUU.Device.Object[];
+        incidentArray: JUHUU.Incident.Object[];
+      };
+    }
+
     export namespace RetrieveStripeConnectPortalUrl {
       export type Params = {
         propertyId: string;

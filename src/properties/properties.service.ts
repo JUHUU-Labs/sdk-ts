@@ -140,6 +140,46 @@ export default class PropertiesService extends Service {
     );
   }
 
+  async dashboard(
+    PropertyDashboardParams: JUHUU.Property.Dashboard.Params,
+    PropertyDashboardOptions?: JUHUU.Property.Dashboard.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Property.Dashboard.Response>> {
+    const queryArray: string[] = [];
+
+    queryArray.push(
+      "createdAt[gte]=" + PropertyDashboardParams.createdAt.gte
+    );
+    queryArray.push(
+      "createdAt[lte]=" + PropertyDashboardParams.createdAt.lte
+    );
+    queryArray.push(
+      "previousCreatedAt[gte]=" + PropertyDashboardParams.previousCreatedAt.gte
+    );
+    queryArray.push(
+      "previousCreatedAt[lte]=" + PropertyDashboardParams.previousCreatedAt.lte
+    );
+
+    if (PropertyDashboardParams.timeZone !== undefined) {
+      queryArray.push(
+        "timeZone=" + encodeURIComponent(PropertyDashboardParams.timeZone)
+      );
+    }
+
+    return await super.sendRequest<JUHUU.Property.Dashboard.Response>(
+      {
+        method: "GET",
+        url:
+          "properties/" +
+          PropertyDashboardParams.propertyId +
+          "/dashboard?" +
+          queryArray.join("&"),
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      PropertyDashboardOptions
+    );
+  }
+
   async retrieveStripeConnectPortalUrl(
     PropertyRetrieveStripeConnectPortalUrlParams: JUHUU.Property.RetrieveStripeConnectPortalUrl.Params,
     PropertyRetrieveStripeConnectPortalUrlOptions?: JUHUU.Property.RetrieveStripeConnectPortalUrl.Options
