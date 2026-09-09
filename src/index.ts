@@ -6521,6 +6521,7 @@ export namespace JUHUU {
       imprintUrl: string | null;
       privacyUrl: string | null;
       copyright: string | null;
+      managementUserCreateable: boolean;
     };
 
     export namespace Create {
