@@ -2628,6 +2628,21 @@ export namespace JUHUU {
       };
     }
 
+    export namespace Search {
+      export type Params = {
+        text: string;
+        pointClusterId?: string | null;
+      };
+
+      export type Options = {
+        limit?: number;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        pointArray: JUHUU.Point.Object[];
+      };
+    }
+
     export namespace Create {
       export type Params = {
         propertyId: string;

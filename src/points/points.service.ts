@@ -90,6 +90,38 @@ export default class PointsService extends Service {
     return response as JUHUU.HttpResponse<JUHUU.Point.List.Response>;
   }
 
+  async search(
+    PointSearchParams: JUHUU.Point.Search.Params,
+    PointSearchOptions?: JUHUU.Point.Search.Options,
+  ): Promise<JUHUU.HttpResponse<JUHUU.Point.Search.Response>> {
+    // text is free form user input, so it has to be encoded
+    const queryArray: string[] = [
+      "text=" + encodeURIComponent(PointSearchParams.text),
+    ];
+
+    if (PointSearchParams?.pointClusterId !== undefined) {
+      if (PointSearchParams.pointClusterId === null) {
+        queryArray.push("pointClusterId=null");
+      } else {
+        queryArray.push("pointClusterId=" + PointSearchParams.pointClusterId);
+      }
+    }
+
+    if (PointSearchOptions?.limit !== undefined) {
+      queryArray.push("limit=" + PointSearchOptions.limit);
+    }
+
+    return await super.sendRequest<JUHUU.Point.Search.Response>(
+      {
+        method: "GET",
+        url: "points/search?" + queryArray.join("&"),
+        body: undefined,
+        authenticationNotOptional: false,
+      },
+      PointSearchOptions,
+    );
+  }
+
   async create(
     PointCreateParams: JUHUU.Point.Create.Params,
     PointCreateOptions?: JUHUU.Point.Create.Options,
