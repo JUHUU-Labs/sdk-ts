@@ -6537,6 +6537,8 @@ export namespace JUHUU {
       privacyUrl: string | null;
       copyright: string | null;
       managementUserCreateable: boolean;
+      searchEnabled: boolean; // whether the map search is offered in this app
+      mainQuickActionArray: QuickAction[]; // extra buttons in the home toolbar
     };
 
     export namespace Create {
@@ -6606,6 +6608,8 @@ export namespace JUHUU {
         imprintUrl?: string | null;
         privacyUrl?: string | null;
         copyright?: string | null;
+        searchEnabled?: boolean;
+        mainQuickActionArray?: QuickAction[];
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = {
