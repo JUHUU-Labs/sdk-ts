@@ -101,6 +101,8 @@ export default class ApplicationsService extends Service {
           expoProjectId: ApplicationUpdateParams.expoProjectId,
           homescreenName: ApplicationUpdateParams.homescreenName,
           slug: ApplicationUpdateParams.slug,
+          searchEnabled: ApplicationUpdateParams.searchEnabled,
+          mainQuickActionArray: ApplicationUpdateParams.mainQuickActionArray,
         },
         authenticationNotOptional: true,
       },
