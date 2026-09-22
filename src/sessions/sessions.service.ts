@@ -257,6 +257,31 @@ export default class SessionService extends Service {
     );
   }
 
+  /**
+   * Move a session to a different location or location group.
+   *
+   * Unlike attachLocation (which only attaches a location to a session that
+   * does not have one yet), this re-points a session that may already have a
+   * location. Pass locationId: null to move the session up to group level.
+   */
+  async changeLocation(
+    SessionChangeLocationParams: JUHUU.Session.ChangeLocation.Params,
+    SessionChangeLocationOptions?: JUHUU.Session.ChangeLocation.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Session.ChangeLocation.Response>> {
+    return await super.sendRequest<JUHUU.Session.ChangeLocation.Response>(
+      {
+        method: "PATCH",
+        url: "sessions/" + SessionChangeLocationParams.sessionId + "/location",
+        body: {
+          locationId: SessionChangeLocationParams.locationId,
+          locationGroupId: SessionChangeLocationParams.locationGroupId,
+        },
+        authenticationNotOptional: true,
+      },
+      SessionChangeLocationOptions
+    );
+  }
+
   async attachUser(
     SessionAttachUserParams: JUHUU.Session.AttachUser.Params,
     SessionAttachUserOptions?: JUHUU.Session.AttachUser.Options
