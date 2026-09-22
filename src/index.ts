@@ -808,6 +808,12 @@ export namespace JUHUU {
         locationId: string;
         tariffId: string;
         scheduledReadyAt?: Date;
+        /**
+         * Session to ignore while looking for conflicts. Used when checking
+         * where an existing session could move to, so that it does not block
+         * itself.
+         */
+        excludeSessionId?: string;
       };
 
       export type Options = JUHUU.RequestOptions;

@@ -368,6 +368,12 @@ export default class SessionService extends Service {
       );
     }
 
+    if (SessionCheckAvailabilityParams.excludeSessionId !== undefined) {
+      queryArray.push(
+        "excludeSessionId=" + SessionCheckAvailabilityParams.excludeSessionId
+      );
+    }
+
     return await super.sendRequest<JUHUU.Session.CheckAvailability.Response>(
       {
         method: "GET",
