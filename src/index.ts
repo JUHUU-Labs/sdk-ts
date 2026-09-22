@@ -724,6 +724,29 @@ export namespace JUHUU {
       };
     }
 
+    export namespace ChangeLocation {
+      export type Params = {
+        sessionId: string;
+        /**
+         * Target rentableDevice location. Pass null to move the session up to
+         * group level, leaving it unassigned to a concrete box.
+         */
+        locationId?: string | null;
+        /**
+         * Target rentableDeviceGroup location. Only needs to be sent when
+         * moving the session to group level; when locationId is given the
+         * group is derived from it.
+         */
+        locationGroupId?: string | null;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        session: JUHUU.Session.Object;
+      };
+    }
+
     export namespace AttachUser {
       export type Params = {
         sessionId: string;
