@@ -2,6 +2,14 @@ import { JUHUU } from ".";
 import { Environment } from "./types/types";
 import io, { Socket } from "socket.io-client";
 
+type RefreshedTokens = { accessToken: string; refreshToken: string };
+
+// In-flight token refreshes keyed by the refresh token being exchanged.
+// Module level because every service is its own instance. The API rotates
+// refresh tokens, so parallel refreshes with the same token would otherwise
+// all but one fail (403/409) and the user would appear logged out.
+const pendingRefreshes = new Map<string, Promise<RefreshedTokens | null>>();
+
 export default class Service {
   constructor(config: JUHUU.SetupConfig) {
     this.environment = config.environment ?? "production";
@@ -59,6 +67,69 @@ export default class Service {
   getRefreshToken: () => Promise<string | null>;
   setRefreshToken: (refreshToken: string) => Promise<void>;
   logger: (message: string, ...args: any[]) => void;
+
+  /**
+   * Exchanges a refresh token for new tokens and stores them. Concurrent
+   * callers with the same refresh token share a single request.
+   */
+  private refreshTokens(
+    oldRefreshToken: string
+  ): Promise<RefreshedTokens | null> {
+    const pending = pendingRefreshes.get(oldRefreshToken);
+    if (pending !== undefined) {
+      this.logger("joining in-flight token refresh");
+      return pending;
+    }
+
+    const refresh = (async (): Promise<RefreshedTokens | null> => {
+      // retry once on 409: the API reports a write conflict on the user
+      // document (e.g. another device refreshing at the same moment)
+      for (let attempt = 0; attempt < 2; attempt++) {
+        this.logger("sending request to refresh tokens...");
+        const query = await this.sendRequest<RefreshedTokens>(
+          {
+            method: "GET",
+            url: "auth/refresh",
+            body: undefined,
+            authenticationNotOptional: true,
+          },
+          {
+            accessToken: oldRefreshToken, // use old refresh token instead of access token
+            triggerOnException: false,
+            refreshTokensIfNecessary: false,
+          }
+        );
+
+        this.logger("query for new tokens", query);
+
+        if (query.ok === false) {
+          if (query.status === 409) {
+            continue;
+          }
+          return null;
+        }
+
+        if (query.data === null || query.data === undefined) {
+          this.logger("no data in query");
+          return null;
+        }
+
+        await Promise.all([
+          this.setRefreshToken(query.data.refreshToken),
+          this.setAccessToken(query.data.accessToken),
+        ]);
+
+        return query.data;
+      }
+
+      return null;
+    })().finally(() => {
+      pendingRefreshes.delete(oldRefreshToken);
+    });
+
+    pendingRefreshes.set(oldRefreshToken, refresh);
+    return refresh;
+  }
 
   async sendRequest<T>(
     {
@@ -241,7 +312,7 @@ export default class Service {
 
       responseObject = {
         ok: false,
-        data: await response?.json(),
+        data: await response?.json().catch(() => undefined),
         statusText: response?.statusText ?? "",
         status: response?.status ?? 0,
       };
@@ -266,42 +337,26 @@ export default class Service {
           return responseObject;
         }
 
-        this.logger("sending request to refresh tokens...");
-        const query = await this.sendRequest<{
-          accessToken: string;
-          refreshToken: string;
-        }>(
-          {
-            method: "GET",
-            url: "auth/refresh",
-            body: undefined,
-            authenticationNotOptional: true,
-          },
-          {
-            accessToken: oldRefreshToken, // use old refresh token instead of access token
-            triggerOnException: false,
-            refreshTokensIfNecessary: false,
+        // another request may have refreshed while this one was in flight;
+        // then the stored access token is already new and can be used as is
+        const storedAccessToken = await this.getAccessToken();
+        let accessToken: string;
+        if (
+          storedAccessToken !== null &&
+          storedAccessToken !== undefined &&
+          storedAccessToken !== token
+        ) {
+          this.logger("tokens were already refreshed");
+          accessToken = storedAccessToken;
+        } else {
+          const tokens = await this.refreshTokens(oldRefreshToken);
+
+          if (tokens === null) {
+            return responseObject;
           }
-        );
 
-        this.logger("query for new tokens", query);
-
-        if (query.ok === false) {
-          return responseObject;
+          accessToken = tokens.accessToken;
         }
-
-        if (query.data === null) {
-          this.logger("no data in query");
-          return responseObject;
-        }
-
-        const accessToken = query.data.accessToken;
-        const refreshToken = query.data.refreshToken;
-
-        await Promise.all([
-          this.setRefreshToken(refreshToken),
-          this.setAccessToken(accessToken),
-        ]);
 
         // send original request again
         this.logger("retrying original request...");
