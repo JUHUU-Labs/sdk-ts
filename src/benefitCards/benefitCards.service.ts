@@ -48,6 +48,10 @@ export default class BenefitCardsService extends Service {
       queryArray.push("text=" + params.text);
     }
 
+    if (params?.attached !== undefined) {
+      queryArray.push("attached=" + params.attached);
+    }
+
     if (options?.limit !== undefined) {
       queryArray.push("limit=" + options.limit);
     }
