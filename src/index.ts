@@ -5464,6 +5464,7 @@ export namespace JUHUU {
         propertyId?: string;
         userId?: string;
         text?: string;
+        attached?: boolean; //true: only cards attached to a user, false: only cards not attached to any user. Cannot be combined with userId.
       };
       export type Options = {
         limit?: number;
