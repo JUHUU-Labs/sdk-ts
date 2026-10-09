@@ -24,6 +24,7 @@ export default class TariffsService extends Service {
           secondsToPay: TariffCreateParams.secondsToPay,
           maximumScheduledReadyAtSeconds:
             TariffCreateParams.maximumScheduledReadyAtSeconds,
+          statementDescriptorSuffix: TariffCreateParams.statementDescriptorSuffix,
         },
         authenticationNotOptional: true,
       },
@@ -118,6 +119,7 @@ export default class TariffsService extends Service {
           roundToMidnight: TariffUpdateParams.roundToMidnight,
           roundToMorning: TariffUpdateParams.roundToMorning,
           manualTerminationEnabled: TariffUpdateParams.manualTerminationEnabled,
+          statementDescriptorSuffix: TariffUpdateParams.statementDescriptorSuffix,
         },
         authenticationNotOptional: true,
       },
