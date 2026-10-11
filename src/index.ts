@@ -110,6 +110,7 @@ import BenefitCardsService from "./benefitCards/benefitCards.service";
 import CatalogsService from "./catalogs/catalogs.service";
 import OffersService from "./offers/offers.service";
 import KitsService from "./kits/kits.service";
+import BroadcastsService from "./broadcasts/broadcasts.service";
 import PanelsService from "./panels/panels.service";
 import PricesService from "./prices/prices.service";
 import ApplicationsService from "./applications/applications.service";
@@ -169,6 +170,7 @@ export class Juhuu {
     this.catalogs = new CatalogsService(config);
     this.offers = new OffersService(config);
     this.kits = new KitsService(config);
+    this.broadcasts = new BroadcastsService(config);
     this.panels = new PanelsService(config);
     this.prices = new PricesService(config);
     this.applications = new ApplicationsService(config);
@@ -225,6 +227,7 @@ export class Juhuu {
   readonly catalogs: CatalogsService;
   readonly offers: OffersService;
   readonly kits: KitsService;
+  readonly broadcasts: BroadcastsService;
   readonly panels: PanelsService;
   readonly prices: PricesService;
   readonly applications: ApplicationsService;
@@ -6015,6 +6018,77 @@ export namespace JUHUU {
       };
       export type Options = JUHUU.RequestOptions;
       export type Response = JUHUU.Offer.Object;
+    }
+  }
+
+  /**
+   * An email that is sent to every customer of a property. Customers are
+   * processed in batches in the background, the counters show the progress.
+   */
+  export namespace Broadcast {
+    export type Status = "running" | "completed" | "failed";
+
+    export type Object = {
+      id: string;
+      readonly object: "broadcast";
+      createdAt: Date;
+      propertyId: string;
+      createdByUserId: string | null;
+      subject: string;
+      message: string;
+      status: Status;
+      nextBatchIndex: number;
+      customerCount: number; // customers of the property when the broadcast was created
+      processedCount: number; // customers that have been processed so far
+      sentCount: number; // customers an email was sent to
+      skippedCount: number; // customers without a verified or valid email
+      completedAt: Date | null;
+      errorMessage: string | null;
+    };
+
+    export namespace Create {
+      export type Params = {
+        propertyId: string;
+        subject: string;
+        message: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        broadcast: JUHUU.Broadcast.Object;
+      };
+    }
+
+    export namespace List {
+      export type Params = {
+        propertyId: string;
+        statusArray?: JUHUU.Broadcast.Status[];
+      };
+
+      export type Options = {
+        limit?: number;
+        cursor?: string;
+      } & JUHUU.RequestOptions;
+
+      export type Response = {
+        broadcastArray: JUHUU.Broadcast.Object[];
+        count: number;
+        hasMore: boolean;
+        cursor: string | null;
+      };
+    }
+
+    export namespace Retrieve {
+      export type Params = {
+        broadcastId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        broadcast: JUHUU.Broadcast.Object;
+      };
     }
   }
 
