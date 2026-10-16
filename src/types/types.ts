@@ -1666,6 +1666,17 @@ export interface StartMqttReceiveBlock extends BaseBlock {
   };
 }
 
+export interface StartRfidBlock extends BaseBlock {
+  type: "start.rfid";
+  in: Record<string, never>;
+  out: {
+    uid: DataEdgeConnection;
+    uidLength: DataEdgeConnection;
+    reader: DataEdgeConnection;
+    timestamp: DataEdgeConnection;
+  };
+}
+
 // parameter blocks
 export interface ParameterRetrieveBlock extends BaseBlock {
   type: "parameter.retrieve";
@@ -3239,6 +3250,7 @@ export type FlowBlock =
   | StartParameterUpdateBlock
   | StartCronBlock
   | StartMqttReceiveBlock
+  | StartRfidBlock
   | StartPaymentUpdateBlock
   | ConstNumberBlock
   | ConstTextBlock
