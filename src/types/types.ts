@@ -1883,6 +1883,7 @@ export interface UserCreateBlock extends BaseBlock {
   in: {
     name: DataEdgeConnection;
     type: DataEdgeConnection;
+    acceptedTermIdArray: DataEdgeConnection;
   };
   out: {
     user: DataEdgeConnection;
@@ -1890,12 +1891,14 @@ export interface UserCreateBlock extends BaseBlock {
   data: {
     name?: string | null;
     type?: "standard" | "management" | null;
+    acceptedTermIdArray?: string[] | null;
   };
 }
 
 export interface UserCreateBlockInputs {
   name?: string | null;
   type: "standard" | "management";
+  acceptedTermIdArray?: string[] | null;
 }
 
 export interface IncidentRetrieveBlock extends BaseBlock {
