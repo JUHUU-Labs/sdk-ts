@@ -3576,13 +3576,22 @@ export namespace JUHUU {
       };
 
       export type Options = {
-        expand?: Array<"property" | "deviceTemplate">;
+        expand?: Array<
+          "property" | "deviceTemplate" | "location" | "locationGroup"
+        >;
       } & JUHUU.RequestOptions;
 
       export type Response = {
         device: JUHUU.Device.Object;
         deviceTemplate?: JUHUU.DeviceTemplate.Object;
         property?: JUHUU.Property.Object;
+        // The location this device belongs to, resolved server side via the
+        // location's deviceId/deviceIdArray - a device carries no locationId.
+        // Undefined when not expanded and when the device has no location.
+        location?: JUHUU.Location.Object;
+        // The rentableDeviceGroup location the above sits under (e.g. the
+        // tower a box belongs to); undefined when there is none.
+        locationGroup?: JUHUU.Location.Object;
       };
     }
 
