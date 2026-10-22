@@ -812,6 +812,12 @@ export namespace JUHUU {
         tariffId: string;
         scheduledReadyAt?: Date;
         /**
+         * Explicit end of the window to check instead of deriving it from the
+         * tariff duration. Pass an existing session's scheduledTerminationAt
+         * when checking where it could move to.
+         */
+        scheduledTerminationAt?: Date;
+        /**
          * Session to ignore while looking for conflicts. Used when checking
          * where an existing session could move to, so that it does not block
          * itself.
