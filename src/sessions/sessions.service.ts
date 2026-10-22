@@ -368,6 +368,13 @@ export default class SessionService extends Service {
       );
     }
 
+    if (SessionCheckAvailabilityParams.scheduledTerminationAt !== undefined) {
+      queryArray.push(
+        "scheduledTerminationAt=" +
+          SessionCheckAvailabilityParams.scheduledTerminationAt.toISOString()
+      );
+    }
+
     if (SessionCheckAvailabilityParams.excludeSessionId !== undefined) {
       queryArray.push(
         "excludeSessionId=" + SessionCheckAvailabilityParams.excludeSessionId
