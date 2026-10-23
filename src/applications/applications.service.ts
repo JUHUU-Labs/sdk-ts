@@ -102,6 +102,7 @@ export default class ApplicationsService extends Service {
           homescreenName: ApplicationUpdateParams.homescreenName,
           slug: ApplicationUpdateParams.slug,
           searchEnabled: ApplicationUpdateParams.searchEnabled,
+          feedbackPromptEnabled: ApplicationUpdateParams.feedbackPromptEnabled,
           mainQuickActionArray: ApplicationUpdateParams.mainQuickActionArray,
         },
         authenticationNotOptional: true,
