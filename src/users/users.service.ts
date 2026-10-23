@@ -136,6 +136,8 @@ export default class UsersService extends Service {
           acceptedTermIdArray: UserUpdateParams?.acceptedTermIdArray,
           group: UserUpdateParams?.group,
           expoPushTokenArray: UserUpdateParams?.expoPushTokenArray,
+          feedbackPromptStatus: UserUpdateParams?.feedbackPromptStatus,
+          feedbackPromptVersion: UserUpdateParams?.feedbackPromptVersion,
         },
         authenticationNotOptional: true,
       },

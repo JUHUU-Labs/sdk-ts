@@ -103,6 +103,7 @@ export default class ApplicationsService extends Service {
           slug: ApplicationUpdateParams.slug,
           searchEnabled: ApplicationUpdateParams.searchEnabled,
           feedbackPromptEnabled: ApplicationUpdateParams.feedbackPromptEnabled,
+          feedbackPromptVersion: ApplicationUpdateParams.feedbackPromptVersion,
           mainQuickActionArray: ApplicationUpdateParams.mainQuickActionArray,
         },
         authenticationNotOptional: true,
