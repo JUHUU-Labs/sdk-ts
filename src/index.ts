@@ -857,6 +857,8 @@ export namespace JUHUU {
       billingPhoneVerified: boolean;
       taxCodeArray: TaxCode[];
       expoPushTokenArray: string[];
+      feedbackPromptStatus: "shown" | "dismissed" | "submitted" | null; // in-app feedback prompt outcome, null = never shown
+      feedbackPromptVersion: number | null; // application feedbackPromptVersion the status belongs to
       group: UserGroup;
       createdByPropertyId: string | null;
       identity: {
@@ -949,6 +951,8 @@ export namespace JUHUU {
         acceptedTermIdArray?: string[];
         group?: UserGroup;
         expoPushTokenArray?: string[];
+        feedbackPromptStatus?: "shown" | "dismissed" | "submitted";
+        feedbackPromptVersion?: number;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -6661,6 +6665,7 @@ export namespace JUHUU {
       managementUserCreateable: boolean;
       searchEnabled: boolean; // whether the map search is offered in this app
       feedbackPromptEnabled: boolean; // whether users are asked for app feedback after their third session
+      feedbackPromptVersion: number; // bump to ask users who already answered the feedback prompt again
       mainQuickActionArray: QuickAction[]; // extra buttons in the home toolbar
     };
 
@@ -6733,6 +6738,7 @@ export namespace JUHUU {
         copyright?: string | null;
         searchEnabled?: boolean;
         feedbackPromptEnabled?: boolean;
+        feedbackPromptVersion?: number;
         mainQuickActionArray?: QuickAction[];
       };
       export type Options = JUHUU.RequestOptions;
