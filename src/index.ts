@@ -567,6 +567,10 @@ export namespace JUHUU {
         propertyId?: string;
         scheduledReadyAt?: Date;
         metadata?: Record<string, any>;
+        // generate once per booking attempt and reuse it for every retry of
+        // that attempt; a repeated request then responds with status 202
+        // instead of creating a second session
+        idempotencyKey?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
