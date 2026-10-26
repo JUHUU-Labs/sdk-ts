@@ -23,6 +23,7 @@ export default class SessionService extends Service {
           propertyId: SessionCreateParams.propertyId,
           scheduledReadyAt: SessionCreateParams.scheduledReadyAt,
           metadata: SessionCreateParams.metadata,
+          idempotencyKey: SessionCreateParams.idempotencyKey,
         },
         authenticationNotOptional: true,
       },
