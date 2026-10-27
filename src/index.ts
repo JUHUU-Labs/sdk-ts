@@ -6060,6 +6060,7 @@ export namespace JUHUU {
       createdAt: Date;
       propertyId: string;
       createdByUserId: string | null;
+      userId: string | null; // customer that receives the email, null means every customer
       subject: string;
       message: string;
       status: Status;
@@ -6075,6 +6076,7 @@ export namespace JUHUU {
     export namespace Create {
       export type Params = {
         propertyId: string;
+        userId?: string; // only email this customer instead of every customer
         subject: string;
         message: string;
       };
