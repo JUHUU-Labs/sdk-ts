@@ -8,7 +8,7 @@ export default class BroadcastsService extends Service {
 
   /**
    * Sends an email to every customer of the property that has a verified
-   * email. The emails are created in the background, use retrieve or list
+   * email, or only to userId if it is set. The emails are created in the background, use retrieve or list
    * to follow the progress.
    */
   async create(
@@ -21,6 +21,7 @@ export default class BroadcastsService extends Service {
         url: "broadcasts",
         body: {
           propertyId: params.propertyId,
+          userId: params.userId,
           subject: params.subject,
           message: params.message,
         },
