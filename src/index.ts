@@ -6670,6 +6670,7 @@ export namespace JUHUU {
       copyright: string | null;
       managementUserCreateable: boolean;
       searchEnabled: boolean; // whether the map search is offered in this app
+      buddyEnabled: boolean; // whether the JUHUU Buddy phone agent answers for this app
       feedbackPromptEnabled: boolean; // whether users are asked for app feedback after their third session
       feedbackPromptVersion: number; // bump to ask users who already answered the feedback prompt again
       mainQuickActionArray: QuickAction[]; // extra buttons in the home toolbar
@@ -6743,6 +6744,7 @@ export namespace JUHUU {
         privacyUrl?: string | null;
         copyright?: string | null;
         searchEnabled?: boolean;
+        buddyEnabled?: boolean;
         feedbackPromptEnabled?: boolean;
         feedbackPromptVersion?: number;
         mainQuickActionArray?: QuickAction[];
