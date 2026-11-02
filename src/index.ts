@@ -99,6 +99,7 @@ import ParameterAnomalyGroupsService from "./parameterAnomalyGroups/parameterAno
 import ParameterAnomalyGroupTrackersService from "./parameterAnomalyGroupTrackers/parameterAnomalyGroupTrackers.service";
 import ParameterAnomalyGroupTrackerTracesService from "./parameterAnomalyGroupTrackerTraces/parameterAnomalyGroupTrackerTraces.service";
 import EmzService from "./emz/emz.service";
+import BuddyService from "./buddy/buddy.service";
 import FlowsService from "./flows/flows.service";
 import FlowTracesService from "./flowTraces/flowTraces.service";
 import MqttTopicsService from "./mqttTopics/mqttTopics.service";
@@ -159,6 +160,7 @@ export class Juhuu {
     this.parameterAnomalyGroupTrackerTraces =
       new ParameterAnomalyGroupTrackerTracesService(config);
     this.emz = new EmzService(config);
+    this.buddy = new BuddyService(config);
     this.flows = new FlowsService(config);
     this.flowTraces = new FlowTracesService(config);
     this.mqttTopics = new MqttTopicsService(config);
@@ -216,6 +218,7 @@ export class Juhuu {
   readonly parameterAnomalyGroupTrackers: ParameterAnomalyGroupTrackersService;
   readonly parameterAnomalyGroupTrackerTraces: ParameterAnomalyGroupTrackerTracesService;
   readonly emz: EmzService;
+  readonly buddy: BuddyService;
   readonly flows: FlowsService;
   readonly flowTraces: FlowTracesService;
   readonly mqttTopics: MqttTopicsService;
@@ -1308,6 +1311,20 @@ export namespace JUHUU {
       export type Response = {
         success: boolean;
         message: string;
+      };
+    }
+  }
+
+  export namespace Buddy {
+    export namespace ConversationToken {
+      export type Params = {
+        applicationId: string;
+      };
+
+      export type Options = JUHUU.RequestOptions;
+
+      export type Response = {
+        conversationToken: string;
       };
     }
   }
@@ -6671,6 +6688,7 @@ export namespace JUHUU {
       managementUserCreateable: boolean;
       searchEnabled: boolean; // whether the map search is offered in this app
       buddyEnabled: boolean; // whether the JUHUU Buddy phone agent answers for this app
+      buddyAgentId: string | null; // the ElevenLabs agent of this app's JUHUU Buddy
       feedbackPromptEnabled: boolean; // whether users are asked for app feedback after their third session
       feedbackPromptVersion: number; // bump to ask users who already answered the feedback prompt again
       mainQuickActionArray: QuickAction[]; // extra buttons in the home toolbar
@@ -6745,6 +6763,7 @@ export namespace JUHUU {
         copyright?: string | null;
         searchEnabled?: boolean;
         buddyEnabled?: boolean;
+        buddyAgentId?: string | null;
         feedbackPromptEnabled?: boolean;
         feedbackPromptVersion?: number;
         mainQuickActionArray?: QuickAction[];
