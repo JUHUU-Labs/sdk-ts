@@ -1941,6 +1941,7 @@ export interface BenefitCardListBlock extends BaseBlock {
     userId: DataEdgeConnection;
     reference: DataEdgeConnection;
     text: DataEdgeConnection;
+    metadata: DataEdgeConnection;
     limit: DataEdgeConnection;
     skip: DataEdgeConnection;
   };
@@ -1953,6 +1954,7 @@ export interface BenefitCardListBlock extends BaseBlock {
     userId?: string;
     reference?: string | null;
     text?: string | null;
+    metadata?: Record<string, string | number | boolean>;
     limit?: number;
     skip?: number;
   };
@@ -1962,6 +1964,7 @@ export interface BenefitCardListBlockInputs {
   userId?: string;
   reference?: string | null;
   text?: string | null;
+  metadata?: Record<string, string | number | boolean>;
   limit?: number;
   skip?: number;
 }
