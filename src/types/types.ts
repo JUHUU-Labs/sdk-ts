@@ -4,14 +4,20 @@ export type ProximityStrategy =
   | {
       type: "qr";
       flowId: string | null;
+      /** false = the user must scan the QR; typing the five-letter code is rejected. Default (undefined) = allowed. */
+      allowManualInput?: boolean;
     }
   | {
       type: "link";
       linkId: string | null;
+      /** false = the user must scan the QR; typing the five-letter code is rejected. Default (undefined) = allowed. */
+      allowManualInput?: boolean;
     }
   | {
       type: "linkIdArray";
       linkIdArray: string[];
+      /** false = the user must scan the QR; typing the five-letter code is rejected. Default (undefined) = allowed. */
+      allowManualInput?: boolean;
     }
   | {
       type: "location";
