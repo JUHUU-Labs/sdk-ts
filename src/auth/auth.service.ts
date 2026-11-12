@@ -227,6 +227,7 @@ export default class AuthService extends Service {
           phone: AuthChangePhoneRequestParams.phone,
           countryCode: AuthChangePhoneRequestParams.countryCode,
           nationalNumber: AuthChangePhoneRequestParams.nationalNumber,
+          captchaToken: AuthChangePhoneRequestParams.captchaToken,
         },
         authenticationNotOptional: true,
       },
@@ -280,6 +281,7 @@ export default class AuthService extends Service {
         body: {
           email: AuthChangeEmailRequestParams.email,
           propertyId: AuthChangeEmailRequestParams.propertyId,
+          captchaToken: AuthChangeEmailRequestParams.captchaToken,
         },
         authenticationNotOptional: true,
       },

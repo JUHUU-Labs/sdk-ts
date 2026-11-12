@@ -1194,6 +1194,7 @@ export namespace JUHUU {
         phone: string;
         countryCode: PhoneCountryCode;
         nationalNumber: string;
+        captchaToken?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
@@ -1235,6 +1236,7 @@ export namespace JUHUU {
       export type Params = {
         email: string;
         propertyId?: string;
+        captchaToken?: string;
       };
 
       export type Options = JUHUU.RequestOptions;
