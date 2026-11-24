@@ -86,6 +86,9 @@ export default class MqttTopicsService extends Service {
         body: {
           name: params.name,
           chatId: params.chatId,
+          watchdogEnabled: params.watchdogEnabled,
+          watchdogTimeoutMinutes: params.watchdogTimeoutMinutes,
+          watchdogRecipientUserIdArray: params.watchdogRecipientUserIdArray,
         },
         authenticationNotOptional: true,
       },

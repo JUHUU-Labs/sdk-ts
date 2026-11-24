@@ -3819,7 +3819,17 @@ export namespace JUHUU {
       simId: string;
     }
 
-    export type Object = Location | Device | ParameterAnomalyGroup | Sim;
+    export interface MqttTopic extends Base {
+      type: "mqttTopic";
+      mqttTopicId: string;
+    }
+
+    export type Object =
+      | Location
+      | Device
+      | ParameterAnomalyGroup
+      | Sim
+      | MqttTopic;
 
     export namespace Create {
       export type Params = {
@@ -3830,6 +3840,7 @@ export namespace JUHUU {
         locationId?: string;
         parameterAnomalyGroupId?: string;
         simId?: string;
+        mqttTopicId?: string;
         incidentTemplateId?: string;
         title?: JUHUU.Incident.Object["title"];
         type: JUHUU.Incident.Object["type"];
@@ -4846,8 +4857,13 @@ export namespace JUHUU {
       id: string;
       readonly object: "mqttTopic";
       name: string;
-      propertyId: string;
+      propertyId: string | null;
       chatId: string | null;
+      lastMessageAt: Date | null;
+      watchdogEnabled: boolean;
+      watchdogTimeoutMinutes: number | null;
+      watchdogRecipientUserIdArray: string[];
+      watchdogIncidentId: string | null;
     };
 
     export namespace Create {
@@ -4900,6 +4916,9 @@ export namespace JUHUU {
         mqttTopicId: string;
         name?: string;
         chatId?: string | null;
+        watchdogEnabled?: boolean;
+        watchdogTimeoutMinutes?: number | null;
+        watchdogRecipientUserIdArray?: string[];
       };
 
       export type Options = JUHUU.RequestOptions;
