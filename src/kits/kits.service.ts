@@ -95,6 +95,27 @@ export default class KitsService extends Service {
     );
   }
 
+  async health(
+    params: JUHUU.Kit.Health.Params,
+    options?: JUHUU.Kit.Health.Options
+  ): Promise<JUHUU.HttpResponse<JUHUU.Kit.Health.Response>> {
+    const queryArray: string[] = [];
+
+    if (params.weeks !== undefined) {
+      queryArray.push("weeks=" + params.weeks);
+    }
+
+    return await super.sendRequest<JUHUU.Kit.Health.Response>(
+      {
+        method: "GET",
+        url: "kits/" + params.kitId + "/health?" + queryArray.join("&"),
+        body: undefined,
+        authenticationNotOptional: true,
+      },
+      options
+    );
+  }
+
   async update(
     params: JUHUU.Kit.Update.Params,
     options?: JUHUU.Kit.Update.Options
