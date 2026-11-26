@@ -6238,6 +6238,68 @@ export namespace JUHUU {
         kit: JUHUU.Kit.Object;
       };
     }
+    export namespace Health {
+      export type Params = {
+        kitId: string;
+        /** Weeks to return including the current one, 1-52. Default 12. */
+        weeks?: number;
+      };
+      export type Options = JUHUU.RequestOptions;
+      export type MetricStats = {
+        min: number;
+        max: number;
+        avg: number;
+        /** Last value of the boot cycle, i.e. just before the reboot. */
+        last: number;
+      };
+      export type WeekMetricStats = {
+        min: number;
+        max: number;
+        avg: number;
+        /** Sum over all samples; for 0/1 metrics (dnsFail, undervoltNow) the number of bad samples. */
+        sum: number;
+        /** Average of the pre-reboot values of the cycles that ended in the week. */
+        lastAvg: number;
+      };
+      /**
+       * Metric keys: memAvailMB, memTotalMB, swapUsedMB, load1, load5,
+       * load15, tempC, dnsMs, wgHandshakeAgeS, undervoltNow, dnsFail,
+       * tailscaleFail, rss_<process> (KB). Only metrics the kit sent exist.
+       */
+      export type Cycle = {
+        bootAt: Date;
+        lastSampleAt: Date;
+        sampleCount: number;
+        /** Boot happened inside the nightly 03:00 reboot window. */
+        plannedReboot: boolean;
+        metrics: Record<string, MetricStats>;
+      };
+      export type Week = {
+        start: Date;
+        end: Date;
+        expectedSampleCount: number;
+        heartbeatCount: number;
+        metricsCount: number;
+        serialClosedCount: number;
+        syncErrorCount: number;
+        httpPoolDropsMax: number | null;
+        rebootCount: number;
+        unplannedRebootCount: number;
+        metrics: Record<string, WeekMetricStats>;
+      };
+      export type Statistics = {
+        kitId: string;
+        timeZone: string;
+        from: Date;
+        to: Date;
+        sampleIntervalSeconds: number;
+        cycleArray: Cycle[];
+        weekArray: Week[];
+      };
+      export type Response = {
+        kitHealth: Statistics;
+      };
+    }
     export namespace List {
       export type Params = {
         name?: string;
